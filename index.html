@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body>
+    <aside id="sidebar">
+        <img id="company-logo" src="company-logo.svg" alt="company logo">
+        <ul id="nav-buttons">
+            <li id="sidebar-projects-btn"><span class="material-icons-round">apartment</span>Projects</li>
+            <li><span class="material-icons-round">people</span>Users</li>
+        </ul>
+    </aside>
+
+
+    <!-- projects page main -->
+
+    <main id="content">
+        <div id="projects-page" class="">
+            <dialog id="new-project-modal">
+                <form id="new-project-form" action="">
+                    <h2>New Project</h2>
+                    <div class="input-list">
+                        <div class="form-field-container">
+                            <div class="form-field-title">
+                                <span class="material-icons-round">apartment</span>
+                                <label for="">Name</label>
+                            </div>
+                            <input name="project-name" type="text" placeholder="project name">
+                            <p class="tip">TIP: Give it a short name</p>
+                        </div>
+                        <div class="form-field-container">
+                            <div class="form-field-title">
+                                <span class="material-icons-round">description</span>
+                                <label for="">Description</label>
+                            </div>
+                            <textarea name="description" id="" cols="30" rows="5" placeholder="Give you..."></textarea>
+                        </div>
+                        <div class="form-field-container">
+                            <div class="form-field-title">
+                                <span class="material-icons-round">person</span>
+                                <label for="">Role</label>
+                            </div>
+                            <select name="role" id="">
+                                <option value="Architect">Architect</option>
+                                <option value="Engineer">Engineer</option>
+                                <option value="Developer">Developer</option>
+                            </select>
+                        </div>
+                        <div class="form-field-container">
+                            <div class="form-field-title"> 
+                                <span class="material-icons-round">place</span>
+                                <label for="">Status</label>
+                            </div>
+                            <select name="project-status" id="">
+                                <option value="Pending">Pending</option>
+                                <option value="Active">Active</option>
+                                <option value="Finished">Finished</option>
+                            </select>
+                        </div>
+                        <div class="form-field-container">
+                            <div class="form-field-title">
+                                <span class="material-icons-round">calendar_today</span>
+                                <label for="">Finish Date</label>
+                            </div>
+                            <input name="finish-date" type="date">
+                        </div>
+                        <div>
+                            <button type="reset" class="form-cancel-btn">Cancel</button>
+                            <button type="submit" class="form-submit-btn">Accept</button>
+                        </div>
+                    </div>
+                </form>
+            </dialog>
+            <!-- dialog for same name error window -->
+            <dialog id="warning-dialog">
+                <form class="warn-form" id="warn-form" action="">
+                    <div id="warn-body">
+                        <span class="material-symbols-outlined">
+                            error
+                            </span>
+                        <div class="">
+                            <h3 id="warn-message"></h3>
+                        </div>
+                    </div>
+                    <div id="warn-footer">
+                        <button type="reset" class="warn-button">Ok</button>
+                    </div>
+                </form>
+            </dialog>
+            <header id="page-header">
+                <h2>Projects</h2>
+                <div id="page-header-buttons">
+                    <div id="import-parent">
+                        <span class="material-symbols-outlined">upload
+                            <div id="import-child">
+                                <input id="import-json" type="file">
+                            </div>
+                        </span>
+                    </div>
+                    <a href="" id="export-json">
+                        <span class="material-symbols-outlined">download
+                            
+                        </span>
+                    </a>
+                    <button id="test">*TEST ONLY*</button>
+                    <button class="new-project-btn">New Projects</button>
+                </div>
+            </header>
+            <div id="project-list">
+                <!-- <div class="project-card">
+                    <div class="project-card-header">
+                        <div class="card-img">
+                            <h2>HP</h2>
+                        </div>
+                        <div class="card-title">
+                            <h2>Commercial</h2>
+                            <p>Community hospital located at downtown.</p>
+                        </div>
+                    </div>
+                    <div class="project-card-body">
+                        <div class="card-body">
+                            <p>Status</p>
+                            <p style="color: white;">Active</p>
+                        </div>
+                        <div class="card-body">
+                            <p>Role</p>
+                            <p style="color: white;">Engineer</p>
+                        </div>
+                        <div class="card-body">
+                            <p>Cost</p>
+                            <p style="color: white;" class="cost">$2,000,000</p>
+                        </div>
+                        <div class="card-body">
+                            <p>Estimated Progress</p>
+                            <p style="color: white;">50%</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-card-header">
+                        <div class="card-img">
+                            <h2>HP</h2>
+                        </div>
+                        <div class="card-title">
+                            <h2>Hospital</h2>
+                            <p>Community hospital located at downtown.</p>
+                        </div>
+                    </div>
+                    <div class="project-card-body">
+                        <div class="card-body">
+                            <p>Status</p>
+                            <p style="color: white;">Active</p>
+                        </div>
+                        <div class="card-body">
+                            <p>Role</p>
+                            <p style="color: white;">Engineer</p>
+                        </div>
+                        <div class="card-body">
+                            <p>Cost</p>
+                            <p style="color: white;" class="cost">$2,000,000</p>
+                        </div>
+                        <div class="card-body">
+                            <p>Estimated Progress</p>
+                            <p style="color: white;">50%</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-card-header">
+                        <div class="card-img">
+                            <h2>HP</h2>
+                        </div>
+                        <div class="card-title">
+                            <h2>Arena</h2>
+                            <p>Community hospital located at downtown.</p>
+                        </div>
+                    </div>
+                    <div class="project-card-body">
+                        <div class="card-body">
+                            <p>Status</p>
+                            <p style="color: white;">Active</p>
+                        </div>
+                        <div class="card-body">
+                            <p>Role</p>
+                            <p style="color: white;">Engineer</p>
+                        </div>
+                        <div class="card-body">
+                            <p>Cost</p>
+                            <p style="color: white;" class="cost">$2,000,000</p>
+                        </div>
+                        <div class="card-body">
+                            <p>Estimated Progress</p>
+                            <p style="color: white;">50%</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-card-header">
+                        <div class="card-img">
+                            <h2>HP</h2>
+                        </div>
+                        <div class="card-title">
+                            <h2>Airport</h2>
+                            <p>Community hospital located at downtown.</p>
+                        </div>
+                    </div>
+                    <div class="project-card-body">
+                        <div class="card-body">
+                            <p>Status</p>
+                            <p style="color: white;">Active</p>
+                        </div>
+                        <div class="card-body">
+                            <p>Role</p>
+                            <p style="color: white;">Engineer</p>
+                        </div>
+                        <div class="card-body">
+                            <p>Cost</p>
+                            <p style="color: white;" class="cost">$2,000,000</p>
+                        </div>
+                        <div class="card-body">
+                            <p>Estimated Progress</p>
+                            <p style="color: white;">50%</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-card-header">
+                        <div class="card-img">
+                            <h2>HP</h2>
+                        </div>
+                        <div class="card-title">
+                            <h2>Stadium</h2>
+                            <p>Community hospital located at downtown.</p>
+                        </div>
+                    </div>
+                    <div class="project-card-body">
+                        <div class="card-body">
+                            <p>Status</p>
+                            <p style="color: white;">Active</p>
+                        </div>
+                        <div class="card-body">
+                            <p>Role</p>
+                            <p style="color: white;">Engineer</p>
+                        </div>
+                        <div class="card-body">
+                            <p>Cost</p>
+                            <p style="color: white;" class="cost">$2,000,000</p>
+                        </div>
+                        <div class="card-body">
+                            <p>Estimated Progress</p>
+                            <p style="color: white;">50%</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-card-header">
+                        <div class="card-img">
+                            <h2>HP</h2>
+                        </div>
+                        <div class="card-title">
+                            <h2>Coffee Shop</h2>
+                            <p>Community hospital located at downtown.</p>
+                        </div>
+                    </div>
+                    <div class="project-card-body">
+                        <div class="card-body">
+                            <p>Status</p>
+                            <p style="color: white;">Active</p>
+                        </div>
+                        <div class="card-body">
+                            <p>Role</p>
+                            <p style="color: white;">Engineer</p>
+                        </div>
+                        <div class="card-body">
+                            <p>Cost</p>
+                            <p style="color: white;" class="cost">$2,000,000</p>
+                        </div>
+                        <div class="card-body">
+                            <p>Estimated Progress</p>
+                            <p style="color: white;">50%</p>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+
+        <!-- for project details page -->
+
+        <div id="project-details" class="page-hidden">
+
+            <div id="proj-detals-header">
+                <h2>Hospital Center</h2>
+                <p>Community Hospital Location</p>
+            </div>
+
+            <div id="proj-details-content">
+
+                <div id="side-info-panel">
+
+                    <div id="info">
+                        <div id="info-header">
+                            <div>H</div>
+                            <button>Edit</button>
+                        </div>
+                        <div id="info-sub-header">
+                            <p><b>Hospital Center</b></p>
+                            <p>Hospital center location at downtown</p>
+                        </div>
+                        <div id="info-body">
+                            <div class="info-body-stats">
+                                <p class="stat-title">Status</p>
+                                <p>Active</p>
+                            </div>
+                            <div class="info-body-stats">
+                                <p class="stat-title">Cost</p>
+                                <p>$2,499,000</p>
+                            </div>
+                            <div class="info-body-stats">
+                                <p class="stat-title">Role</p>
+                                <p>Engineer</p>
+                            </div>
+                            <div class="info-body-stats">
+                                <p class="stat-title">Finish Date</p>
+                                <p>2023-11-28</p>
+                            </div>
+                        </div>
+                    </div> 
+
+                    <div id="todo">
+
+                        <div id="todo-search">
+                            <label for="">To Do</label>
+                            <div>
+                                <span class="material-icons-round">search</span>
+                                <input type="text" placeholder="Search To-Do's by name">
+                                <span class="material-icons-round">add</span>
+                            </div>
+                        </div>
+
+                        <div id="todo-body"> 
+                            <div class="todo">
+                                <span class="material-icons-round">construction</span>
+                                <p class="todo-text">
+                                    this is a test i have a lot more to add to this page still and
+                                    then i will add the viewer.. excited for this!!!!
+                                </p>
+                                <p class="todo-date">Fri, Sep 20</p>
+                            </div>
+                            <div class="todo">
+                                <span class="material-icons-round">construction</span>
+                                <p class="todo-text">
+                                    this is a test i have a lot more to add to this page still and
+                                    then i will add the viewer.. excited for this!!!!
+                                </p>
+                                <p class="todo-date">Fri, Sep 20</p>
+                            </div>
+                            <div class="todo">
+                                <span class="material-icons-round">construction</span>
+                                <p class="todo-text">
+                                    this is a test i have a lot more to add to this page still and
+                                    then i will add the viewer.. excited for this!!!!
+                                </p>
+                                <p class="todo-date">Fri, Sep 20</p>
+                            </div>
+                            <div class="todo">
+                                <span class="material-icons-round">construction</span>
+                                <p class="todo-text">
+                                    this is a test i have a lot more to add to this page still and
+                                    then i will add the viewer.. excited for this!!!!
+                                </p>
+                                <p class="todo-date">Fri, Sep 20</p>
+                            </div>
+                            <div class="todo">
+                                <span class="material-icons-round">construction</span>
+                                <p class="todo-text">
+                                    this is a test i have a lot more to add to this page still and
+                                    then i will add the viewer.. excited for this!!!!
+                                </p>
+                                <p class="todo-date">Fri, Sep 20</p>
+                            </div>
+                            <div class="todo">
+                                <span class="material-icons-round">construction</span>
+                                <p class="todo-text">
+                                    this is a test i have a lot more to add to this page still and
+                                    then i will add the viewer.. excited for this!!!!
+                                </p>
+                                <p class="todo-date">Fri, Sep 20</p>
+                            </div>
+                            <div class="todo">
+                                <span class="material-icons-round">construction</span>
+                                <p class="todo-text">
+                                    this is a test i have a lot more to add to this page still and
+                                    then i will add the viewer.. excited for this!!!!
+                                </p>
+                                <p class="todo-date">Fri, Sep 20</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+    
+                <div id="viewer">
+    
+                </div>
+
+            </div>
+        </div>
+        
+    </main>
+    <script type="module" src="src/script.ts"></script>
+</body>
+</html>
+
+
