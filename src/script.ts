@@ -60,6 +60,19 @@ function toggleProjectsDetailsPage() {
     projectDetails.classList.toggle('page-hidden')
 }
 
+function getProject(projectId: string | number) {
+    return projectsManager.list.find(project => project.id == projectId)
+}
+
+function dateFormat(date: Date) {
+    const options = {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    };
+    return new Intl.DateTimeFormat(navigator.language, options).format(date);
+}
+
 
 // ----------- CALLBACK FUNCTIONS ------------ //
 
@@ -79,7 +92,7 @@ function newProjectFormHandler(event: Event, projectForm: HTMLFormElement) {
         role: formData.get('role') as projectRole,
         status: formData.get('project-status') as projectStatus,
         // here we are create a new date object from the string we get back from the form
-        finishDate: new Date(formData.get('finish-date') as string),
+        finishDate: dateFormat(new Date(formData.get('finish-date') as string)),
     }
     // catching error if project name is the same as existing, error coming from projectmanager class
     // in newProject method
@@ -94,12 +107,39 @@ function newProjectFormHandler(event: Event, projectForm: HTMLFormElement) {
     }
 }
 
-function projectClicked(event: Event) {
+function projectCardClicked(event: Event) {
+    const projectCard = ( event.target as HTMLElement).closest('.project-card')
+    if ( !projectCard ) return
+    const project = getProject(projectCard.dataset.id)
+    const activeProjectTitle = document.getElementById('active-project-title')
+    const infoSubHeaderTitle = document.getElementById("info-sub-header-title")
+    const infoSubHeaderDescription = document.getElementById("info-sub-header-description")
+    const infoBodyStatus = document.getElementById("info-body-status")
+    const infoBodyCost = document.getElementById("info-body-cost")
+    const infoBodyRole = document.getElementById("info-body-role")
+    const infoBodyFinishDate = document.getElementById("info-body-finish-date")
+    console.log(project)
+    if ( !activeProjectTitle
+        || !infoSubHeaderTitle
+        || !infoSubHeaderDescription
+        || !infoBodyStatus
+        || !infoBodyCost
+        || !infoBodyRole
+        || !infoBodyFinishDate
+        || ! project ) return
+    activeProjectTitle.textContent = project.projectName
+    infoSubHeaderTitle.textContent = project.projectName
+    infoSubHeaderDescription.textContent = project.description
+    infoBodyStatus.textContent = project.status
+    infoBodyCost.value = project.cost
+    infoBodyRole.textContent = project.role
+    infoBodyFinishDate.textContent = project.finishDate
+
     toggleProjectsDetailsPage()
 
 }
 
-function projectsList(event: Event) {
+function projectsClicked(event: Event) {
     if ( !projectsPage ) return
     if ( projectsPage.classList.contains('page-hidden') ) toggleProjectsDetailsPage()
     else return
@@ -172,12 +212,12 @@ if (importJSONBtn) {
 
 // project card click
 if (projectList) {
-    projectList.addEventListener('click', (event) => projectClicked(event))
+    projectList.addEventListener('click', (event) => projectCardClicked(event))
 }
 
 // Projects button on sidebar clicked
 const sidebarProjectsBtn = document.getElementById('sidebar-projects-btn')
 if ( sidebarProjectsBtn ) {
-    sidebarProjectsBtn.addEventListener('click', (event) => projectsList(event))
+    sidebarProjectsBtn.addEventListener('click', (event) => projectsClicked(event))
 }
 
