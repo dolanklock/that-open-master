@@ -13,6 +13,8 @@ import { Project, IProject, projectRole, projectStatus } from "./class/Projects"
 import { ProjectsManager } from "./class/ProjectsManager"
 
 
+// testing new changes
+
 // ----------------- VARIABLES ---------------- //
 
 const projectsPage = document.getElementById('projects-page')
