@@ -31,6 +31,9 @@ export class ProjectsManager {
                 throw new Error(`A project with the name "${data.projectName}" already exists.`);
             }
         })
+        if ( data.projectName.length < 5 ) {
+            throw new Error(`Project name must be greater than 5 characters`);
+        }
         const project = new Project(data)
         this.list.push(project)
         return project
@@ -57,7 +60,7 @@ export class ProjectsManager {
             }
         }
     }
-    
+
     totalCostProjects() {
         if ( !projectList ) return
         const childElements = [...projectList.children]

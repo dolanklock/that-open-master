@@ -32,6 +32,7 @@ export class Project {
     status: projectStatus
     finishDate: Date
     id: uuidv4
+    iconColor: string
 
     // class attributes
     cost: number = 5
@@ -45,6 +46,7 @@ export class Project {
             this[key] = data[key]
         }
         this.id = uuidv4()
+        this.iconColor = this.getRandomColor()
         this.addProject();
     };
 
@@ -52,8 +54,8 @@ export class Project {
         const html = `
             <div class="project-card" data-id="${this.id}">
                 <div class="project-card-header">
-                    <div class="card-img">
-                        <h2>HP</h2>
+                    <div class="card-img" style="background-color: ${this.iconColor}">
+                        <h2>${this.projectName.slice(0, 2).toUpperCase()}</h2>
                     </div>
                     <div class="card-title">
                         <h2>${this.projectName}</h2>
@@ -86,6 +88,17 @@ export class Project {
             projectList.insertAdjacentHTML('beforeend', html);
         };
     };
+
+    getRandomColor() {
+        // Generate random values for red, green, and blue components
+        const red = Math.floor(Math.random() * 256);
+        const green = Math.floor(Math.random() * 256);
+        const blue = Math.floor(Math.random() * 256);
+        // Construct the RGB color string
+        const color = "rgb(" + red + "," + green + "," + blue + ")";
+        return color;
+      }
+
 };
 
 

@@ -19,10 +19,64 @@
 
 
     <!-- projects page main -->
-
+    <dialog id="new-project-modal">
+        <form id="new-project-form" action="">
+            <h2>New Project</h2>
+            <div class="input-list">
+                <div class="form-field-container">
+                    <div class="form-field-title">
+                        <span class="material-icons-round">apartment</span>
+                        <label for="">Name</label>
+                    </div>
+                    <input id="new-project-form-project-name" name="project-name" type="text" placeholder="project name">
+                    <p class="tip">TIP: Give it a short name</p>
+                </div>
+                <div class="form-field-container">
+                    <div class="form-field-title">
+                        <span class="material-icons-round">description</span>
+                        <label for="">Description</label>
+                    </div>
+                    <textarea id="new-project-form-description" name="description" id="" cols="30" rows="5" placeholder="Give you..."></textarea>
+                </div>
+                <div class="form-field-container">
+                    <div class="form-field-title">
+                        <span class="material-icons-round">person</span>
+                        <label for="">Role</label>
+                    </div>
+                    <select id="new-project-form-role" name="role" id="">
+                        <option value="Architect">Architect</option>
+                        <option value="Engineer">Engineer</option>
+                        <option value="Developer">Developer</option>
+                    </select>
+                </div>
+                <div class="form-field-container">
+                    <div class="form-field-title"> 
+                        <span class="material-icons-round">place</span>
+                        <label for="">Status</label>
+                    </div>
+                    <select id="new-project-form-status" name="project-status" id="">
+                        <option value="Pending">Pending</option>
+                        <option value="Active">Active</option>
+                        <option value="Finished">Finished</option>
+                    </select>
+                </div>
+                <div class="form-field-container">
+                    <div class="form-field-title">
+                        <span class="material-icons-round">calendar_today</span>
+                        <label for="">Finish Date</label>
+                    </div>
+                    <input id="new-project-form-date" name="finish-date" type="date">
+                </div>
+                <div>
+                    <button type="reset" class="form-cancel-btn">Cancel</button>
+                    <button type="submit" class="form-submit-btn">Accept</button>
+                </div>
+            </div>
+        </form>
+    </dialog>
     <main id="content">
         <div id="projects-page" class="">
-            <dialog id="new-project-modal">
+            <!-- <dialog id="new-project-modal">
                 <form id="new-project-form" action="">
                     <h2>New Project</h2>
                     <div class="input-list">
@@ -76,7 +130,7 @@
                         </div>
                     </div>
                 </form>
-            </dialog>
+            </dialog> -->
             <!-- dialog for same name error window -->
             <dialog id="warning-dialog">
                 <form class="warn-form" id="warn-form" action="">
@@ -302,8 +356,10 @@
                 <div id="side-info-panel">
                     <div id="info">
                         <div id="info-header">
-                            <div>H</div>
-                            <button>Edit</button>
+                            <div>
+                                <p>H</p>
+                            </div>
+                            <button id="info-header-edit">Edit</button>
                         </div>
                         <div id="info-sub-header">
                             <p id="info-sub-header-title"><b>Hospital Center</b></p>

@@ -12,10 +12,9 @@
 import { Project, IProject, projectRole, projectStatus } from "./class/Projects"
 import { ProjectsManager } from "./class/ProjectsManager"
 
-// testing again
-// testing new changes
 
 // ----------------- VARIABLES ---------------- //
+
 
 const projectsPage = document.getElementById('projects-page')
 const projectDetails = document.getElementById('project-details')
@@ -47,6 +46,7 @@ const showModalForm = function(id: string, showModal=true) {
     }
 }
 
+
 const showWarnModalForm = function(msg: string) {
     if ( warnModal && warnModal instanceof HTMLDialogElement) {
         warnModal.showModal()
@@ -56,31 +56,35 @@ const showWarnModalForm = function(msg: string) {
     warnMessage.textContent = msg
 }
 
+
 function toggleProjectsDetailsPage() {
     if ( !projectsPage || !projectDetails ) return
     projectsPage.classList.toggle('page-hidden')
     projectDetails.classList.toggle('page-hidden')
 }
 
+
 function getProject(projectId: string | number) {
     return projectsManager.list.find(project => project.id == projectId)
 }
 
+function getProjectCard(projectId: string) {
+    return document.querySelector(`[data-id="${projectId}"]`)
+}
+
 function dateFormat(date: Date) {
+    // if ( date !instanceof Date ) return 'N/A'
     const options = {
         month: 'short',
         day: 'numeric',
         year: 'numeric',
     };
+    console.log(date)
     return new Intl.DateTimeFormat(navigator.language, options).format(date);
 }
 
 
-// ----------- CALLBACK FUNCTIONS ------------ //
-
-
-function newProjectFormHandler(event: Event, projectForm: HTMLFormElement) {
-    event.preventDefault()
+function getProjectFormData(projectForm: HTMLFormElement) {
     // instantiating formdata object from FormData class and passing in html form element
     // this is an object that we can use to access all input values of our form using .get method
     const formData = new FormData(projectForm)
@@ -96,23 +100,39 @@ function newProjectFormHandler(event: Event, projectForm: HTMLFormElement) {
         // here we are create a new date object from the string we get back from the form
         finishDate: dateFormat(new Date(formData.get('finish-date') as string)),
     }
-    // catching error if project name is the same as existing, error coming from projectmanager class
-    // in newProject method
-    try {
-        const project = projectsManager.newProject(projectFormData)
-        console.log(project)
-        console.log(projectsManager.list)
-        projectForm.reset()
-        showModalForm('new-project-modal', false) // closes dialog
-    } catch (error) {
-        showWarnModalForm(error)
-    }
+    return projectFormData
 }
 
-function projectCardClicked(event: Event) {
-    const projectCard = ( event.target as HTMLElement).closest('.project-card')
-    if ( !projectCard ) return
-    const project = getProject(projectCard.dataset.id)
+
+function getActiveProject(): Project {
+    const activeProjectTitle = document.getElementById('active-project-title')?.textContent
+    const project = projectsManager.list.find(project => project.projectName === activeProjectTitle)
+    if ( !activeProjectTitle || !project ) return
+    return project
+}
+
+
+function updateProjectDetailsForm(project: Project) {
+    // this function will update the form inputs to values of the project editing when you click the edit button on the project
+    showModalForm('new-project-modal', true)
+    const projectDetailForm = document.getElementById('new-project-form')
+    const projectNameInput = document.getElementById('new-project-form-project-name') as HTMLInputElement
+    const projectDescriptionInput = document.getElementById('new-project-form-description') as HTMLInputElement
+    const projectRoleInput = document.getElementById('new-project-form-role') as HTMLInputElement
+    const projectStatusInput = document.getElementById('new-project-form-status') as HTMLInputElement
+    const projectDateInput = document.getElementById('new-project-form-date') as HTMLInputElement
+
+    if ( !projectNameInput || !projectDescriptionInput || !projectRoleInput || !projectStatusInput) return
+    projectNameInput.value = project.projectName
+    projectDescriptionInput.value = project.description
+    projectRoleInput.value = project.role
+    projectStatusInput.value = project.status
+    projectDateInput.valueAsDate = new Date(project.finishDate) // TODO: figure out how to set the date to existing value
+}
+
+
+function updateProjectDetailsContent(project:Project) {
+    // this function will update the html project content after the user edits and submits the new values
     const activeProjectTitle = document.getElementById('active-project-title')
     const infoSubHeaderTitle = document.getElementById("info-sub-header-title")
     const infoSubHeaderDescription = document.getElementById("info-sub-header-description")
@@ -120,6 +140,8 @@ function projectCardClicked(event: Event) {
     const infoBodyCost = document.getElementById("info-body-cost")
     const infoBodyRole = document.getElementById("info-body-role")
     const infoBodyFinishDate = document.getElementById("info-body-finish-date")
+    const bubbleTitle = document.getElementById('info-header')?.querySelector('div p')
+    const projectDetailsBubbleTitle = document.getElementById('info-header')?.querySelector('div')
     console.log(project)
     if ( !activeProjectTitle
         || !infoSubHeaderTitle
@@ -128,6 +150,8 @@ function projectCardClicked(event: Event) {
         || !infoBodyCost
         || !infoBodyRole
         || !infoBodyFinishDate
+        || !bubbleTitle
+        || !projectDetailsBubbleTitle
         || ! project ) return
     activeProjectTitle.textContent = project.projectName
     infoSubHeaderTitle.textContent = project.projectName
@@ -136,10 +160,83 @@ function projectCardClicked(event: Event) {
     infoBodyCost.value = project.cost
     infoBodyRole.textContent = project.role
     infoBodyFinishDate.textContent = project.finishDate
+    bubbleTitle.textContent = project.projectName.slice(0, 2).toUpperCase()
+    projectDetailsBubbleTitle.style.backgroundColor = project.iconColor
+}
 
-    toggleProjectsDetailsPage()
+
+function updateProjectCardContent(project: Project) {
+    const projectCard = getProjectCard(project.id)
+    if ( !projectCard ) return
+    // TODO: get all closest html elements and udpate their values to new ones
+    const projectTitle = projectCard.querySelector('.card-title h2')
+    if ( !projectTitle ) return
+    projectTitle.textContent = project.projectName
+
 
 }
+
+
+// ----------- CALLBACK FUNCTIONS ------------ //
+
+
+function newProjectFormHandler(event: Event, projectForm: HTMLFormElement) {
+    event.preventDefault()
+    if ( projectsPage?.classList.contains('page-hidden') ) {
+        // if this block is executed then the user is editing an existing project on details page
+        // update existing project data
+        const projectFormData = getProjectFormData(projectForm)
+        // update the project object with new values from form
+        const projectObject = getActiveProject()
+        projectObject.projectName = projectFormData.projectName
+        projectObject.description = projectFormData.description
+        projectObject.role = projectFormData.role
+        projectObject.status = projectFormData.status
+        // update the project details page values with updated values from form
+        // updateProjectDetailsForm(projectObject)
+        updateProjectDetailsContent(projectObject)
+        updateProjectCardContent(projectObject)
+        projectForm.reset()
+        showModalForm('new-project-modal', false) // closes dialog
+        // TODO: NEED TO REFRESH PAGE SOMEHOW
+        // main project page is not updating the values either after making edit change
+        // need to do abstraction and streamline functionality
+
+    } else {
+        // if this block is executeed then user is creating a brand new project
+        const projectFormData = getProjectFormData(projectForm)
+        // catching error if project name is the same as existing, error coming from projectmanager class
+        // in newProject method
+        try {
+            const project = projectsManager.newProject(projectFormData)
+            console.log(project)
+            console.log(projectsManager.list)
+            projectForm.reset()
+            showModalForm('new-project-modal', false) // closes dialog
+        } catch (error) {
+            showWarnModalForm(error)
+        }
+    }
+}
+
+
+function projectCardClicked(event: Event) {
+    const projectCard = ( event.target as HTMLElement).closest('.project-card')
+    if ( !projectCard ) return
+    const project = getProject(projectCard.dataset.id)
+    if ( !project ) return
+    updateProjectDetailsContent(project)
+    toggleProjectsDetailsPage()
+}
+
+
+function editProjectCard(event: Event) {
+    console.log('clicked')
+    showModalForm('new-project-modal', true)
+    const project = getActiveProject()
+    updateProjectDetailsForm(project)
+}
+
 
 function projectsClicked(event: Event) {
     if ( !projectsPage ) return
@@ -188,6 +285,7 @@ if ( projectList ) {
 
 
 // ** FOR TESTING ONLY ** //
+
 if ( testBtn ) {
     testBtn.addEventListener('click', (event) => {
         console.log(projectsManager.totalCostProjects())
@@ -195,7 +293,9 @@ if ( testBtn ) {
         // projectsManager.exportProjectDataJSON()
     })
 }
+
 // ** FOR TESTING ONLY ** //
+
 
 // for closing the warnModal that opens in the new project dialog if project names are the same
 document.getElementById('warn-form')?.addEventListener('click', (event) => {
@@ -222,4 +322,19 @@ const sidebarProjectsBtn = document.getElementById('sidebar-projects-btn')
 if ( sidebarProjectsBtn ) {
     sidebarProjectsBtn.addEventListener('click', (event) => projectsClicked(event))
 }
+
+const editProjectDetails =  document.getElementById('info-header-edit')
+if ( editProjectDetails ) {
+    editProjectDetails.addEventListener('click', (event) => editProjectCard(event))
+}
+
+
+// TODO: fix form, when sumbit new project with no date it errors out
+// TODO: fix when do edit project and choose new date it does not update the date for the project
+// TODO: update the project card content for the project on projects page 
+
+
+
+
+
 
