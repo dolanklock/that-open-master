@@ -579,6 +579,10 @@ input:focus, textarea:focus, select:focus {
     font-size: var(--font-sm);
 }
 
+#add-todo:hover {
+    cursor: pointer;
+    color: lightgray;
+}
 
 /* -------------------------- warning message dialog ------------------------ */
 
@@ -630,3 +634,5 @@ input:focus, textarea:focus, select:focus {
     flex-direction: row;
     justify-content: end;
 }
+
+

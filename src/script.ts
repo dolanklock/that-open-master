@@ -23,6 +23,7 @@ const newProjectForm = document.getElementById('new-project-form');
 const newProjectDialog = document.getElementById('new-project-modal')
 const newProjectSubmitBtn = document.querySelector('.form-submit-btn');
 const newProjectCancelBtn = document.querySelector('.form-cancel-btn');
+const todoBody = document.getElementById('todo-body')
 const projectList = document.getElementById('project-list')
 
 const projectsManager = new ProjectsManager()
@@ -88,9 +89,9 @@ function getProjectFormData(projectForm: HTMLFormElement) {
     // instantiating formdata object from FormData class and passing in html form element
     // this is an object that we can use to access all input values of our form using .get method
     const formData = new FormData(projectForm)
-    console.log(formData)
     // console.log(formData.get('project-name')); // the HTML input tag will have attribute 'name'
     // that is equal to 'project-name' and we can access it with this get method
+    const date = formData.get('finish-date')
     const projectFormData: IProject = {
         // as string is type assertion and tells the TS to convert value to string (be careful with this, rarley used)
         projectName: formData.get('project-name') as string,
@@ -98,13 +99,14 @@ function getProjectFormData(projectForm: HTMLFormElement) {
         role: formData.get('role') as projectRole,
         status: formData.get('project-status') as projectStatus,
         // here we are create a new date object from the string we get back from the form
-        finishDate: dateFormat(new Date(formData.get('finish-date') as string)),
+        finishDate: date ? formData.get('finish-date') as string : 'N/A',
     }
     return projectFormData
 }
 
 
-function getActiveProject(): Project {
+function getActiveProject(): Project | undefined {
+    // this function will get the active project (js object) when the user selects a project card from the project page
     const activeProjectTitle = document.getElementById('active-project-title')?.textContent
     const project = projectsManager.list.find(project => project.projectName === activeProjectTitle)
     if ( !activeProjectTitle || !project ) return
@@ -166,13 +168,18 @@ function updateProjectDetailsContent(project:Project) {
 
 
 function updateProjectCardContent(project: Project) {
+    // this function will update the project card info on the project page when a user edits and changes
+    // the project content on the project details page
     const projectCard = getProjectCard(project.id)
     if ( !projectCard ) return
     // TODO: get all closest html elements and udpate their values to new ones
     const projectTitle = projectCard.querySelector('.card-title h2')
-    if ( !projectTitle ) return
+    const projectRole = projectCard.querySelector('.project-card-role')
+    const projectStatus = projectCard.querySelector('.project-card-status')
+    if ( !projectTitle || !projectRole || !projectStatus ) return
     projectTitle.textContent = project.projectName
-
+    projectRole.textContent = project.role
+    projectStatus.textContent = project.status
 
 }
 
@@ -188,10 +195,12 @@ function newProjectFormHandler(event: Event, projectForm: HTMLFormElement) {
         const projectFormData = getProjectFormData(projectForm)
         // update the project object with new values from form
         const projectObject = getActiveProject()
+        if ( !projectObject ) return
         projectObject.projectName = projectFormData.projectName
         projectObject.description = projectFormData.description
         projectObject.role = projectFormData.role
         projectObject.status = projectFormData.status
+        projectObject.finishDate = projectFormData.finishDate
         // update the project details page values with updated values from form
         // updateProjectDetailsForm(projectObject)
         updateProjectDetailsContent(projectObject)
@@ -234,6 +243,7 @@ function editProjectCard(event: Event) {
     console.log('clicked')
     showModalForm('new-project-modal', true)
     const project = getActiveProject()
+    if ( !project ) return
     updateProjectDetailsForm(project)
 }
 
@@ -328,11 +338,28 @@ if ( editProjectDetails ) {
     editProjectDetails.addEventListener('click', (event) => editProjectCard(event))
 }
 
+const addToDo = document.getElementById('add-todo')
+if ( addToDo ) {
+    addToDo.addEventListener('click', function() {
+        console.log('todo clicked')
+        // TODO: get project object and set todo to attribute of object for json export
+        // TODO: add form that pops up for user to enter todo note and then get the value and
+        // add to the todo text p element in htmlToDo
+        const htmlToDo = `<div class="todo">
+                            <span class="material-icons-round">construction</span>
+                            <p class="todo-text">
+                                this is a test i have a lot more to add to this page still and
+                                then i will add the viewer.. excited for this!!!!
+                            </p>
+                            <p class="todo-date">Fri, Sep 20</p>
+                        </div>`
+        if ( !todoBody ) return
+        todoBody.insertAdjacentHTML('afterbegin', htmlToDo)
+    })
 
-// TODO: fix form, when sumbit new project with no date it errors out
-// TODO: fix when do edit project and choose new date it does not update the date for the project
-// TODO: update the project card content for the project on projects page 
+}
 
+// TODO: should have input for cost and estimated progress ???
 
 
 

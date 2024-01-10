@@ -19,7 +19,7 @@ export interface IProject {
     description: string
     role: projectRole
     status: projectStatus
-    finishDate: Date
+    finishDate: string
 };
 
 // in order to import this class into another module we need
@@ -30,7 +30,7 @@ export class Project {
     description: string
     role: projectRole
     status: projectStatus
-    finishDate: Date
+    finishDate: string
     id: uuidv4
     iconColor: string
 
@@ -66,11 +66,11 @@ export class Project {
                 <div class="project-card-body">
                     <div class="card-body">
                         <p>Status</p>
-                        <p style="color: white;">${this.status}</p>
+                        <p class="project-card-status" style="color: white;">${this.status}</p>
                     </div>
                     <div class="card-body">
                         <p>Role</p>
-                        <p style="color: white;">${this.role}</p>
+                        <p class="project-card-role" style="color: white;">${this.role}</p>
                     </div>
                     <div class="card-body">
                         <p>Cost</p>
