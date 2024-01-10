@@ -33,6 +33,7 @@ export class Project {
     finishDate: string
     id: uuidv4
     iconColor: string
+    todoList: [ToDo]
 
     // class attributes
     cost: number = 5
@@ -102,7 +103,14 @@ export class Project {
 };
 
 
-
+export class ToDo {
+    id: uuidv4
+    text: string
+    constructor(text: string) {
+        this.text = text
+        this.id = uuidv4()
+    }
+}
 
 
 

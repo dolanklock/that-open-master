@@ -1,6 +1,6 @@
 'use strict';
 
-import { Project, IProject } from "./Projects"
+import { Project, IProject, ToDo } from "./Projects"
 
 //// VARIABLES ////
 
@@ -76,6 +76,12 @@ export class ProjectsManager {
         const projectCards = [...projectList.children]
         const project = projectCards.filter(project => name === project.querySelector('.card-title')?.querySelector('h2')?.textContent)
         return project
+    }
+
+    addToDo(projectId: string, todo: ToDo) {
+        const project = this.list.find(project => project.id == projectId)
+        if ( !project ) return
+        project.todoList.push(todo)
     }
 
     exportProjectDataJSON(filename: string = 'projects') {

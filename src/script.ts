@@ -9,7 +9,7 @@
 // NOTE: we need to add the attribute to the script tag in our HTML file
 // to have type="module" - this will let the browser know we are using import/export
 // from different modules
-import { Project, IProject, projectRole, projectStatus } from "./class/Projects"
+import { Project, IProject, projectRole, projectStatus, ToDo } from "./class/Projects"
 import { ProjectsManager } from "./class/ProjectsManager"
 
 
@@ -342,26 +342,55 @@ const addToDo = document.getElementById('add-todo')
 if ( addToDo ) {
     addToDo.addEventListener('click', function() {
         console.log('todo clicked')
-        // TODO: get project object and set todo to attribute of object for json export
-        // TODO: add form that pops up for user to enter todo note and then get the value and
-        // add to the todo text p element in htmlToDo
+        const project = getActiveProject()
+        if ( !project ) return
+        console.log('PORJECT TODO', project)
+        const todoForm = document.getElementById('new-todo-form')
+        if ( !todoForm ) return
+        todoForm.addEventListener('submit', function() {
+            // TODO when add button for todo is clicked open up the form and get user to add text
+            // once text is added and submitted capture the text from the form and add to object below
+        })
+        const todoFormData = new FormData(todoForm as HTMLFormElement)
+        let text = todoFormData.get('todo-text')
+        if ( !text ) {
+            text = ""
+        }
         const htmlToDo = `<div class="todo">
                             <span class="material-icons-round">construction</span>
-                            <p class="todo-text">
-                                this is a test i have a lot more to add to this page still and
-                                then i will add the viewer.. excited for this!!!!
-                            </p>
+                            <p class="todo-text">${text}</p>
                             <p class="todo-date">Fri, Sep 20</p>
                         </div>`
+        projectsManager.addToDo(project.id, new ToDo(text as string))
         if ( !todoBody ) return
         todoBody.insertAdjacentHTML('afterbegin', htmlToDo)
     })
+    // TODO: add form that pops up for user to enter todo note
 
 }
+
 
 // TODO: should have input for cost and estimated progress ???
 
 
+/*
 
+Class ToDo {
+	id
+	text
+}
 
+Each project object should have a todo attribute that contains
+A list of todo objects. 
 
+The todo objects should contain to attributes 
+- Text
+- Id
+
+Every time a todo is added a new todo object is created
+And the todo id and text attributes are set
+
+Then the project object todo list attribute will append the new
+Todo object
+
+*/
