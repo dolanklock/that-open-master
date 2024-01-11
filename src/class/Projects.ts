@@ -33,7 +33,7 @@ export class Project {
     finishDate: string
     id: uuidv4
     iconColor: string
-    todoList: [ToDo]
+    todoList: ToDo[] = []
 
     // class attributes
     cost: number = 5
@@ -45,6 +45,7 @@ export class Project {
         // use 'in' instead of 'of' for looping over an object
         for ( const key in data ) {
             this[key] = data[key]
+            console.log('log', data[key])
         }
         this.id = uuidv4()
         this.iconColor = this.getRandomColor()
@@ -79,7 +80,8 @@ export class Project {
                     </div>
                     <div class="card-body">
                         <p>Estimated Progress</p>
-                        <p style="color: white;">${new Intl.NumberFormat(navigator.language, { style: 'currency', currency: 'CAD' }).format(this.progress)}%</p>
+                        <p style="color: white;">${new Intl.NumberFormat(navigator.language, { style: 'currency', currency: 'CAD' })
+                        .format(this.progress)}%</p>
                     </div>
                     <button class="delete-project">Delete</button>
                 </div>
@@ -88,7 +90,22 @@ export class Project {
         if ( projectList ) {
             projectList.insertAdjacentHTML('beforeend', html);
         };
+        this._addToDos()
     };
+
+    _addToDos() {
+        // this method will import the todos from the imported project json files and add todos to html
+        const todoBody = document.getElementById('todo-body')
+        if ( !todoBody ) return
+        this.todoList.forEach(todo => {
+            const htmlToDo = `<div class="todo">
+                        <span class="material-icons-round">construction</span>
+                        <p class="todo-text">${todo.text}</p>
+                        <p class="todo-date">Fri, Sep 20</p>
+                    </div>`
+            todoBody.insertAdjacentHTML('afterbegin', htmlToDo)
+        })
+    }
 
     getRandomColor() {
         // Generate random values for red, green, and blue components

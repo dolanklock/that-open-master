@@ -235,6 +235,7 @@ function projectCardClicked(event: Event) {
     const project = getProject(projectCard.dataset.id)
     if ( !project ) return
     updateProjectDetailsContent(project)
+    renderToDoList(project)
     toggleProjectsDetailsPage()
 }
 
@@ -254,6 +255,42 @@ function projectsClicked(event: Event) {
     else return
 }
 
+function addToDoHandler(event: Event) {
+    // when todo form is submitted this function will run and get valie from input and
+    // add todo to the html and add the todo to the project objects todolist
+    event.preventDefault()
+    const project = getActiveProject()
+    const todoForm = document.getElementById('new-todo-form')
+    if ( !project || !todoForm ) return
+    const todoFormData = new FormData(todoForm as HTMLFormElement)
+    let text = todoFormData.get('todo-text')
+    if ( !text ) {
+        todoForm.reset()
+        showModalForm('new-todo-modal', false) // closes dialog
+    }
+    projectsManager.addToDo(project.id, new ToDo(text as string))
+    renderToDoList(project)
+    todoForm.reset()
+    showModalForm('new-todo-modal', false) // closes dialog
+}
+
+
+function renderToDoList(project: Project) {
+    // clears html inside todo-body html and updates the html inside of it 
+    // with the given project object todo list
+    if ( !todoBody ) return
+    todoBody.innerHTML = ""
+    project.todoList.forEach(todo => {
+        const htmlToDo = 
+                    `<div class="todo">
+                        <span class="material-icons-round">construction</span>
+                        <p class="todo-text">${todo.text}</p>
+                        <p class="todo-date">Fri, Sep 20</p>
+                    </div>`
+        todoBody.insertAdjacentHTML('afterbegin', htmlToDo)
+    })
+}
+
 
 // ---------------- EVENT HANDLER ----------------- //
 
@@ -263,9 +300,6 @@ if ( newProjectBtn ) {
     newProjectBtn.addEventListener('click', () => showModalForm('new-project-modal', true))
 }
 
-// if ( newProjectSubmitBtn ) {
-//     newProjectSubmitBtn.addEventListener('click', () => showModalForm('new-project-modal', false))
-// }
 
 // if cancel button is clicked in new project dialog
 if ( newProjectCancelBtn ) {
@@ -338,59 +372,38 @@ if ( editProjectDetails ) {
     editProjectDetails.addEventListener('click', (event) => editProjectCard(event))
 }
 
+
+// if add todo button is clicked will open dialog
 const addToDo = document.getElementById('add-todo')
 if ( addToDo ) {
-    addToDo.addEventListener('click', function() {
-        console.log('todo clicked')
-        const project = getActiveProject()
-        if ( !project ) return
-        console.log('PORJECT TODO', project)
-        const todoForm = document.getElementById('new-todo-form')
-        if ( !todoForm ) return
-        todoForm.addEventListener('submit', function() {
-            // TODO when add button for todo is clicked open up the form and get user to add text
-            // once text is added and submitted capture the text from the form and add to object below
-        })
-        const todoFormData = new FormData(todoForm as HTMLFormElement)
-        let text = todoFormData.get('todo-text')
-        if ( !text ) {
-            text = ""
-        }
-        const htmlToDo = `<div class="todo">
-                            <span class="material-icons-round">construction</span>
-                            <p class="todo-text">${text}</p>
-                            <p class="todo-date">Fri, Sep 20</p>
-                        </div>`
-        projectsManager.addToDo(project.id, new ToDo(text as string))
-        if ( !todoBody ) return
-        todoBody.insertAdjacentHTML('afterbegin', htmlToDo)
-    })
-    // TODO: add form that pops up for user to enter todo note
+    addToDo.addEventListener('click', (event) => showModalForm('new-todo-modal', true))
+}
 
+const todoForm = document.getElementById('new-todo-form')
+if ( todoForm ) {
+    todoForm.addEventListener('submit', (event) => addToDoHandler(event))
 }
 
 
-// TODO: should have input for cost and estimated progress ???
+// TODO: for todos need to add function to clear the html in todo-body html every time a project is clicked and
+// then render the active project todos in the body
+
+// TODO: continue work on getting todos to import when I export projects and then import them
+// it is not bringing todos
+// in the Project class in the constructor method when iterating through data do I need to create a
+// ToDo object from the todo list data? maybe not...
+// Need to add to addProject method so that I am adding todo html to each respective project
 
 
-/*
+// TODO: need to fix todo notes, when i add two projects the todo notes from the first one it shows in the todos
+// for the second project
 
-Class ToDo {
-	id
-	text
-}
+// TODO: fix scrolling of todos - when add too many todos it makes page height bigger, should add scroll bar
 
-Each project object should have a todo attribute that contains
-A list of todo objects. 
+// TODO: should have input for cost and estimated progress ??
 
-The todo objects should contain to attributes 
-- Text
-- Id
+// TODO: add delete button for todos??
 
-Every time a todo is added a new todo object is created
-And the todo id and text attributes are set
+// TODO: add date to todo html
 
-Then the project object todo list attribute will append the new
-Todo object
-
-*/
+// TODO: update error handler in projectsmanager class in that module in the importjson method

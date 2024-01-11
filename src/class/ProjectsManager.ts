@@ -81,6 +81,8 @@ export class ProjectsManager {
     addToDo(projectId: string, todo: ToDo) {
         const project = this.list.find(project => project.id == projectId)
         if ( !project ) return
+        console.log('hereeeeee', project)
+        console.log('hereeeeee', project.todoList)
         project.todoList.push(todo)
     }
 
@@ -122,7 +124,7 @@ export class ProjectsManager {
                 // datatype is an array of IPorject's
                 // the as string at the end is type assignment and we are telling
                 // TS that this will be a string when its in the projects array
-                const projects: IProject[] = JSON.parse(json as string)
+                const projects: IProject[] = JSON.parse(json as string) // json.parse converts json string into a JavaScript object
                 // iterating through projects array which contains JSON items that
                 // we can create a new project from using the 'newProject' method in
                 // this class
@@ -130,7 +132,7 @@ export class ProjectsManager {
                     try {
                         this.newProject(project)
                     } catch (error) {
-                        
+                        // TODO: what to do with error here? notify to user there was error loading json?
                     }
                 }
             })
