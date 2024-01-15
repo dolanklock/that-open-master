@@ -9,8 +9,13 @@
 // NOTE: we need to add the attribute to the script tag in our HTML file
 // to have type="module" - this will let the browser know we are using import/export
 // from different modules
+
+// --------------------- IMPORTS -------------------- //
+
+
 import { Project, IProject, projectRole, projectStatus, ToDo } from "./class/Projects"
 import { ProjectsManager } from "./class/ProjectsManager"
+import { showWarnModalForm, showModalForm, showWarnModalFormImportJson, updateProjectDetailsContent, updateProjectCardContent } from "./class/Warnings"
 
 
 // ----------------- VARIABLES ---------------- //
@@ -24,38 +29,14 @@ const newProjectDialog = document.getElementById('new-project-modal')
 const newProjectSubmitBtn = document.querySelector('.form-submit-btn');
 const newProjectCancelBtn = document.querySelector('.form-cancel-btn');
 const todoBody = document.getElementById('todo-body')
+const todoForm = document.getElementById('new-todo-form')
 const projectList = document.getElementById('project-list')
 
 const projectsManager = new ProjectsManager()
-
 const testBtn = document.getElementById('test')
-
-// warn elements
-const warnModal = document.getElementById('warning-dialog')
 
 
 // ------------------ FUNCTIONS ----------------- // 
-
-
-const showModalForm = function(id: string, showModal=true) {
-    const modalForm = document.getElementById(id)
-    if ( modalForm && modalForm instanceof HTMLDialogElement ) {
-        if ( showModal ) modalForm.showModal()
-        else modalForm.close()
-    } else {
-        console.warn(`"${id}" is not a valid CSS id, verify id is correct and in CSS`)
-    }
-}
-
-
-const showWarnModalForm = function(msg: string) {
-    if ( warnModal && warnModal instanceof HTMLDialogElement) {
-        warnModal.showModal()
-    }
-    const warnMessage = document.getElementById('warn-message')
-    if ( !warnMessage ) return
-    warnMessage.textContent = msg
-}
 
 
 function toggleProjectsDetailsPage() {
@@ -69,9 +50,6 @@ function getProject(projectId: string | number) {
     return projectsManager.list.find(project => project.id == projectId)
 }
 
-function getProjectCard(projectId: string) {
-    return document.querySelector(`[data-id="${projectId}"]`)
-}
 
 function dateFormat(date: Date) {
     // if ( date !instanceof Date ) return 'N/A'
@@ -80,7 +58,7 @@ function dateFormat(date: Date) {
         day: 'numeric',
         year: 'numeric',
     };
-    console.log(date)
+    // console.log(date)
     return new Intl.DateTimeFormat(navigator.language, options).format(date);
 }
 
@@ -133,56 +111,6 @@ function updateProjectDetailsForm(project: Project) {
 }
 
 
-function updateProjectDetailsContent(project:Project) {
-    // this function will update the html project content after the user edits and submits the new values
-    const activeProjectTitle = document.getElementById('active-project-title')
-    const infoSubHeaderTitle = document.getElementById("info-sub-header-title")
-    const infoSubHeaderDescription = document.getElementById("info-sub-header-description")
-    const infoBodyStatus = document.getElementById("info-body-status")
-    const infoBodyCost = document.getElementById("info-body-cost")
-    const infoBodyRole = document.getElementById("info-body-role")
-    const infoBodyFinishDate = document.getElementById("info-body-finish-date")
-    const bubbleTitle = document.getElementById('info-header')?.querySelector('div p')
-    const projectDetailsBubbleTitle = document.getElementById('info-header')?.querySelector('div')
-    console.log(project)
-    if ( !activeProjectTitle
-        || !infoSubHeaderTitle
-        || !infoSubHeaderDescription
-        || !infoBodyStatus
-        || !infoBodyCost
-        || !infoBodyRole
-        || !infoBodyFinishDate
-        || !bubbleTitle
-        || !projectDetailsBubbleTitle
-        || ! project ) return
-    activeProjectTitle.textContent = project.projectName
-    infoSubHeaderTitle.textContent = project.projectName
-    infoSubHeaderDescription.textContent = project.description
-    infoBodyStatus.textContent = project.status
-    infoBodyCost.value = project.cost
-    infoBodyRole.textContent = project.role
-    infoBodyFinishDate.textContent = project.finishDate
-    bubbleTitle.textContent = project.projectName.slice(0, 2).toUpperCase()
-    projectDetailsBubbleTitle.style.backgroundColor = project.iconColor
-}
-
-
-function updateProjectCardContent(project: Project) {
-    // this function will update the project card info on the project page when a user edits and changes
-    // the project content on the project details page
-    const projectCard = getProjectCard(project.id)
-    if ( !projectCard ) return
-    // TODO: get all closest html elements and udpate their values to new ones
-    const projectTitle = projectCard.querySelector('.card-title h2')
-    const projectRole = projectCard.querySelector('.project-card-role')
-    const projectStatus = projectCard.querySelector('.project-card-status')
-    if ( !projectTitle || !projectRole || !projectStatus ) return
-    projectTitle.textContent = project.projectName
-    projectRole.textContent = project.role
-    projectStatus.textContent = project.status
-
-}
-
 
 // ----------- CALLBACK FUNCTIONS ------------ //
 
@@ -218,12 +146,12 @@ function newProjectFormHandler(event: Event, projectForm: HTMLFormElement) {
         // in newProject method
         try {
             const project = projectsManager.newProject(projectFormData)
-            console.log(project)
-            console.log(projectsManager.list)
+            // console.log(project)
+            // console.log(projectsManager.list)
             projectForm.reset()
             showModalForm('new-project-modal', false) // closes dialog
         } catch (error) {
-            showWarnModalForm(error)
+            showWarnModalForm(`A project with the name "${error.message}" already exists.`)
         }
     }
 }
@@ -241,7 +169,7 @@ function projectCardClicked(event: Event) {
 
 
 function editProjectCard(event: Event) {
-    console.log('clicked')
+    // console.log('clicked')
     showModalForm('new-project-modal', true)
     const project = getActiveProject()
     if ( !project ) return
@@ -260,7 +188,6 @@ function addToDoHandler(event: Event) {
     // add todo to the html and add the todo to the project objects todolist
     event.preventDefault()
     const project = getActiveProject()
-    const todoForm = document.getElementById('new-todo-form')
     if ( !project || !todoForm ) return
     const todoFormData = new FormData(todoForm as HTMLFormElement)
     let text = todoFormData.get('todo-text')
@@ -272,6 +199,7 @@ function addToDoHandler(event: Event) {
     renderToDoList(project)
     todoForm.reset()
     showModalForm('new-todo-modal', false) // closes dialog
+    renderToDoStatusColor()
 }
 
 
@@ -282,14 +210,61 @@ function renderToDoList(project: Project) {
     todoBody.innerHTML = ""
     project.todoList.forEach(todo => {
         const htmlToDo = 
-                    `<div class="todo">
-                        <span class="material-icons-round">construction</span>
-                        <p class="todo-text">${todo.text}</p>
-                        <p class="todo-date">Fri, Sep 20</p>
-                    </div>`
+                        `<div class="todo">
+                            <span class="material-icons-round">construction</span>
+                            <p class="todo-text">${todo.text}</p>
+                            <div class="todo-status-date">
+                                <select name="todo-status" id="">
+                                    <option value="open">Open</option>
+                                    <option value="in-progress">In-progress</option>
+                                    <option value="complete">Complete</option>
+                                </select>
+                                <p class="todo-date">Fri, Sep 20</p>
+                            </div>
+                        </div>`
         todoBody.insertAdjacentHTML('afterbegin', htmlToDo)
     })
 }
+
+
+function renderToDoStatusColor() {
+    // call this method in the add todo event handler to update the colors on creation
+    // can probably get rid of the todoStatusChangeEventHandler function and use this one instead???
+
+    // TODO: better way to do this will be to pass the active proejct in to this function
+    // and then iterate through the projects todos and get the html todo by the todos id attr and then
+    // get the closest select element and its value and then set the todo backgroun based on that
+
+    // TODO: need to work on this - figure out how to get inner html into an array so i can iterate and change color
+    const todos = todoBody?.innerHTML
+    const innerHTMLArray = todos.split('\n');
+    // [...todoBody?.innerHTML].forEach(todo => {
+    //     console.log('todo here', todo)
+    // })
+    console.log('todos here', innerHTMLArray)
+}
+
+
+function todoStatusChangeEventHandler(event: Event) {
+    /*
+    this function will update the color of the todo background when the status is changed
+
+    * @param {Event} event - the event object from the addeventlistener method
+    * @returns {none}
+    */
+    event.preventDefault()
+    const selectElement = event.target
+    const todo = (event.target as HTMLElement).closest('.todo')
+    if ( !selectElement || !todo ) return
+    if ( selectElement.value === 'open' ) {
+        todo.style.background = 'red'
+    } else if ( selectElement.value === 'in-progress' ) {
+        todo.style.background = 'blue'
+    } else if ( selectElement.value === 'complete' ) {
+        todo.style.background = 'green'
+    }
+}
+
 
 
 // ---------------- EVENT HANDLER ----------------- //
@@ -330,19 +305,22 @@ if ( projectList ) {
 
 // ** FOR TESTING ONLY ** //
 
-if ( testBtn ) {
-    testBtn.addEventListener('click', (event) => {
-        console.log(projectsManager.totalCostProjects())
-        console.log(projectsManager.getProjectByName('testing'))
-        // projectsManager.exportProjectDataJSON()
-    })
-}
+// if ( testBtn ) {
+//     testBtn.addEventListener('click', (event) => {
+//         event.preventDefault()
+//         // console.log(projectsManager.totalCostProjects())
+//         // console.log(projectsManager.getProjectByName('testing'))
+//         // projectsManager.exportProjectDataJSON()
+//         console.log(projectsManager.list)
+//     })
+// }
 
 // ** FOR TESTING ONLY ** //
 
 
 // for closing the warnModal that opens in the new project dialog if project names are the same
 document.getElementById('warn-form')?.addEventListener('click', (event) => {
+    const warnModal = document.getElementById('warning-dialog')
     if ( warnModal && warnModal instanceof HTMLDialogElement ) warnModal.close()
 })
 
@@ -353,7 +331,9 @@ if (exportJSONBtn) {
 
 const importJSONBtn = document.getElementById('import-json')
 if (importJSONBtn) {
-    importJSONBtn.addEventListener('click', () => projectsManager.importProjectDataJSON())
+    console.log('befer', projectsManager.list)
+    importJSONBtn.addEventListener("click", (event) => projectsManager.importProjectDataJSON(event))
+    console.log('after', projectsManager.list)
 }
 
 // project card click
@@ -379,24 +359,59 @@ if ( addToDo ) {
     addToDo.addEventListener('click', (event) => showModalForm('new-todo-modal', true))
 }
 
-const todoForm = document.getElementById('new-todo-form')
+// ------------------------ todo Event Listeners ------------------------------ #
+
 if ( todoForm ) {
     todoForm.addEventListener('submit', (event) => addToDoHandler(event))
 }
 
+// this closes the todo form dialog if cancel is clicked
+if ( todoForm ) {
+    todoForm.addEventListener('click', (event) => {
+        if ( event.target.classList.contains('form-cancel-btn') ) {
+            todoForm.reset()
+            showModalForm('new-todo-modal', false) // closes dialog
+        }
+    })
+}
 
-// TODO: for todos need to add function to clear the html in todo-body html every time a project is clicked and
-// then render the active project todos in the body
-
-// TODO: continue work on getting todos to import when I export projects and then import them
-// it is not bringing todos
-// in the Project class in the constructor method when iterating through data do I need to create a
-// ToDo object from the todo list data? maybe not...
-// Need to add to addProject method so that I am adding todo html to each respective project
+if ( todoBody ) {
+    todoBody.addEventListener('change', (event) => todoStatusChangeEventHandler(event))
+}
 
 
-// TODO: need to fix todo notes, when i add two projects the todo notes from the first one it shows in the todos
-// for the second project
+
+
+/*
+
+TODO: two big bugs - 
+
+maybe change so that the import input is inside of a button so i can check if button is cancel or not? therefor
+I can say if cancel pressed run the whole import function else dont even run it...
+
+bug#1 - when i create a project and give it name stadium, then i import json and select open and then cancel it, then import json again and click
+open, it does not prompt the dialog for same name error even though there is a proejct with same name importing...
+
+bug#2 - with no projects created, when i import and then cancel the dialog, then import again and select open, it gives me the 
+same name error warning dialog even though there is no existing projects created....
+
+*/
+
+
+// TODO: update todo backgroun color so that when todo is added it automatically has correct background
+// color for status "open"
+
+// TODO: when i press import then open it works with no dialog pop up
+// when i press import then cancel then import then open, i get pop up with warning...why?
+
+
+// TODO: believe could be async issue... notice in the importProjectDataJSON method the projectmanager list has objects already in them
+// happens only when i click import then cancel and then click import again and select 'open'
+
+// TODO: when i import project and then cancel and then import again and select override it will error for project
+// same name even thoough there is no proejct with the same name...
+
+// TODO: add confirmation for when delete is clicked on projectcard
 
 // TODO: fix scrolling of todos - when add too many todos it makes page height bigger, should add scroll bar
 

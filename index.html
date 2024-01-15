@@ -77,19 +77,16 @@
 
     <dialog id="new-todo-modal">
         <form id="new-todo-form" action="">
-            <h2>To Do</h2>
             <div class="input-list">
                 <div class="form-field-container">
                     <div class="form-field-title">
-                        <span class="material-icons-round">apartment</span>
-                        <label for="">Name</label>
+                        <label for="">Todo Note</label>
                     </div>
-                    <input id="new-project-form-project-name" name="todo-text" type="text" placeholder="project name">
-                    <p class="tip">TIP: Give it a short name</p>
+                    <input id="new-project-form-project-name" name="todo-text" type="text" placeholder="Enter text">
                 </div>
                 <div>
-                    <button type="reset" class="form-cancel-btn">Cancel</button>
-                    <button type="submit" class="form-submit-btn">Accept</button>
+                    <button type="button" class="form-cancel-btn">Cancel</button>
+                    <button type="submit" class="form-submit-btn">Add</button>
                 </div>
             </div>
         </form>
@@ -165,6 +162,22 @@
                     </div>
                     <div id="warn-footer">
                         <button type="reset" class="warn-button">Ok</button>
+                    </div>
+                </form>
+            </dialog>
+            <dialog id="warning-dialog-import-json">
+                <form class="warn-form" id="warn-form-import-json" action="">
+                    <div id="warn-body">
+                        <span class="material-symbols-outlined">
+                            error
+                            </span>
+                        <div class="warn-message">
+                            <h3 id="warn-message"></h3>
+                        </div>
+                    </div>
+                    <div id="warn-footer">
+                        <button type="button" id="cancel-warn-import-json-btn" class="warn-button">Cancel</button>
+                        <button type="submit" class="warn-button">Override</button>
                     </div>
                 </form>
             </dialog>

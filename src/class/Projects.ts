@@ -40,12 +40,13 @@ export class Project {
     progress: number = 0
 
     constructor(data: IProject) {
+        console.log(`*** CREATING NEW PROJECT WITH NAME "${data.projectName}" ***`)
         // instance attributes
         // instead of writing each on out 'this.name = name' we can loop of data object and dynamically assign attributes
         // use 'in' instead of 'of' for looping over an object
         for ( const key in data ) {
             this[key] = data[key]
-            console.log('log', data[key])
+            // console.log('log', data[key])
         }
         this.id = uuidv4()
         this.iconColor = this.getRandomColor()
@@ -61,7 +62,6 @@ export class Project {
                     </div>
                     <div class="card-title">
                         <h2>${this.projectName}</h2>
-                        <h2>${this.id}</h2>
                         <p>Community hospital located at downtown.</p>
                     </div>
                 </div>
@@ -98,11 +98,21 @@ export class Project {
         const todoBody = document.getElementById('todo-body')
         if ( !todoBody ) return
         this.todoList.forEach(todo => {
-            const htmlToDo = `<div class="todo">
-                        <span class="material-icons-round">construction</span>
-                        <p class="todo-text">${todo.text}</p>
-                        <p class="todo-date">Fri, Sep 20</p>
-                    </div>`
+            const htmlToDo = `
+                            <div class="todo">
+                                <span class="material-icons-round">construction</span>
+                                <p class="todo-text">${todo.text}</p>
+                                <div class="todo-status-date">
+                                    <select name="todo-status" id="todo-status">
+                                        <option value="open">Open</option>
+                                        <option value="in-progress">In-progress</option>
+                                        <option value="complete">Complete</option>
+                                    </select>
+                                    <p class="todo-date">Fri, Sep 20</p>
+                                </div>
+                            </div>
+                            `
+                            
             todoBody.insertAdjacentHTML('afterbegin', htmlToDo)
         })
     }
