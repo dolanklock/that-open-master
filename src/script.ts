@@ -135,9 +135,6 @@ function newProjectFormHandler(event: Event, projectForm: HTMLFormElement) {
         updateProjectCardContent(projectObject)
         projectForm.reset()
         showModalForm('new-project-modal', false) // closes dialog
-        // TODO: NEED TO REFRESH PAGE SOMEHOW
-        // main project page is not updating the values either after making edit change
-        // need to do abstraction and streamline functionality
 
     } else {
         // if this block is executeed then user is creating a brand new project
@@ -146,8 +143,6 @@ function newProjectFormHandler(event: Event, projectForm: HTMLFormElement) {
         // in newProject method
         try {
             const project = projectsManager.newProject(projectFormData)
-            // console.log(project)
-            // console.log(projectsManager.list)
             projectForm.reset()
             showModalForm('new-project-modal', false) // closes dialog
         } catch (error) {
@@ -169,7 +164,6 @@ function projectCardClicked(event: Event) {
 
 
 function editProjectCard(event: Event) {
-    // console.log('clicked')
     showModalForm('new-project-modal', true)
     const project = getActiveProject()
     if ( !project ) return
@@ -180,12 +174,18 @@ function editProjectCard(event: Event) {
 function projectsClicked(event: Event) {
     if ( !projectsPage ) return
     if ( projectsPage.classList.contains('page-hidden') ) toggleProjectsDetailsPage()
-    else return
+    // renderToDoStatusColor(getActiveProject() as Project)
 }
 
 function addToDoHandler(event: Event) {
-    // when todo form is submitted this function will run and get valie from input and
-    // add todo to the html and add the todo to the project objects todolist
+    /*
+    when todo form is submitted this function will run and get valie from input and
+    add todo to the html and add the todo to the project objects todolist
+
+    * @param {Project} project - the project object to use for rendering the todos. The project passed in will be
+                        the data values for the HTML rendered
+    * @returns {none}
+    */
     event.preventDefault()
     const project = getActiveProject()
     if ( !project || !todoForm ) return
@@ -199,22 +199,29 @@ function addToDoHandler(event: Event) {
     renderToDoList(project)
     todoForm.reset()
     showModalForm('new-todo-modal', false) // closes dialog
-    renderToDoStatusColor()
+    renderToDoStatusColor(project)
 }
 
 
 function renderToDoList(project: Project) {
-    // clears html inside todo-body html and updates the html inside of it 
-    // with the given project object todo list
+    /*
+    this function clears the HTML inside of the todo-body HTML and updates the HTML inside of the todo-body
+    with the given project object todo list. then after it adds the todo HTML, it will run the renderToDoStatusColor
+    function in order to get the todo HTML to the correct color and status
+
+    * @param {Project} project - the project object to use for rendering the todos. The project passed in will be
+                        the data values for the HTML rendered
+    * @returns {none}
+    */
     if ( !todoBody ) return
     todoBody.innerHTML = ""
     project.todoList.forEach(todo => {
         const htmlToDo = 
-                        `<div class="todo">
+                        `<div class="todo" data-id="${todo.id}">
                             <span class="material-icons-round">construction</span>
                             <p class="todo-text">${todo.text}</p>
                             <div class="todo-status-date">
-                                <select name="todo-status" id="">
+                                <select name="todo-status" id="" class="todo-status">
                                     <option value="open">Open</option>
                                     <option value="in-progress">In-progress</option>
                                     <option value="complete">Complete</option>
@@ -224,24 +231,47 @@ function renderToDoList(project: Project) {
                         </div>`
         todoBody.insertAdjacentHTML('afterbegin', htmlToDo)
     })
+    renderToDoStatusColor(project)
 }
 
 
-function renderToDoStatusColor() {
-    // call this method in the add todo event handler to update the colors on creation
-    // can probably get rid of the todoStatusChangeEventHandler function and use this one instead???
+function renderToDoStatusColor(project: Project) {
+    /*
+    this function will iterate through the given project objects todos and find the todo HTML from the given
+    todo object, then it will assign the todo HTML status to the todo objects status (this will update the
+    dropdown selector) and then it will update the todo HTML background color based on the todo objects status value
 
-    // TODO: better way to do this will be to pass the active proejct in to this function
-    // and then iterate through the projects todos and get the html todo by the todos id attr and then
-    // get the closest select element and its value and then set the todo backgroun based on that
+    * @param {Project} project - the project object to use for updating the todo HTML - whatever project passed
+                        in, that will be the todo html that is updated because the project objects todo objects id
+                        will be used to find the todo HTML (by id)
+    * @returns {none}
+    */
+    project.todoList.forEach(todo => {
+        const todoHTMLElement = document.querySelector(`[data-id="${todo.id}"]`)
+        const todoStatus = todoHTMLElement?.querySelector('.todo-status')
+        todoStatus.value = todo.status
+        if ( !todoHTMLElement || !todoStatus ) return
+        if ( todo.status === 'open' ) todoHTMLElement.style.background = "red"
+        if ( todo.status === 'in-progress' ) todoHTMLElement.style.background = "blue"
+        if ( todo.status === 'complete' ) todoHTMLElement.style.background = "green"
+    })
 
-    // TODO: need to work on this - figure out how to get inner html into an array so i can iterate and change color
-    const todos = todoBody?.innerHTML
-    const innerHTMLArray = todos.split('\n');
-    // [...todoBody?.innerHTML].forEach(todo => {
-    //     console.log('todo here', todo)
-    // })
-    console.log('todos here', innerHTMLArray)
+}
+
+function updateProjectToDoStatus(elementIdFind: string, status: string) {
+    /*
+    this function will get the current active project object (Project) and find the 
+    todo object from its todoList from the elementIdFind passed in and update the todo objects
+    status attribute with the status passed into arg
+
+    * @param {string} elementIdFind - the id of the todo object to find in the project objects todoList list
+    * @param {string} status - the current status of the todo object
+    * @returns {none}
+    */
+    const project = getActiveProject()
+    const projectToDo = project?.todoList.find(todo => todo.id === elementIdFind)
+    if ( !projectToDo ) return
+    projectToDo.status = status
 }
 
 
@@ -254,15 +284,10 @@ function todoStatusChangeEventHandler(event: Event) {
     */
     event.preventDefault()
     const selectElement = event.target
-    const todo = (event.target as HTMLElement).closest('.todo')
-    if ( !selectElement || !todo ) return
-    if ( selectElement.value === 'open' ) {
-        todo.style.background = 'red'
-    } else if ( selectElement.value === 'in-progress' ) {
-        todo.style.background = 'blue'
-    } else if ( selectElement.value === 'complete' ) {
-        todo.style.background = 'green'
-    }
+    const todoHTMLElement = (event.target as HTMLElement).closest('.todo')
+    if ( !todoHTMLElement || !selectElement ) return
+    updateProjectToDoStatus(todoHTMLElement.dataset.id, selectElement.value)
+    renderToDoStatusColor(getActiveProject() as Project)
 }
 
 
@@ -305,15 +330,15 @@ if ( projectList ) {
 
 // ** FOR TESTING ONLY ** //
 
-// if ( testBtn ) {
-//     testBtn.addEventListener('click', (event) => {
-//         event.preventDefault()
-//         // console.log(projectsManager.totalCostProjects())
-//         // console.log(projectsManager.getProjectByName('testing'))
-//         // projectsManager.exportProjectDataJSON()
-//         console.log(projectsManager.list)
-//     })
-// }
+if ( testBtn ) {
+    testBtn.addEventListener('click', (event) => {
+        event.preventDefault()
+        // console.log(projectsManager.totalCostProjects())
+        // console.log(projectsManager.getProjectByName('testing'))
+        // projectsManager.exportProjectDataJSON()
+        console.log("TEST CHECK", projectsManager.list)
+    })
+}
 
 // ** FOR TESTING ONLY ** //
 
@@ -381,6 +406,9 @@ if ( todoBody ) {
 
 
 
+
+// TODO: add todo date on creation, and make sure import project, the date is brought with it, will need to update todo
+// class to have date created attribute
 
 /*
 

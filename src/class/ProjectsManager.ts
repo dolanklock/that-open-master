@@ -4,7 +4,8 @@
 
 
 import { Project, IProject, ToDo } from "./Projects"
-import { showWarnModalFormImportJson, showModalForm, updateProjectDetailsContent, updateProjectCardContent } from "./Warnings"
+import { showWarnModalFormImportJson, showModalForm, updateProjectDetailsContent,
+     updateProjectCardContent, updateToDoHTMLFromProject } from "./Warnings"
 
 // --------------------- VARIABLES -------------------- //
 
@@ -45,8 +46,6 @@ export class ProjectsManager {
     constructor() {
         this.countChange = 0
         this.countLoad = 0
-        // console.log('here')
-        // console.log(this.list)
     }
 
     newProject(data: IProject) {
@@ -65,13 +64,6 @@ export class ProjectsManager {
         if ( data.projectName.length < 5 ) {
             throw new Error(`Project name must be greater than 5 characters`);
         }
-        // if ( !same ) {
-        //     console.log('RUNNING HERE*****')
-        //     const project = new Project(data)
-        //     this.list.push(project)
-        //     return project
-        // }
-        // console.log('RUNNING HERE*****', this.list)
         const project = new Project(data)
         this.list.push(project)
         return project
@@ -244,9 +236,8 @@ export class ProjectsManager {
                 for ( const project of projects ) {
                     console.log(`POP : ${project}`)
                     try {
-                        // console.log(`try (${this.countChange})`)
-                        // console.log('try -', this.list)
                         this.newProject(project)
+                        
                     } catch (error) {
                      
                         // console.log(`catch (${this.countChange})`)

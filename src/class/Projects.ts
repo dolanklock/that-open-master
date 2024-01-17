@@ -2,6 +2,9 @@
 
 // importing uuid package
 import { v4 as uuidv4 } from 'uuid'
+import { updateToDoBackgroundColorByProjectStatus } from "./Warnings"
+
+
 
 // these are similar to interface but are more for single item and not an object like interface
 // we speciffy the type of an element using this syntax
@@ -99,11 +102,11 @@ export class Project {
         if ( !todoBody ) return
         this.todoList.forEach(todo => {
             const htmlToDo = `
-                            <div class="todo">
+                            <div class="todo" data-id="${todo.id}">
                                 <span class="material-icons-round">construction</span>
                                 <p class="todo-text">${todo.text}</p>
                                 <div class="todo-status-date">
-                                    <select name="todo-status" id="todo-status">
+                                    <select name="todo-status" id="todo-status" class="todo-status">
                                         <option value="open">Open</option>
                                         <option value="in-progress">In-progress</option>
                                         <option value="complete">Complete</option>
@@ -133,8 +136,10 @@ export class Project {
 export class ToDo {
     id: uuidv4
     text: string
+    status: string
     constructor(text: string) {
         this.text = text
+        this.status = "open"
         this.id = uuidv4()
     }
 }

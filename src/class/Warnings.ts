@@ -88,3 +88,32 @@ export function updateProjectCardContent(project: Project) {
     projectStatus.textContent = project.status
 
 }
+
+
+// export function updateToDoHTMLFromProject(project: Project) {
+//     /*
+//     *this function essentially updates the html code for the todo based on the projects attr values
+//     It will ujpdate the background color and the status based on the passed in project attr values*
+
+//     *this function was made for when a project is being imported by JSON*
+
+//     this function will iterate through the project objects todoList and get the HTML todo that
+//     matches the todo objects id and update the background color of the todo HTML element
+//     based on the todo object status and also will update the select element within the todo HTML
+//     and set its value to the todo objects status
+
+//     * @param {Project} project - the project to update HTML for
+//     * @returns {none}
+//     */
+//    // this function should update the project object only
+//     project.todoList.forEach(todo => {
+//         const todoHTMLElement = document.querySelector(`[data-id="${todo.id}"]`)
+//         if ( !todoHTMLElement ) return
+//         const selectElement = todoHTMLElement.querySelector('.todo-status')
+//         if ( !selectElement ) return
+//         if ( todo.status === 'open' ) todoHTMLElement.style.background = "red"
+//         if ( todo.status === 'in-progress' ) todoHTMLElement.style.background = "blue"
+//         if ( todo.status === 'complete' ) todoHTMLElement.style.background = "green"
+//         selectElement.value = todo.status
+//     })
+// }
