@@ -33,6 +33,16 @@ export const showModalForm = function(id: string, showModal=true) {
     }
 }
 
+export function dateFormat(date: Date) {
+    // if ( date !instanceof Date ) return 'N/A'
+    const options = {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    };
+    // console.log(date)
+    return new Intl.DateTimeFormat(navigator.language, options).format(date);
+}
 
 function getProjectCard(projectId: string) {
     return document.querySelector(`[data-id="${projectId}"]`)
@@ -74,8 +84,13 @@ export function updateProjectDetailsContent(project:Project) {
 
 
 export function updateProjectCardContent(project: Project) {
-    // this function will update the project card info on the project page when a user edits and changes
-    // the project content on the project details page
+    /*
+    this function will update the project card info on the project page when a user edits and changes
+    the project content on the project details page
+
+    * @param {Project} the project object of the project card you want to update the HTML for
+    * @returns {none}
+    */
     const projectCard = getProjectCard(project.id)
     if ( !projectCard ) return
     // TODO: get all closest html elements and udpate their values to new ones
@@ -88,6 +103,7 @@ export function updateProjectCardContent(project: Project) {
     projectStatus.textContent = project.status
 
 }
+
 
 
 // export function updateToDoHTMLFromProject(project: Project) {

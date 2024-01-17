@@ -15,7 +15,12 @@
 
 import { Project, IProject, projectRole, projectStatus, ToDo } from "./class/Projects"
 import { ProjectsManager } from "./class/ProjectsManager"
-import { showWarnModalForm, showModalForm, showWarnModalFormImportJson, updateProjectDetailsContent, updateProjectCardContent } from "./class/Warnings"
+import { showWarnModalForm,
+     showModalForm,
+      dateFormat,
+       showWarnModalFormImportJson,
+        updateProjectDetailsContent,
+         updateProjectCardContent } from "./class/Warnings"
 
 
 // ----------------- VARIABLES ---------------- //
@@ -51,16 +56,7 @@ function getProject(projectId: string | number) {
 }
 
 
-function dateFormat(date: Date) {
-    // if ( date !instanceof Date ) return 'N/A'
-    const options = {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-    };
-    // console.log(date)
-    return new Intl.DateTimeFormat(navigator.language, options).format(date);
-}
+
 
 
 function getProjectFormData(projectForm: HTMLFormElement) {
@@ -226,7 +222,7 @@ function renderToDoList(project: Project) {
                                     <option value="in-progress">In-progress</option>
                                     <option value="complete">Complete</option>
                                 </select>
-                                <p class="todo-date">Fri, Sep 20</p>
+                                <p class="todo-date">Created on: ${todo.dateCreated}</p>
                             </div>
                         </div>`
         todoBody.insertAdjacentHTML('afterbegin', htmlToDo)
@@ -333,6 +329,7 @@ if ( projectList ) {
 if ( testBtn ) {
     testBtn.addEventListener('click', (event) => {
         event.preventDefault()
+        console.log(dateFormat(new Date()))
         // console.log(projectsManager.totalCostProjects())
         // console.log(projectsManager.getProjectByName('testing'))
         // projectsManager.exportProjectDataJSON()
@@ -406,10 +403,6 @@ if ( todoBody ) {
 
 
 
-
-// TODO: add todo date on creation, and make sure import project, the date is brought with it, will need to update todo
-// class to have date created attribute
-
 /*
 
 TODO: two big bugs - 
@@ -425,19 +418,6 @@ same name error warning dialog even though there is no existing projects created
 
 */
 
-
-// TODO: update todo backgroun color so that when todo is added it automatically has correct background
-// color for status "open"
-
-// TODO: when i press import then open it works with no dialog pop up
-// when i press import then cancel then import then open, i get pop up with warning...why?
-
-
-// TODO: believe could be async issue... notice in the importProjectDataJSON method the projectmanager list has objects already in them
-// happens only when i click import then cancel and then click import again and select 'open'
-
-// TODO: when i import project and then cancel and then import again and select override it will error for project
-// same name even thoough there is no proejct with the same name...
 
 // TODO: add confirmation for when delete is clicked on projectcard
 

@@ -2,7 +2,7 @@
 
 // importing uuid package
 import { v4 as uuidv4 } from 'uuid'
-import { updateToDoBackgroundColorByProjectStatus } from "./Warnings"
+import { updateToDoBackgroundColorByProjectStatus, dateFormat } from "./Warnings"
 
 
 
@@ -111,7 +111,7 @@ export class Project {
                                         <option value="in-progress">In-progress</option>
                                         <option value="complete">Complete</option>
                                     </select>
-                                    <p class="todo-date">Fri, Sep 20</p>
+                                    <p class="todo-date">Created on: ${todo.dateCreated}</p>
                                 </div>
                             </div>
                             `
@@ -137,10 +137,12 @@ export class ToDo {
     id: uuidv4
     text: string
     status: string
+    dateCreated: string
     constructor(text: string) {
         this.text = text
         this.status = "open"
         this.id = uuidv4()
+        this.dateCreated = dateFormat(new Date())
     }
 }
 
