@@ -40,7 +40,7 @@ const projectList = document.getElementById('project-list')
 const projectsManager = new ProjectsManager()
 const testBtn = document.getElementById('test')
 
-
+console.log('first', projectsManager.list)
 // ------------------ FUNCTIONS ----------------- // 
 
 

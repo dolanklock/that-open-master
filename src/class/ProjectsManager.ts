@@ -46,6 +46,7 @@ export class ProjectsManager {
     constructor() {
         this.countChange = 0
         this.countLoad = 0
+
     }
 
     newProject(data: IProject) {
@@ -54,10 +55,13 @@ export class ProjectsManager {
         this.countChange ++
         // console.log(`RUNNING newProject method (${this.countChange}) : ${this.list}`)
         console.log(`***** ATTEMPTING TO CREATE PROJECT WITH NAME "${data.projectName}" *****`)
+        console.log(this.list)
         this.list.forEach(project => {
             // console.log('** DATA FROM JSON: ', data.projectName, '  -  CURRENT PROJECT NAME: ', project.projectName, " **")
             if ( project.projectName === data.projectName ) {
+                console.log(this.list)
                 console.log(`* CANT ADD ${project.projectName} PROEJCT ALREAD EXISTS *`)
+                console.log(this.list)
                 throw new Error(`${data.projectName}`);
             }
         })
@@ -197,11 +201,12 @@ export class ProjectsManager {
 
     importProjectDataJSON(event) {
         console.log('running importProjectDataJSON')
+        console.log(this.list)
         event.stopPropagation()
         const importJSONInput = document.getElementById('import-json')
         // console.log('importjsoninput', importJSONInput)
         if (importJSONInput && importJSONInput instanceof HTMLInputElement) {
-            // console.log('running ok')
+            console.log('running ok')
             // console.log('here', importJSONInput)
             // getting the HTML input element
             if ( !importJSONInput ) return
@@ -212,7 +217,6 @@ export class ProjectsManager {
             const reader = new FileReader()
             // * the change event handler below will be triggered first then go to this load
             // event handler once file is chosen
-
             // reader.addEventListener('click', () => this._readerCallback(reader))
             reader.addEventListener('load', function eventHandler(event) {
                 event.stopPropagation()
@@ -236,10 +240,10 @@ export class ProjectsManager {
                 for ( const project of projects ) {
                     console.log(`POP : ${project}`)
                     try {
+                        console.log('checking before', this.list)
                         this.newProject(project)
-                        
+                        console.log('checking after', this.list)
                     } catch (error) {
-                     
                         // console.log(`catch (${this.countChange})`)
                         // throw new Error(project.projectName)
                         // throw error
