@@ -41,6 +41,8 @@ const projectsManager = new ProjectsManager()
 const testBtn = document.getElementById('test')
 
 console.log('first', projectsManager.list)
+
+
 // ------------------ FUNCTIONS ----------------- // 
 
 
@@ -330,10 +332,10 @@ if ( testBtn ) {
     testBtn.addEventListener('click', (event) => {
         event.preventDefault()
         console.log(dateFormat(new Date()))
-        // console.log(projectsManager.totalCostProjects())
-        // console.log(projectsManager.getProjectByName('testing'))
-        // projectsManager.exportProjectDataJSON()
         console.log("TEST CHECK", projectsManager.list)
+        // projectsManager.importJSONReader = undefined
+        // projectsManager.reader.removeEventListener('load', projectsManager.importJSONLoadReader)
+        // console.log(projectsManager.importJSONReader)
     })
 }
 
@@ -405,11 +407,13 @@ if ( todoBody ) {
 
 /*
 
+
 TODO: two big bugs - 
 
 maybe change so that the import input is inside of a button so i can check if button is cancel or not? therefor
 I can say if cancel pressed run the whole import function else dont even run it...
 
+SOLVED
 bug#1 - when i create a project and give it name stadium, then i import json and select open and then cancel it, then import json again and click
 open, it does not prompt the dialog for same name error even though there is a proejct with same name importing...
 
