@@ -625,12 +625,18 @@ input:focus, textarea:focus, select:focus {
 
 
 .warn-button {
-    background-color: var(--action-btn);
-    border-radius: 15px;
-    padding: 5px;
-    color: white;
+    background-color: #e3e3e3;
+    /* border-radius: 8px; */
+    padding: 0;
+    margin: 0;
+    color: black;
     border: none;
-    width: 100px;
+    width: 125px;
+}
+
+.warn-button:hover {
+    cursor: pointer;
+    color: darkgray;
 }
 
 
@@ -638,19 +644,34 @@ input:focus, textarea:focus, select:focus {
     display: flex;
     flex-direction: column;
     padding: 20px;
+    background-color: #e3e3e3;
+    opacity: 50;
+    color: black;
 }
 
 #warn-body {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    column-gap: 20px;
+    row-gap: 20px;
 }
 
 #warn-footer {
     display: flex;
     flex-direction: row;
     justify-content: end;
+}
+
+.warn-message {
+    display: flex;
+    width: 80%;
+    align-items: center;
+    justify-content: center;
+}
+
+.warn-message h3 {
+    font-weight: 100;
 }
 
 

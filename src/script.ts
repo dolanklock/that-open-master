@@ -10,7 +10,7 @@
 // to have type="module" - this will let the browser know we are using import/export
 // from different modules
 
-// --------------------- IMPORTS -------------------- //
+// ---------------------------- IMPORTS ----------------------------- //
 
 
 import { Project, IProject, projectRole, projectStatus, ToDo } from "./class/Projects"
@@ -20,10 +20,10 @@ import { showWarnModalForm,
       dateFormat,
        showWarnModalFormImportJson,
         updateProjectDetailsContent,
-         updateProjectCardContent } from "./class/Warnings"
+         updateProjectCardContent } from "./class/ProjectFunctions"
 
 
-// ----------------- VARIABLES ---------------- //
+// ------------------------ VARIABLES -------------------------- //
 
 
 const projectsPage = document.getElementById('projects-page')
@@ -40,10 +40,8 @@ const projectList = document.getElementById('project-list')
 const projectsManager = new ProjectsManager()
 const testBtn = document.getElementById('test')
 
-console.log('first', projectsManager.list)
 
-
-// ------------------ FUNCTIONS ----------------- // 
+// -------------------------- FUNCTIONS ------------------------ // 
 
 
 function toggleProjectsDetailsPage() {
@@ -110,7 +108,7 @@ function updateProjectDetailsForm(project: Project) {
 
 
 
-// ----------- CALLBACK FUNCTIONS ------------ //
+// --------------------- CALLBACK FUNCTIONS --------------------- //
 
 
 function newProjectFormHandler(event: Event, projectForm: HTMLFormElement) {
@@ -290,7 +288,7 @@ function todoStatusChangeEventHandler(event: Event) {
 
 
 
-// ---------------- EVENT HANDLER ----------------- //
+// --------------------------- EVENT HANDLER ---------------------------- //
 
 
 // new project button is clicked, will open dialog
@@ -331,8 +329,6 @@ if ( projectList ) {
 if ( testBtn ) {
     testBtn.addEventListener('click', (event) => {
         event.preventDefault()
-        console.log(dateFormat(new Date()))
-        console.log("TEST CHECK", projectsManager.list)
         // projectsManager.importJSONReader = undefined
         // projectsManager.reader.removeEventListener('load', projectsManager.importJSONLoadReader)
         // console.log(projectsManager.importJSONReader)
@@ -355,9 +351,7 @@ if (exportJSONBtn) {
 
 const importJSONBtn = document.getElementById('import-json')
 if (importJSONBtn) {
-    console.log('befer', projectsManager.list)
     importJSONBtn.addEventListener("click", (event) => projectsManager.importProjectDataJSON(event))
-    console.log('after', projectsManager.list)
 }
 
 // project card click
@@ -407,21 +401,10 @@ if ( todoBody ) {
 
 /*
 
+// TODO: when import projects need it so if more then  one project with same name will confirm to override
+// each proejct that is same.. right now even if there is two with same name it will only prompt the one
 
-TODO: two big bugs - 
-
-maybe change so that the import input is inside of a button so i can check if button is cancel or not? therefor
-I can say if cancel pressed run the whole import function else dont even run it...
-
-SOLVED
-bug#1 - when i create a project and give it name stadium, then i import json and select open and then cancel it, then import json again and click
-open, it does not prompt the dialog for same name error even though there is a proejct with same name importing...
-
-bug#2 - with no projects created, when i import and then cancel the dialog, then import again and select open, it gives me the 
-same name error warning dialog even though there is no existing projects created....
-
-*/
-
+// TODO: update override project dialog to look nicer
 
 // TODO: add confirmation for when delete is clicked on projectcard
 
@@ -434,3 +417,5 @@ same name error warning dialog even though there is no existing projects created
 // TODO: add date to todo html
 
 // TODO: update error handler in projectsmanager class in that module in the importjson method
+
+*/

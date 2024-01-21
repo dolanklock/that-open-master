@@ -1,9 +1,14 @@
 'use strict';
 
+// --------------------------- IMPORTS ----------------------- //
+
+
 // importing uuid package
 import { v4 as uuidv4 } from 'uuid'
-import { updateToDoBackgroundColorByProjectStatus, dateFormat } from "./Warnings"
+import { dateFormat } from "./ProjectFunctions"
 
+
+// ----------------------------- TYPES ------------------------------- //
 
 
 // these are similar to interface but are more for single item and not an object like interface
@@ -25,6 +30,10 @@ export interface IProject {
     finishDate: string
 };
 
+
+// ----------------------------- CLASSES --------------------------------- //
+
+
 // in order to import this class into another module we need
 // to add the 'export' keyword to the class
 export class Project {
@@ -43,7 +52,6 @@ export class Project {
     progress: number = 0
 
     constructor(data: IProject) {
-        console.log(`*** CREATING NEW PROJECT WITH NAME "${data.projectName}" ***`)
         // instance attributes
         // instead of writing each on out 'this.name = name' we can loop of data object and dynamically assign attributes
         // use 'in' instead of 'of' for looping over an object

@@ -4,7 +4,7 @@
 
 
 import { Project, IProject, ToDo } from "./Projects"
-import { showWarnModalFormImportJson, showModalForm, updateProjectCardContent } from "./Warnings"
+import { showWarnModalFormImportJson, showModalForm, updateProjectCardContent } from "./ProjectFunctions"
 
 // --------------------- VARIABLES -------------------- //
 
@@ -40,7 +40,7 @@ export class ProjectsManager {
     newProject(data: IProject) {
         // check if new project has same name as existing ones
         this.list.forEach(project => {
-            // console.log('** DATA FROM JSON: ', data.projectName, '  -  CURRENT PROJECT NAME: ', project.projectName, " **")
+            console.log(`EXISTING PROJECT NAME: ${project.projectName} : NEW PROPOSED NAME: ${data.projectName}`)
             if ( project.projectName === data.projectName ) {
                 throw new Error(`${data.projectName}`);
             }
@@ -192,12 +192,14 @@ export class ProjectsManager {
                 }.bind(this))
             }
         }
-
     }
 
     importProjectDataJSON(event: Event) {
         const importJSONInput = document.getElementById('import-json')
         if (importJSONInput && importJSONInput instanceof HTMLInputElement) {
+            importJSONInput.value = null // need to do this so it clears value if same path is chosen twice to import.
+            // without it, if import a json then import json again the load and change eventlisteners below wont be triggered
+
             // getting the HTML input element
             if ( !importJSONInput ) return
             importJSONInput.accept = 'application/json' // assigning accept attr to element in html
