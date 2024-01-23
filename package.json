@@ -11,9 +11,11 @@
     "postcss": "^8.4.32",
     "rollup": "^4.7.0",
     "source-map-js": "^1.0.2",
+    "three": "0.152.2",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@types/three": "0.156.0",
     "typescript": "^5.3.3",
     "vite": "^5.0.7"
   },

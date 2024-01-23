@@ -13,6 +13,7 @@
 // ---------------------------- IMPORTS ----------------------------- //
 
 
+import { ThreeDViewer } from "./class/ThreeDViewer"
 import { Project, IProject, projectRole, projectStatus, ToDo } from "./class/Projects"
 import { ProjectsManager } from "./class/ProjectsManager"
 import { showWarnModalForm,
@@ -21,6 +22,10 @@ import { showWarnModalForm,
        showWarnModalFormImportJson,
         updateProjectDetailsContent,
          updateProjectCardContent } from "./class/ProjectFunctions"
+
+// importing three.js
+import * as THREE from "three"
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 
 
 // ------------------------ VARIABLES -------------------------- //
@@ -54,9 +59,6 @@ function toggleProjectsDetailsPage() {
 function getProject(projectId: string | number) {
     return projectsManager.list.find(project => project.id == projectId)
 }
-
-
-
 
 
 function getProjectFormData(projectForm: HTMLFormElement) {
@@ -398,8 +400,121 @@ if ( todoBody ) {
 }
 
 
+// ------------------------------ THREE D VIEWER ------------------------------- //
+
+
+// const threeDViewer = new ThreeDViewer('viewer', 0.4, 5)
+// threeDViewer.resize()
+
+// TODO: when move a little bit the viewer div is greatly increasing in width and height on resize
+// 
+
+
+
+// NOTE: everything in THREE js is a class, so we will be creating instances of classes for many things
+
+// creating the scene for threeD viewer
+const scene = new THREE.Scene()
+
+// things to shoot the scene (camara)
+
+// VIEWER
+const viewer = document.getElementById('viewer') as HTMLElement
+const viewerRect = viewer.getBoundingClientRect()
+console.log(viewerRect.height, viewerRect.width)
+const aspectRatio = viewerRect.width / viewerRect.height
+
+// RENDERER
+// camera man to start recording "THREE.WebGL1Renderer"
+const renderer = new THREE.WebGL1Renderer()
+console.log(renderer)
+// append renderer domElement to the viewer html so it knows what to view
+viewer.append(renderer.domElement)
+// we want the rendered domElement we are appending above to be set to the same size
+// as the viewer, so we can do the following
+renderer.setSize(viewerRect.width, viewerRect.height)
+
+// CAMERA
+// this class PerspectiveCamera takes in some args into constructor
+const camera = new THREE.PerspectiveCamera(75, aspectRatio)
+
+// MESH
+/*
+
+need to create a mesh for all geometry in the scene
+
+mesh is a series of trianglations with vertex points
+
+in computer graphics, the objects we put in a threeD space is called "meshes"
+
+all meshes are composed of geometry and materials, the geometry of a mesh is always a collection 
+of trianlges where each trinalge has the 3 space coordinates (vertexes) that compose that triangle
+
+shaders are little programs that run per triangle and trinagle vertex to calculate its color
+the more complex the geomtry, the more triangles you will have and the more cpu your computer will need to process
+
+since bigger models require much more resources there is some optimization techniques used - 
+- Instancing (reusing geometry)
+- indexing (grouping vertex)
+- Normal Mapping (faking details)
+
+*/
+
+const geometry = new THREE.BoxGeometry() // creating geometry to see in viewer
+const material = new THREE.MeshStandardMaterial() // create material using threejs for mesh below
+const mesh = new THREE.Mesh(geometry, material)
+
+// need to add light to the scene
+const directionalLight = new THREE.DirectionalLight()
+const ambientLight = new THREE.AmbientLight()
+// set light intensity for better shadowing
+ambientLight.intensity = 0.4
+
+// add mesh and light to the scene object
+scene.add(mesh, directionalLight, ambientLight)
+
+// everything added to our virtual scene world is at 0,0,0 in the scene virtual world so the camera
+// is inside the mesh so we need to move the camera or the mesh so they are not inside of eachother! (see below)
+
+// camera is a object instrance of class and then the posistion is again another object which is attribute for
+// camera object that also has attributes "z"
+camera.position.z = 5 // moving camera 5 units in virtual world
+
+
+// NEED TO ADD FUNCTIONALITY TO MOVE CAMERA AROUND
+const cameraControls = new OrbitControls(camera, viewer)
+
+function renderScene() {
+    // FINAL SETUP (this code needs to be at the end!!!) this takes frames (fps) frames (pictures) per second
+    // so in order to capture all threeD viewer changes or additions, we need this at the end
+    // need to tell the renderer the camera and the scene to use
+    renderer.render(scene, camera)
+    // this will allow to run a function the next time the browser creates or renders a "frame" (fps)
+    window.requestAnimationFrame(renderScene)
+ 
+}
+
+renderScene() // turn camera recording on
+
+
+window.addEventListener("resize", () => {
+    const viewerRect = viewer.getBoundingClientRect()
+    renderer.setSize(viewerRect.width, viewerRect.height)
+    const aspectRatio = viewerRect.width / viewerRect.height
+    camera.aspect = aspectRatio
+    console.log(viewerRect.width)
+})
+
+
+// ------------------------------ TODO LIST ------------------------------- //
+
+
 
 /*
+
+// TODO: when importing projects the color between the project page and the actual proejct card detail
+// page when click on card - the project image color is different between the two, make sure
+// background color is same everywhere
 
 // TODO: when import projects need it so if more then  one project with same name will confirm to override
 // each proejct that is same.. right now even if there is two with same name it will only prompt the one

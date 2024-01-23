@@ -437,7 +437,9 @@ input:focus, textarea:focus, select:focus {
     padding: 20px;
 }
 
+
 /* ---------------- main side panel and viewer -------------- */
+
 
 #side-info-panel {
     background-color: var(--primary-300);
@@ -449,11 +451,16 @@ input:focus, textarea:focus, select:focus {
 
 
 #viewer {
-    flex-grow: 1;
+    /* flex-grow: 1; */
+    width: 900px;
+    height: 900px;
     background-color: var(--primary);
+    margin-right: 50px;
 }
 
+
 /*  ----------- side panel contents ------------ */
+
 
 #info {
     background-color: var(--primary);
