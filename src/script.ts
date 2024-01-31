@@ -403,107 +403,46 @@ if ( todoBody ) {
 // ------------------------------ THREE D VIEWER ------------------------------- //
 
 
-// const threeDViewer = new ThreeDViewer('viewer', 0.4, 5)
-// threeDViewer.resize()
+const threeDViewer = new ThreeDViewer('viewer-test', 0.4, 5)
+threeDViewer.addAxisHelper()
+// threeDViewer.addGridHelper(10, 10)
 
-// TODO: when move a little bit the viewer div is greatly increasing in width and height on resize
-// 
+// -------- setting threeD viewers grid ------- //
+threeDViewer.gridHelper.setMaterialOpacity(0.4)
+threeDViewer.gridHelper.setMaterialTransparent(true)
+threeDViewer.gridHelper.setColor("#808080")
 
+// ------ threeD viewer GUI config ------- //
 
+// postion control
+threeDViewer.gui.cubeControls.add(threeDViewer.mesh.position, "x", -10, 10, 1) // can leave with just "x" for num input
+// or for num slider specify min max and step
+threeDViewer.gui.cubeControls.add(threeDViewer.mesh.position, "y", -10, 10, 1)
+threeDViewer.gui.cubeControls.add(threeDViewer.mesh.position, "z", -10, 10, 1)
+threeDViewer.gui.cubeControls.add(threeDViewer.mesh, "visible")
+threeDViewer.gui.cubeControls.addColor(threeDViewer.material, "color")
+// directional light controls
+threeDViewer.gui.directionalLightControls.addColor(threeDViewer.directionalLight, "color")
+threeDViewer.gui.directionalLightControls.add(threeDViewer.directionalLight.position, "x", -10, 10, 1)
+threeDViewer.gui.directionalLightControls.add(threeDViewer.directionalLight.position, "y", -10, 10, 1)
+threeDViewer.gui.directionalLightControls.add(threeDViewer.directionalLight.position, "z", -10, 10, 1)
 
-// NOTE: everything in THREE js is a class, so we will be creating instances of classes for many things
+threeDViewer.gui.directionalLightControls.add(threeDViewer.directionalLight, "intensity", 0, 10, 1)
+threeDViewer.addSpotLight([0, 0, 10], "#fc0320")
+threeDViewer.addSpotLight([30, 10, 0], "#d5e310")
 
-// creating the scene for threeD viewer
-const scene = new THREE.Scene()
+// load obj file into threeJS
+// threeDViewer.loader.objLoad("../Assets/Gear/Gear1.mtl", "../Assets/Gear/Gear1.obj")
 
-// things to shoot the scene (camara)
-
-// VIEWER
-const viewer = document.getElementById('viewer') as HTMLElement
-const viewerRect = viewer.getBoundingClientRect()
-console.log(viewerRect.height, viewerRect.width)
-const aspectRatio = viewerRect.width / viewerRect.height
-
-// RENDERER
-// camera man to start recording "THREE.WebGL1Renderer"
-const renderer = new THREE.WebGL1Renderer()
-console.log(renderer)
-// append renderer domElement to the viewer html so it knows what to view
-viewer.append(renderer.domElement)
-// we want the rendered domElement we are appending above to be set to the same size
-// as the viewer, so we can do the following
-renderer.setSize(viewerRect.width, viewerRect.height)
-
-// CAMERA
-// this class PerspectiveCamera takes in some args into constructor
-const camera = new THREE.PerspectiveCamera(75, aspectRatio)
-
-// MESH
-/*
-
-need to create a mesh for all geometry in the scene
-
-mesh is a series of trianglations with vertex points
-
-in computer graphics, the objects we put in a threeD space is called "meshes"
-
-all meshes are composed of geometry and materials, the geometry of a mesh is always a collection 
-of trianlges where each trinalge has the 3 space coordinates (vertexes) that compose that triangle
-
-shaders are little programs that run per triangle and trinagle vertex to calculate its color
-the more complex the geomtry, the more triangles you will have and the more cpu your computer will need to process
-
-since bigger models require much more resources there is some optimization techniques used - 
-- Instancing (reusing geometry)
-- indexing (grouping vertex)
-- Normal Mapping (faking details)
-
-*/
-
-const geometry = new THREE.BoxGeometry() // creating geometry to see in viewer
-const material = new THREE.MeshStandardMaterial() // create material using threejs for mesh below
-const mesh = new THREE.Mesh(geometry, material)
-
-// need to add light to the scene
-const directionalLight = new THREE.DirectionalLight()
-const ambientLight = new THREE.AmbientLight()
-// set light intensity for better shadowing
-ambientLight.intensity = 0.4
-
-// add mesh and light to the scene object
-scene.add(mesh, directionalLight, ambientLight)
-
-// everything added to our virtual scene world is at 0,0,0 in the scene virtual world so the camera
-// is inside the mesh so we need to move the camera or the mesh so they are not inside of eachother! (see below)
-
-// camera is a object instrance of class and then the posistion is again another object which is attribute for
-// camera object that also has attributes "z"
-camera.position.z = 5 // moving camera 5 units in virtual world
+threeDViewer.loader.loadGLTF("./Assets/GLTFSample/Avocado.gltf")
 
 
-// NEED TO ADD FUNCTIONALITY TO MOVE CAMERA AROUND
-const cameraControls = new OrbitControls(camera, viewer)
 
-function renderScene() {
-    // FINAL SETUP (this code needs to be at the end!!!) this takes frames (fps) frames (pictures) per second
-    // so in order to capture all threeD viewer changes or additions, we need this at the end
-    // need to tell the renderer the camera and the scene to use
-    renderer.render(scene, camera)
-    // this will allow to run a function the next time the browser creates or renders a "frame" (fps)
-    window.requestAnimationFrame(renderScene)
- 
-}
-
-renderScene() // turn camera recording on
+// TODO: FINAL CONCLUSION IT IS THE PARENT CSS THAT IS MESSING WITH 3D VIEWER CHANGING SIZE RAPIDLY "proj-details-header"
+// NEED TO FIND ANOTHER WAY TO STYLE PROJECT-DETAILS SHEET WITH CSS
 
 
-window.addEventListener("resize", () => {
-    const viewerRect = viewer.getBoundingClientRect()
-    renderer.setSize(viewerRect.width, viewerRect.height)
-    const aspectRatio = viewerRect.width / viewerRect.height
-    camera.aspect = aspectRatio
-    console.log(viewerRect.width)
-})
+
 
 
 // ------------------------------ TODO LIST ------------------------------- //
