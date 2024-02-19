@@ -26,7 +26,7 @@ import { showWarnModalForm,
 // importing three.js
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
-
+import * as OBC from "openbim-components"
 
 // ------------------------ VARIABLES -------------------------- //
 
@@ -400,42 +400,101 @@ if ( todoBody ) {
 }
 
 
-// ------------------------------ THREE D VIEWER ------------------------------- //
+// ------------------------------ THREE D VIEWER USING THREEJS ------------------------------- //
 
 
-const threeDViewer = new ThreeDViewer('viewer-test', 0.4, 5)
-threeDViewer.addAxisHelper()
-// threeDViewer.addGridHelper(10, 10)
+// const threeDViewer = new ThreeDViewer('viewer-test', 0.4, 5)
+// threeDViewer.addAxisHelper()
+// // threeDViewer.addGridHelper(10, 10)
 
-// -------- setting threeD viewers grid ------- //
-threeDViewer.gridHelper.setMaterialOpacity(0.4)
-threeDViewer.gridHelper.setMaterialTransparent(true)
-threeDViewer.gridHelper.setColor("#808080")
+// // -------- setting threeD viewers grid ------- //
+// threeDViewer.gridHelper.setMaterialOpacity(0.4)
+// threeDViewer.gridHelper.setMaterialTransparent(true)
+// threeDViewer.gridHelper.setColor("#808080")
 
-// ------ threeD viewer GUI config ------- //
+// // ------ threeD viewer GUI config ------- //
 
-// postion control
-threeDViewer.gui.cubeControls.add(threeDViewer.mesh.position, "x", -10, 10, 1) // can leave with just "x" for num input
-// or for num slider specify min max and step
-threeDViewer.gui.cubeControls.add(threeDViewer.mesh.position, "y", -10, 10, 1)
-threeDViewer.gui.cubeControls.add(threeDViewer.mesh.position, "z", -10, 10, 1)
-threeDViewer.gui.cubeControls.add(threeDViewer.mesh, "visible")
-threeDViewer.gui.cubeControls.addColor(threeDViewer.material, "color")
-// directional light controls
-threeDViewer.gui.directionalLightControls.addColor(threeDViewer.directionalLight, "color")
-threeDViewer.gui.directionalLightControls.add(threeDViewer.directionalLight.position, "x", -10, 10, 1)
-threeDViewer.gui.directionalLightControls.add(threeDViewer.directionalLight.position, "y", -10, 10, 1)
-threeDViewer.gui.directionalLightControls.add(threeDViewer.directionalLight.position, "z", -10, 10, 1)
+// // postion control
+// threeDViewer.gui.cubeControls.add(threeDViewer.mesh.position, "x", -10, 10, 1) // can leave with just "x" for num input
+// // or for num slider specify min max and step
+// threeDViewer.gui.cubeControls.add(threeDViewer.mesh.position, "y", -10, 10, 1)
+// threeDViewer.gui.cubeControls.add(threeDViewer.mesh.position, "z", -10, 10, 1)
+// threeDViewer.gui.cubeControls.add(threeDViewer.mesh, "visible")
+// threeDViewer.gui.cubeControls.addColor(threeDViewer.material, "color")
+// // directional light controls
+// threeDViewer.gui.directionalLightControls.addColor(threeDViewer.directionalLight, "color")
+// threeDViewer.gui.directionalLightControls.add(threeDViewer.directionalLight.position, "x", -10, 10, 1)
+// threeDViewer.gui.directionalLightControls.add(threeDViewer.directionalLight.position, "y", -10, 10, 1)
+// threeDViewer.gui.directionalLightControls.add(threeDViewer.directionalLight.position, "z", -10, 10, 1)
 
-threeDViewer.gui.directionalLightControls.add(threeDViewer.directionalLight, "intensity", 0, 10, 1)
-threeDViewer.addSpotLight([0, 0, 10], "#fc0320")
-threeDViewer.addSpotLight([30, 10, 0], "#d5e310")
+// threeDViewer.gui.directionalLightControls.add(threeDViewer.directionalLight, "intensity", 0, 10, 1)
+// threeDViewer.addSpotLight([0, 0, 10], "#fc0320")
+// threeDViewer.addSpotLight([30, 10, 0], "#d5e310")
 
-// load obj file into threeJS
+// // load obj file into threeJS
 // threeDViewer.loader.objLoad("../Assets/Gear/Gear1.mtl", "../Assets/Gear/Gear1.obj")
+// // load an gltf file into threeD viewer
+// threeDViewer.loader.loadGLTF("./Assets/GLTFSample/Avocado.gltf")
 
-threeDViewer.loader.loadGLTF("./Assets/GLTFSample/Avocado.gltf")
 
+// ------------------- THREE D VIEWER USING OBC (OPEN BIM COMPONENTS FROM THAT OPEN ENGINE) ------------------------- //
+
+
+// can use OBC components library to do what we did above but simplified
+
+// creating the viewer component
+const viewer = new OBC.Components()
+
+// creating the scene component
+const sceneComponent = new OBC.SimpleScene(viewer)
+viewer.scene = sceneComponent
+sceneComponent.setup() // applies directional light etc.. refer to source code
+// by holding alt and clicking the 'get()' method and then at the top selecting index-d.ts and selecting
+// the index.js file
+
+// can get the threejs scene by doing the following
+const scene = sceneComponent.get()
+
+// setting up the renderer
+const viewerContainer = document.getElementById("viewer-test") as HTMLDivElement
+const rendererComponent = new OBC.SimpleRenderer(viewer, viewerContainer)
+viewer.renderer = rendererComponent
+
+// setting up camera component
+const cameraComponent = new OBC.OrthoPerspectiveCamera(viewer)
+viewer.camera = cameraComponent
+
+// call init to start to render the scene
+// this is doing similar thing as we did in renderscene function
+
+// renderScene() {
+//     // this will allow to run a function the next time the browser creates or renders a "frame" (fps)
+//     window.requestAnimationFrame(() => this.renderScene())
+//     // FINAL SETUP (this code needs to be at the end!!!) this takes frames (fps) frames (pictures) per second
+//     // so in order to capture all threeD viewer changes or additions, we need this at the end
+//     // need to tell the renderer the camera and the scene to use
+//     this.renderer.render(this.scene, this.camera)
+// }
+
+// creating simple mesh to display in viewer
+const geometry = new THREE.BoxGeometry() // creating geometry to see in viewer
+const material = new THREE.MeshStandardMaterial({color: '#4287f5'}) // create material using threejs for mesh below
+const mesh = new THREE.Mesh(geometry, material)
+
+// need to call the viewer.init() method after we have setup the scene the renderer and the camera..
+viewer.init()
+cameraComponent.updateAspect()
+scene.add(mesh) // add geometry to scene
+
+const ifcLoader = new OBC.FragmentIfcLoader(viewer)
+
+const toolbar = new OBC.Toolbar(viewer)
+
+// console.log('here test', ifcLoader.uiElement.get("main"))
+
+toolbar.addChild(ifcLoader.uiElement.get("main"))
+
+viewer.ui.addToolbar(toolbar)
 
 
 // TODO: FINAL CONCLUSION IT IS THE PARENT CSS THAT IS MESSING WITH 3D VIEWER CHANGING SIZE RAPIDLY "proj-details-header"
