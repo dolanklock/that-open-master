@@ -514,6 +514,8 @@ viewer.ui.addToolbar(toolbar)
 // ------------------------------------- TODO LIST --------------------------------------- //
 
 
+// TODO: add edit feature to the todos, have little edit pencil image and when selected will open same form with current text in it
+// TODO: fix todo so that it wraps and makes div height increase
 
 // TODO: FINAL CONCLUSION IT IS THE PARENT CSS THAT IS MESSING WITH 3D VIEWER CHANGING SIZE RAPIDLY "proj-details-header"
 // NEED TO FIND ANOTHER WAY TO STYLE PROJECT-DETAILS SHEET WITH CSS
