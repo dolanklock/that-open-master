@@ -456,7 +456,7 @@ sceneComponent.setup() // applies directional light etc.. refer to source code
 const scene = sceneComponent.get()
 
 // setting up the renderer
-const viewerContainer = document.getElementById("viewer-test") as HTMLDivElement
+const viewerContainer = document.getElementById("viewer") as HTMLDivElement
 const rendererComponent = new OBC.SimpleRenderer(viewer, viewerContainer)
 viewer.renderer = rendererComponent
 
@@ -486,26 +486,37 @@ viewer.init()
 cameraComponent.updateAspect()
 scene.add(mesh) // add geometry to scene
 
+
+// creating ifcloader component from fragments library
+
 const ifcLoader = new OBC.FragmentIfcLoader(viewer)
 
 const toolbar = new OBC.Toolbar(viewer)
 
 // console.log('here test', ifcLoader.uiElement.get("main"))
 
+// all tools come with uiElement object that has all the premade user interface that the ifcloader object has
+// it is html code behind the scenes that gets added. 
+// its a uiElement with a get method that we pass in the name of the uiElement we want to get
+// now as you can see, the "main" is oof type OBC.SimpleUIComponent. This OBC.SimpleUIComponent object contains the html for the button
+// can use the OBC.Toolbar object and use the addChild method to add the SimpleUIComponent object
 toolbar.addChild(ifcLoader.uiElement.get("main"))
 
+// append the OBC.Toolbar to the viewer object
 viewer.ui.addToolbar(toolbar)
+
+
+
+
+
+
+
+// ------------------------------------- TODO LIST --------------------------------------- //
+
 
 
 // TODO: FINAL CONCLUSION IT IS THE PARENT CSS THAT IS MESSING WITH 3D VIEWER CHANGING SIZE RAPIDLY "proj-details-header"
 // NEED TO FIND ANOTHER WAY TO STYLE PROJECT-DETAILS SHEET WITH CSS
-
-
-
-
-
-// ------------------------------ TODO LIST ------------------------------- //
-
 
 
 /*
