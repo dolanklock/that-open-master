@@ -456,7 +456,7 @@ sceneComponent.setup() // applies directional light etc.. refer to source code
 const scene = sceneComponent.get()
 
 // setting up the renderer
-const viewerContainer = document.getElementById("viewer") as HTMLDivElement
+const viewerContainer = document.getElementById("viewer-main") as HTMLDivElement
 const rendererComponent = new OBC.SimpleRenderer(viewer, viewerContainer)
 viewer.renderer = rendererComponent
 
