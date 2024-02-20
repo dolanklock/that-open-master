@@ -291,6 +291,14 @@ function todoStatusChangeEventHandler(event: Event) {
     renderToDoStatusColor(getActiveProject() as Project)
 }
 
+function editTodoHandler(event: Event) {
+    const clickedElement = event.target as HTMLElement
+    console.log(clickedElement)
+    if ( !clickedElement ) return
+    const todoText = clickedElement.closest('.todo-text')
+    console.log(todoText)
+}
+
 
 
 // --------------------------- EVENT HANDLER ---------------------------- //
@@ -376,16 +384,33 @@ if ( editProjectDetails ) {
 }
 
 
+// ------------------------ todo Event Listeners ------------------------------ #
+
+
+let editingTodo = false
+
 // if add todo button is clicked will open dialog
 const addToDo = document.getElementById('add-todo')
 if ( addToDo ) {
-    addToDo.addEventListener('click', (event) => showModalForm('new-todo-modal', true))
+    addToDo.addEventListener('click', (event) => {
+        editingTodo = false
+        showModalForm('new-todo-modal', true)
+    })
 }
 
-// ------------------------ todo Event Listeners ------------------------------ #
 
 if ( todoForm ) {
-    todoForm.addEventListener('submit', (event) => addToDoHandler(event))
+    todoForm.addEventListener('submit', (event) => {
+        if ( !editingTodo ) {
+            addToDoHandler(event)
+        } else {
+            event.preventDefault()
+            console.log("add edit todo code here")
+            // editTodoHandler(event)
+            // TODO: need to add code for adding existing text of todo to form input
+            // and then when for is submitted need to update todos text note with new input
+        }
+    })
 }
 
 // this closes the todo form dialog if cancel is clicked
@@ -401,24 +426,14 @@ if ( todoForm ) {
 if ( todoBody ) {
     todoBody.addEventListener('change', (event) => todoStatusChangeEventHandler(event))
     todoBody.addEventListener('click', (event) => {
+        // event listener for edit todo
+        event.preventDefault()
+        editingTodo = true
         console.log('edit todo clicked', event.target)
+        editTodoHandler(event)
         showModalForm('new-todo-modal', true) // closes dialog
-        // TODO: open a form window with the text of the todo already in the form input
-        // once form submitted todo note updated with new text
     })
 }
-
-
-
-
-// if ( todoEdit ) {
-//     todoEdit.addEventListener('click', function(event) {
-//         event.preventDefault()
-//         // TODO: complete this
-//         console.log('clicked edit todo')
-//     })
-// }
-
 
 
 
