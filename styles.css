@@ -620,6 +620,20 @@ input:focus, textarea:focus, select:focus {
     font-size: var(--font-sm);
 }
 
+.select-edit {
+    display: flex;
+    column-gap: 10px;
+}
+
+.select-edit span {
+    font-size: 14px;
+}
+
+.todo-edit:hover {
+    cursor: pointer;;
+}
+
+
 #add-todo:hover {
     cursor: pointer;
     color: lightgray;

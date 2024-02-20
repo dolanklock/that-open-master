@@ -219,11 +219,14 @@ function renderToDoList(project: Project) {
                             <span class="material-icons-round">construction</span>
                             <p class="todo-text">${todo.text}</p>
                             <div class="todo-status-date">
-                                <select name="todo-status" id="" class="todo-status">
-                                    <option value="open">Open</option>
-                                    <option value="in-progress">In-progress</option>
-                                    <option value="complete">Complete</option>
-                                </select>
+                                <div class="select-edit">
+                                    <select name="todo-status" id="todo-status" class="todo-status">
+                                        <option value="open">Open</option>
+                                        <option value="in-progress">In-progress</option>
+                                        <option value="complete">Complete</option>
+                                    </select>
+                                    <span class="material-symbols-outlined todo-edit">edit_note</span>
+                                </div>
                                 <p class="todo-date">Created on: ${todo.dateCreated}</p>
                             </div>
                         </div>`
@@ -397,7 +400,27 @@ if ( todoForm ) {
 
 if ( todoBody ) {
     todoBody.addEventListener('change', (event) => todoStatusChangeEventHandler(event))
+    todoBody.addEventListener('click', (event) => {
+        console.log('edit todo clicked', event.target)
+        showModalForm('new-todo-modal', true) // closes dialog
+        // TODO: open a form window with the text of the todo already in the form input
+        // once form submitted todo note updated with new text
+    })
 }
+
+
+
+
+// if ( todoEdit ) {
+//     todoEdit.addEventListener('click', function(event) {
+//         event.preventDefault()
+//         // TODO: complete this
+//         console.log('clicked edit todo')
+//     })
+// }
+
+
+
 
 
 // ------------------------------ THREE D VIEWER USING THREEJS ------------------------------- //
@@ -515,7 +538,7 @@ viewer.ui.addToolbar(toolbar)
 
 
 // TODO: add edit feature to the todos, have little edit pencil image and when selected will open same form with current text in it
-// TODO: fix todo so that it wraps and makes div height increase
+
 
 // TODO: FINAL CONCLUSION IT IS THE PARENT CSS THAT IS MESSING WITH 3D VIEWER CHANGING SIZE RAPIDLY "proj-details-header"
 // NEED TO FIND ANOTHER WAY TO STYLE PROJECT-DETAILS SHEET WITH CSS

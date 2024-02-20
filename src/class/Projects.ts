@@ -114,11 +114,14 @@ export class Project {
                                 <span class="material-icons-round">construction</span>
                                 <p class="todo-text">${todo.text}</p>
                                 <div class="todo-status-date">
-                                    <select name="todo-status" id="todo-status" class="todo-status">
-                                        <option value="open">Open</option>
-                                        <option value="in-progress">In-progress</option>
-                                        <option value="complete">Complete</option>
-                                    </select>
+                                    <div class="select-edit">
+                                        <select name="todo-status" id="todo-status" class="todo-status">
+                                            <option value="open">Open</option>
+                                            <option value="in-progress">In-progress</option>
+                                            <option value="complete">Complete</option>
+                                        </select>
+                                        <span class="material-symbols-outlined todo-edit">edit_note</span>
+                                    </div>
                                     <p class="todo-date">Created on: ${todo.dateCreated}</p>
                                 </div>
                             </div>
