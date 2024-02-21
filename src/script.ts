@@ -291,12 +291,23 @@ function todoStatusChangeEventHandler(event: Event) {
     renderToDoStatusColor(getActiveProject() as Project)
 }
 
-function editTodoHandler(event: Event) {
+async function editTodoHandler(event: Event) {
+    showModalForm('new-todo-modal', true) // closes dialog
     const clickedElement = event.target as HTMLElement
-    console.log(clickedElement)
+    console.log('CLICKED ELEMENT', clickedElement)
     if ( !clickedElement ) return
-    const todoText = clickedElement.closest('.todo-text')
+    const todo = clickedElement.closest('.todo')
+    // TODO: todoText not being found with closest for some reason... worked
+    // with selecting, select-edit...
+    console.log('TODO ELEMENT', todo)
+    const todoText = todo?.querySelector('.todo-text')?.textContent
     console.log(todoText)
+    const newProjectFormProjectName = document.getElementById('new-project-form-project-name') as HTMLInputElement
+    if ( !newProjectFormProjectName || !todoText ) return
+    console.log(newProjectFormProjectName)
+    newProjectFormProjectName.value = todoText
+    console.log(newProjectFormProjectName.textContent)
+
 }
 
 
@@ -426,12 +437,12 @@ if ( todoForm ) {
 if ( todoBody ) {
     todoBody.addEventListener('change', (event) => todoStatusChangeEventHandler(event))
     todoBody.addEventListener('click', (event) => {
-        // event listener for edit todo
-        event.preventDefault()
-        editingTodo = true
-        console.log('edit todo clicked', event.target)
-        editTodoHandler(event)
+        // // event listener for edit todo
+        // event.preventDefault()
+        // editingTodo = true
+        // console.log('edit todo clicked', event.target)
         showModalForm('new-todo-modal', true) // closes dialog
+        editTodoHandler(event)
     })
 }
 
