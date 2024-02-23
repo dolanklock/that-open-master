@@ -291,28 +291,32 @@ function todoStatusChangeEventHandler(event: Event) {
     renderToDoStatusColor(getActiveProject() as Project)
 }
 
-async function editTodoHandler(event: Event) {
-    showModalForm('new-todo-modal', true) // closes dialog
+function editTodoHandler(event: Event) {
+    // this function is for when edit todo is clicked and this function will find the existing
+    // todo html element and update the opened form with the existing todo text
+    // event.preventDefault()
+    showModalForm('new-todo-modal', true)
     const clickedElement = event.target as HTMLElement
-    console.log('CLICKED ELEMENT', clickedElement)
+    // console.log('CLICKED ELEMENT', clickedElement)
     if ( !clickedElement ) return
     const todo = clickedElement.closest('.todo')
-    // TODO: todoText not being found with closest for some reason... worked
-    // with selecting, select-edit...
-    console.log('TODO ELEMENT', todo)
+    // console.log('TODO ELEMENT', todo)
     const todoText = todo?.querySelector('.todo-text')?.textContent
     console.log(todoText)
     const newProjectFormProjectName = document.getElementById('new-project-form-project-name') as HTMLInputElement
-    if ( !newProjectFormProjectName || !todoText ) return
-    console.log(newProjectFormProjectName)
+    // if ( !newProjectFormProjectName || !todoText ) return
+    console.log('RUNS FIRST', newProjectFormProjectName)
     newProjectFormProjectName.value = todoText
-    console.log(newProjectFormProjectName.textContent)
+    console.log('RUNS SECOND', newProjectFormProjectName.textContent)
+    // TODO: form is not updating with todo text for some reason, the input is not getting
+    // todo text...
 
 }
 
 
 
 // --------------------------- EVENT HANDLER ---------------------------- //
+
 
 
 // new project button is clicked, will open dialog
@@ -418,8 +422,8 @@ if ( todoForm ) {
             event.preventDefault()
             console.log("add edit todo code here")
             // editTodoHandler(event)
-            // TODO: need to add code for adding existing text of todo to form input
-            // and then when for is submitted need to update todos text note with new input
+            // TODO: need to add code here to get the existing todo editing and set 
+            // its todo-text to the newly inputted value
         }
     })
 }
@@ -437,11 +441,12 @@ if ( todoForm ) {
 if ( todoBody ) {
     todoBody.addEventListener('change', (event) => todoStatusChangeEventHandler(event))
     todoBody.addEventListener('click', (event) => {
+        // event.stopPropagation()
         // // event listener for edit todo
         // event.preventDefault()
-        // editingTodo = true
+        editingTodo = true
         // console.log('edit todo clicked', event.target)
-        showModalForm('new-todo-modal', true) // closes dialog
+        // showModalForm('new-todo-modal', true)
         editTodoHandler(event)
     })
 }
