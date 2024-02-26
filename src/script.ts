@@ -471,7 +471,6 @@ if ( todoBody ) {
 
 
 // can use OBC components library to do what we did above but simplified
-
 // creating the viewer component
 const viewer = new OBC.Components()
 
@@ -516,7 +515,6 @@ viewer.init()
 cameraComponent.updateAspect()
 scene.add(mesh) // add geometry to scene
 
-
 // creating ifcloader component from fragments library
 
 const ifcLoader = new OBC.FragmentIfcLoader(viewer)
@@ -534,12 +532,6 @@ toolbar.addChild(ifcLoader.uiElement.get("main"))
 
 // append the OBC.Toolbar to the viewer object
 viewer.ui.addToolbar(toolbar)
-
-
-
-
-
-
 
 // ------------------------------------- TODO LIST --------------------------------------- //
 

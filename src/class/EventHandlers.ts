@@ -1,17 +1,18 @@
 import { showWarnModalForm, showModalForm, dateFormat, showWarnModalFormImportJson,
        updateProjectDetailsContent, updateProjectCardContent } from "./ProjectFunctions"
 
+/** 
+* this function is for when edit todo is clicked and this function will find the existing
+todo html element and update the opened form with the existing todo text event.preventDefault()
+* @summary If the description is long, write your summary here. Otherwise, feel free to remove this.
+* @param {ParamDataTypeHere} parameterNameHere - Brief description of the parameter here. Note: For other notations of data types, please refer to JSDocs: DataTypes command.
+* @return {ReturnValueDataTypeHere} Brief description of the returning value here.
+*/
 export function editTodoHandler(event: Event) {
-    // this function is for when edit todo is clicked and this function will find the existing
-    // todo html element and update the opened form with the existing todo text
-    // event.preventDefault()
     const clickedElement = event.target as HTMLElement
-    // console.log('CLICKED ELEMENT', clickedElement)
     if ( !clickedElement || clickedElement.nodeName !== "SPAN" ) return
     showModalForm('new-todo-modal', true)
-    console.log('CHECK HEREEE', clickedElement, clickedElement.nodeName)
     const todo = clickedElement.closest('.todo')
-    // console.log('TODO ELEMENT', todo)
     const todoText = todo?.querySelector('.todo-text')?.textContent
     console.log(todoText)
     const newProjectFormProjectName = document.getElementById('new-project-form-project-name') as HTMLInputElement
