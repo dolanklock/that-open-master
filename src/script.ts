@@ -90,6 +90,12 @@ function getActiveProject(): Project | undefined {
 }
 
 
+/** 
+* Brief description of the function here.
+* @summary If the description is long, write your summary here. Otherwise, feel free to remove this.
+* @param {Project} project - Brief description of the parameter here. Note: For other notations of data types, please refer to JSDocs: DataTypes command.
+* @return {ReturnValueDataTypeHere} Brief description of the returning value here.
+*/
 function updateProjectDetailsForm(project: Project) {
     // this function will update the form inputs to values of the project editing when you click the edit button on the project
     showModalForm('new-project-modal', true)
@@ -304,15 +310,13 @@ function editTodoHandler(event: Event) {
     const todoText = todo?.querySelector('.todo-text')?.textContent
     console.log(todoText)
     const newProjectFormProjectName = document.getElementById('new-project-form-project-name') as HTMLInputElement
-    // if ( !newProjectFormProjectName || !todoText ) return
+    if ( !newProjectFormProjectName || !todoText ) return
     console.log('RUNS FIRST', newProjectFormProjectName)
     newProjectFormProjectName.value = todoText
-    console.log('RUNS SECOND', newProjectFormProjectName.textContent)
+    console.log('RUNS THIRD', newProjectFormProjectName.value)
     // TODO: form is not updating with todo text for some reason, the input is not getting
     // todo text...
-
 }
-
 
 
 // --------------------------- EVENT HANDLER ---------------------------- //
@@ -413,7 +417,6 @@ if ( addToDo ) {
     })
 }
 
-
 if ( todoForm ) {
     todoForm.addEventListener('submit', (event) => {
         if ( !editingTodo ) {
@@ -440,15 +443,7 @@ if ( todoForm ) {
 
 if ( todoBody ) {
     todoBody.addEventListener('change', (event) => todoStatusChangeEventHandler(event))
-    todoBody.addEventListener('click', (event) => {
-        // event.stopPropagation()
-        // // event listener for edit todo
-        // event.preventDefault()
-        editingTodo = true
-        // console.log('edit todo clicked', event.target)
-        // showModalForm('new-todo-modal', true)
-        editTodoHandler(event)
-    })
+    todoBody.addEventListener('click', (event) => editTodoHandler(event))
 }
 
 
@@ -566,6 +561,13 @@ viewer.ui.addToolbar(toolbar)
 
 
 // ------------------------------------- TODO LIST --------------------------------------- //
+
+
+
+
+// TODO: when compied components from master files from Series 1 into project starts messing with
+// other html and the behavior of it. lots of space to right side of viewer for some reason.
+// viewer now flex's properly, why? left title block will change width, why?
 
 
 // TODO: add edit feature to the todos, have little edit pencil image and when selected will open same form with current text in it
