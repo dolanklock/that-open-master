@@ -53,12 +53,6 @@
 2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.
 */
 
-body {
-  margin: 0;
-  /* 1 */
-  line-height: inherit;
-  /* 2 */
-}
 
 /*
 1. Add the correct height in Firefox.
@@ -66,14 +60,6 @@ body {
 3. Ensure horizontal rules are visible by default.
 */
 
-hr {
-  height: 0;
-  /* 1 */
-  color: inherit;
-  /* 2 */
-  border-top-width: 1px;
-  /* 3 */
-}
 
 /*
 Add the correct text decoration in Chrome, Edge, and Safari.
@@ -88,76 +74,34 @@ abbr:where([title]) {
 Remove the default font size and weight for headings.
 */
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-size: inherit;
-  font-weight: inherit;
-}
 
 /*
 Reset links to optimize for opt-in styling instead of opt-out.
 */
 
-a {
-  color: inherit;
-  text-decoration: inherit;
-}
 
 /*
 Add the correct font weight in Edge and Safari.
 */
 
-b,
-strong {
-  font-weight: bolder;
-}
 
 /*
 1. Use the user's configured `mono` font family by default.
 2. Correct the odd `em` font sizing in all browsers.
 */
 
-code,
-kbd,
-samp,
-pre {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  /* 1 */
-  font-size: 1em;
-  /* 2 */
-}
 
 /*
 Add the correct font size in all browsers.
 */
 
-small {
-  font-size: 80%;
-}
+
 
 /*
 Prevent `sub` and `sup` elements from affecting the line height in all browsers.
 */
 
-sub,
-sup {
-  font-size: 75%;
-  line-height: 0;
-  position: relative;
-  vertical-align: baseline;
-}
 
-sub {
-  bottom: -0.25em;
-}
-
-sup {
-  top: -0.5em;
-}
 
 /*
 1. Remove text indentation from table contents in Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=999088, https://bugs.webkit.org/show_bug.cgi?id=201297)
@@ -165,71 +109,25 @@ sup {
 3. Remove gaps between table borders by default.
 */
 
-table {
-  text-indent: 0;
-  /* 1 */
-  border-color: inherit;
-  /* 2 */
-  border-collapse: collapse;
-  /* 3 */
-}
+
+
 
 /*
-1. Change the font styles in all browsers.
-2. Remove the margin in Firefox and Safari.
-3. Remove default padding in all browsers.
-*/
 
-button,
-input,
-optgroup,
-select,
-textarea {
-  font-family: inherit;
-  /* 1 */
-  font-feature-settings: inherit;
-  /* 1 */
-  font-variation-settings: inherit;
-  /* 1 */
-  font-size: 100%;
-  /* 1 */
-  font-weight: inherit;
-  /* 1 */
-  line-height: inherit;
-  /* 1 */
-  color: inherit;
-  /* 1 */
-  margin: 0;
-  /* 2 */
-  padding: 0;
-  /* 3 */
-}
+
 
 /*
 Remove the inheritance of text transform in Edge and Firefox.
 */
 
-button,
-select {
-  text-transform: none;
-}
+
 
 /*
 1. Correct the inability to style clickable types in iOS and Safari.
 2. Remove default button styles.
 */
 
-button,
-[type='button'],
-[type='reset'],
-[type='submit'] {
-  -webkit-appearance: button;
-  /* 1 */
-  background-color: transparent;
-  /* 2 */
-  background-image: none;
-  /* 2 */
-}
+
 
 /*
 Use the modern Firefox focus style for all focusable elements.
@@ -251,9 +149,7 @@ Remove the additional `:invalid` styles in Firefox. (https://github.com/mozilla/
 Add the correct vertical alignment in Chrome and Firefox.
 */
 
-progress {
-  vertical-align: baseline;
-}
+
 
 /*
 Correct the cursor style of increment and decrement buttons in Safari.
@@ -300,91 +196,35 @@ Remove the inner padding in Chrome and Safari on macOS.
 Add the correct display in Chrome and Safari.
 */
 
-summary {
-  display: list-item;
-}
+
 
 /*
 Removes the default spacing and border for appropriate elements.
 */
 
-blockquote,
-dl,
-dd,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-hr,
-figure,
-p,
-pre {
-  margin: 0;
-}
 
-fieldset {
-  margin: 0;
-  padding: 0;
-}
-
-legend {
-  padding: 0;
-}
-
-ol,
-ul,
-menu {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
 
 /*
 Reset default styling for dialogs.
 */
 
-dialog {
-  padding: 0;
-}
+
 
 /*
 Prevent resizing textareas horizontally by default.
 */
 
-textarea {
-  resize: vertical;
-}
 
 /*
 1. Reset the default placeholder opacity in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/3300)
 2. Set the default placeholder color to the user's configured gray 400 color.
 */
 
-input::-moz-placeholder, textarea::-moz-placeholder {
-  opacity: 1;
-  /* 1 */
-  color: #9ca3af;
-  /* 2 */
-}
-
-input::placeholder,
-textarea::placeholder {
-  opacity: 1;
-  /* 1 */
-  color: #9ca3af;
-  /* 2 */
-}
 
 /*
 Set the default cursor for buttons.
 */
 
-button,
-[role="button"] {
-  cursor: pointer;
-}
 
 /*
 Make sure disabled buttons don't get the pointer cursor.
@@ -400,29 +240,13 @@ Make sure disabled buttons don't get the pointer cursor.
    This can trigger a poorly considered lint error in some tools but is included by design.
 */
 
-img,
-svg,
-video,
-canvas,
-audio,
-iframe,
-embed,
-object {
-  display: block;
-  /* 1 */
-  vertical-align: middle;
-  /* 2 */
-}
+
 
 /*
 Constrain images and videos to the parent width and preserve their intrinsic aspect ratio. (https://github.com/mozdevs/cssremedy/issues/14)
 */
 
-img,
-video {
-  max-width: 100%;
-  height: auto;
-}
+
 
 /* Make elements with the HTML hidden attribute stay hidden by default */
 
@@ -430,9 +254,7 @@ video {
   display: none;
 }
 
-html {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-}
+
 
 *, ::before, ::after{
   --tw-border-spacing-x: 0;
@@ -893,7 +715,8 @@ html {
 }
 
 .w-full{
-  width: 100%;
+  /* width: 100%; */
+  width: 50%;
 }
 
 .w-max{

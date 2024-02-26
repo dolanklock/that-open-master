@@ -16,6 +16,7 @@
 import { ThreeDViewer } from "./class/ThreeDViewer"
 import { Project, IProject, projectRole, projectStatus, ToDo } from "./class/Projects"
 import { ProjectsManager } from "./class/ProjectsManager"
+import { editTodoHandler } from "./class/EventHandlers"
 import { showWarnModalForm,
      showModalForm,
       dateFormat,
@@ -297,26 +298,6 @@ function todoStatusChangeEventHandler(event: Event) {
     renderToDoStatusColor(getActiveProject() as Project)
 }
 
-function editTodoHandler(event: Event) {
-    // this function is for when edit todo is clicked and this function will find the existing
-    // todo html element and update the opened form with the existing todo text
-    // event.preventDefault()
-    showModalForm('new-todo-modal', true)
-    const clickedElement = event.target as HTMLElement
-    // console.log('CLICKED ELEMENT', clickedElement)
-    if ( !clickedElement ) return
-    const todo = clickedElement.closest('.todo')
-    // console.log('TODO ELEMENT', todo)
-    const todoText = todo?.querySelector('.todo-text')?.textContent
-    console.log(todoText)
-    const newProjectFormProjectName = document.getElementById('new-project-form-project-name') as HTMLInputElement
-    if ( !newProjectFormProjectName || !todoText ) return
-    console.log('RUNS FIRST', newProjectFormProjectName)
-    newProjectFormProjectName.value = todoText
-    console.log('RUNS THIRD', newProjectFormProjectName.value)
-    // TODO: form is not updating with todo text for some reason, the input is not getting
-    // todo text...
-}
 
 
 // --------------------------- EVENT HANDLER ---------------------------- //

@@ -79,6 +79,8 @@ h5 {
     row-gap: 40px;
     padding: 25px;
     align-items: center;
+    min-width: 300px;
+    min-height: 545px;
 }
 
 #company-logo {
@@ -417,10 +419,11 @@ input:focus, textarea:focus, select:focus {
 
 /* ---------------- header -------------- */
 
-#proj-detals-header {
+#proj-details-header {
     background-color: var(--primary-300);
     width: 100%;
     height: 100px;
+    min-height: 100px;
     display: flex;
     flex-direction: column;
     margin: 0;
@@ -428,7 +431,7 @@ input:focus, textarea:focus, select:focus {
     justify-content: center;
 }
 
-#proj-detals-header h2, p {
+#proj-details-header h2, p {
     margin: 0;
 }
 
@@ -467,8 +470,9 @@ input:focus, textarea:focus, select:focus {
 }
 
 #viewer-main {
-    flex-grow: 1;
+    /* flex-grow: 1; */
     height: 100%;
+    width: 100%;
 }
 
 
@@ -715,7 +719,7 @@ input:focus, textarea:focus, select:focus {
 /* ------------- below is testing only --------------- */
 
 
-.proj-detals-header {
+/* .proj-details-header {
     background-color: var(--primary-300);
     width: 100%;
     height: 100px;
@@ -740,7 +744,7 @@ input:focus, textarea:focus, select:focus {
     width: 100%;
     height: 100%;
     background-color: #b8bab9;
-}
+} */
 
 
 /* ------------- percentage complete progress bar --------------- */
