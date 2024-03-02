@@ -192,6 +192,9 @@ function addToDoHandler(event: Event) {
     * @returns {none}
     */
     event.preventDefault()
+    const newProjectFormProjectName = document.getElementById('new-project-form-project-name') as HTMLInputElement
+    if ( !newProjectFormProjectName ) return
+    else newProjectFormProjectName.value = ""
     const project = getActiveProject()
     if ( !project || !todoForm ) return
     const todoFormData = new FormData(todoForm as HTMLFormElement)
@@ -388,6 +391,7 @@ if ( editProjectDetails ) {
 
 
 let editingTodo = false
+let clickedEditToDo: HTMLSpanElement
 
 // if add todo button is clicked will open dialog
 const addToDo = document.getElementById('add-todo')
@@ -400,14 +404,18 @@ if ( addToDo ) {
 
 if ( todoForm ) {
     todoForm.addEventListener('submit', (event) => {
+        console.log('EDITING TODO STATUS', editingTodo)
         if ( !editingTodo ) {
             addToDoHandler(event)
         } else {
             event.preventDefault()
             console.log("add edit todo code here")
-            // editTodoHandler(event)
-            // TODO: need to add code here to get the existing todo editing and set 
-            // its todo-text to the newly inputted value
+            const todo = clickedEditToDo.closest('.todo') as HTMLDivElement
+            const todoText = todo.querySelector('.todo-text') as HTMLParagraphElement
+            const formData = new FormData(todoForm)
+            todoText.textContent = formData.get('todo-text') as string
+            showModalForm('new-todo-modal', false)
+            // editingTodo = false
         }
     })
 }
@@ -424,7 +432,15 @@ if ( todoForm ) {
 
 if ( todoBody ) {
     todoBody.addEventListener('change', (event) => todoStatusChangeEventHandler(event))
-    todoBody.addEventListener('click', (event) => editTodoHandler(event))
+    todoBody.addEventListener('click', (event) => {
+
+        clickedEditToDo = event.target as HTMLElement
+        console.log('clicked element status', clickedEditToDo)
+        if ( !clickedEditToDo || clickedEditToDo.nodeName !== "SPAN" ) return
+        console.log('editing todo changing to true')
+        editingTodo = true
+        editTodoHandler(event, clickedEditToDo)
+    })
 }
 
 
