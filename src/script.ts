@@ -16,7 +16,6 @@
 import { ThreeDViewer } from "./class/ThreeDViewer"
 import { Project, IProject, projectRole, projectStatus, ToDo } from "./class/Projects"
 import { ProjectsManager } from "./class/ProjectsManager"
-import { editTodoHandler } from "./class/EventHandlers"
 import { showWarnModalForm,
      showModalForm,
       dateFormat,
@@ -117,7 +116,8 @@ function updateProjectDetailsForm(project: Project) {
 
 
 
-// --------------------- CALLBACK FUNCTIONS --------------------- //
+// --------------------- CALLBACK FUNCTIONS FOR EVENT LISTENERS--------------------- //
+
 
 
 function newProjectFormHandler(event: Event, projectForm: HTMLFormElement) {
@@ -155,7 +155,6 @@ function newProjectFormHandler(event: Event, projectForm: HTMLFormElement) {
         }
     }
 }
-
 
 function projectCardClicked(event: Event) {
     const projectCard = ( event.target as HTMLElement).closest('.project-card')
@@ -210,6 +209,35 @@ function addToDoHandler(event: Event) {
     renderToDoStatusColor(project)
 }
 
+function editTodoHandler(event: Event) {
+    /*
+    when todo edit button is clicked and then the form is submitted this event handler
+    will be triggered and update the project object todo object text and then render the updated
+    todo html by running renderTodoList
+
+    * @param {Project} project - the project object to use for rendering the todos. The project passed in will be
+                        the data values for the HTML rendered
+    * @returns {none}
+    */
+    event.preventDefault()
+    // GETTING EXISTING TODO TEXT    
+    const todo = clickedEditToDo.closest('.todo')
+    if ( !todo ) return
+    const project = getActiveProject()
+    if ( !project || !todoForm ) return
+    const todoFormData = new FormData(todoForm as HTMLFormElement)
+    let text = todoFormData.get('todo-text') as string
+    if ( !text ) {
+        todoForm.reset()
+        showModalForm('new-todo-modal', false) // closes dialog
+    }
+    // GET THE EDITING TODO'S ID AND PASS INTO FUNCTION projectManager.editTodo
+    projectsManager.editTodo(project.id, todo.dataset.id, text)
+    renderToDoList(project)
+    todoForm.reset()
+    showModalForm('new-todo-modal', false) // closes dialog
+    renderToDoStatusColor(project)
+}
 
 function renderToDoList(project: Project) {
     /*
@@ -244,7 +272,6 @@ function renderToDoList(project: Project) {
     })
     renderToDoStatusColor(project)
 }
-
 
 function renderToDoStatusColor(project: Project) {
     /*
@@ -284,7 +311,6 @@ function updateProjectToDoStatus(elementIdFind: string, status: string) {
     if ( !projectToDo ) return
     projectToDo.status = status
 }
-
 
 function todoStatusChangeEventHandler(event: Event) {
     /*
@@ -408,14 +434,8 @@ if ( todoForm ) {
         if ( !editingTodo ) {
             addToDoHandler(event)
         } else {
-            event.preventDefault()
-            console.log("add edit todo code here")
-            const todo = clickedEditToDo.closest('.todo') as HTMLDivElement
-            const todoText = todo.querySelector('.todo-text') as HTMLParagraphElement
-            const formData = new FormData(todoForm)
-            todoText.textContent = formData.get('todo-text') as string
-            showModalForm('new-todo-modal', false)
-            // editingTodo = false
+            // event.preventDefault()
+            editTodoHandler(event)
         }
     })
 }
@@ -433,15 +453,13 @@ if ( todoForm ) {
 if ( todoBody ) {
     todoBody.addEventListener('change', (event) => todoStatusChangeEventHandler(event))
     todoBody.addEventListener('click', (event) => {
-
         clickedEditToDo = event.target as HTMLElement
-        console.log('clicked element status', clickedEditToDo)
         if ( !clickedEditToDo || clickedEditToDo.nodeName !== "SPAN" ) return
-        console.log('editing todo changing to true')
         editingTodo = true
-        editTodoHandler(event, clickedEditToDo)
+        showModalForm('new-todo-modal', true)
     })
 }
+
 
 
 

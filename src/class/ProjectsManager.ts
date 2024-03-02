@@ -96,6 +96,17 @@ export class ProjectsManager {
         project.todoList.push(todo)
     }
 
+    editTodo(projectId: string, todoId: string, todoText: string) {
+        console.log("TODO ID", todoId)
+        const project = this.list.find(project => project.id == projectId)
+        console.log("PROJECT", project)
+        const todo = project?.todoList.find((todo) => todo.id === todoId)
+        console.log("TODO", todo)
+        if ( !todo ) return
+        todo.text = todoText
+        console.log("todo text", todo)
+    }
+
     _overrideProjectImportJson(event: Event, project) {
         /*
         this method will take in the project object that comes from the JSON file import and set the
