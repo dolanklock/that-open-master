@@ -41,6 +41,7 @@ const newProjectCancelBtn = document.querySelector('.form-cancel-btn');
 const todoBody = document.getElementById('todo-body')
 const todoForm = document.getElementById('new-todo-form')
 const projectList = document.getElementById('project-list')
+const todoFormInput = document.getElementById('todo-form-input') as HTMLInputElement
 
 const projectsManager = new ProjectsManager()
 const testBtn = document.getElementById('test')
@@ -50,20 +51,32 @@ const testBtn = document.getElementById('test')
 
 
 function toggleProjectsDetailsPage() {
+    /*
+
+    * @param {Project} fill out
+    * @returns {none}
+    */
     if ( !projectsPage || !projectDetails ) return
     projectsPage.classList.toggle('page-hidden')
     projectDetails.classList.toggle('page-hidden')
 }
 
-
 function getProject(projectId: string | number) {
+    /*
+
+    * @param {Project} fill out
+    * @returns {none}
+    */
     return projectsManager.list.find(project => project.id == projectId)
 }
 
-
 function getProjectFormData(projectForm: HTMLFormElement) {
-    // instantiating formdata object from FormData class and passing in html form element
-    // this is an object that we can use to access all input values of our form using .get method
+    /* instantiating formdata object from FormData class and passing in html form element
+    this is an object that we can use to access all input values of our form using .get method
+
+    * @param {Project} fill out
+    * @returns {none}
+    */
     const formData = new FormData(projectForm)
     // console.log(formData.get('project-name')); // the HTML input tag will have attribute 'name'
     // that is equal to 'project-name' and we can access it with this get method
@@ -80,24 +93,25 @@ function getProjectFormData(projectForm: HTMLFormElement) {
     return projectFormData
 }
 
-
 function getActiveProject(): Project | undefined {
-    // this function will get the active project (js object) when the user selects a project card from the project page
+    /* this function will get the active project (js object) when the user selects a project card from the project page
+
+    * @param {Project} fill out
+    * @returns {none}
+    */
     const activeProjectTitle = document.getElementById('active-project-title')?.textContent
     const project = projectsManager.list.find(project => project.projectName === activeProjectTitle)
     if ( !activeProjectTitle || !project ) return
     return project
 }
 
-
-/** 
-* Brief description of the function here.
-* @summary If the description is long, write your summary here. Otherwise, feel free to remove this.
-* @param {Project} project - Brief description of the parameter here. Note: For other notations of data types, please refer to JSDocs: DataTypes command.
-* @return {ReturnValueDataTypeHere} Brief description of the returning value here.
-*/
 function updateProjectDetailsForm(project: Project) {
-    // this function will update the form inputs to values of the project editing when you click the edit button on the project
+    /* this function will update the form inputs to values of the project 
+    editing when you click the edit button on the project
+
+    * @param {Project} fill out
+    * @returns {none}
+    */
     showModalForm('new-project-modal', true)
     const projectDetailForm = document.getElementById('new-project-form')
     const projectNameInput = document.getElementById('new-project-form-project-name') as HTMLInputElement
@@ -121,6 +135,11 @@ function updateProjectDetailsForm(project: Project) {
 
 
 function newProjectFormHandler(event: Event, projectForm: HTMLFormElement) {
+    /*
+
+    * @param {Project} fill out
+    * @returns {none}
+    */
     event.preventDefault()
     if ( projectsPage?.classList.contains('page-hidden') ) {
         // if this block is executed then the user is editing an existing project on details page
@@ -157,6 +176,11 @@ function newProjectFormHandler(event: Event, projectForm: HTMLFormElement) {
 }
 
 function projectCardClicked(event: Event) {
+    /*
+
+    * @param {Project} fill out
+    * @returns {none}
+    */
     const projectCard = ( event.target as HTMLElement).closest('.project-card')
     if ( !projectCard ) return
     const project = getProject(projectCard.dataset.id)
@@ -166,19 +190,26 @@ function projectCardClicked(event: Event) {
     toggleProjectsDetailsPage()
 }
 
-
 function editProjectCard(event: Event) {
+    /*
+
+    * @param {Project} fill out
+    * @returns {none}
+    */
     showModalForm('new-project-modal', true)
     const project = getActiveProject()
     if ( !project ) return
     updateProjectDetailsForm(project)
 }
 
-
 function projectsClicked(event: Event) {
+    /*
+
+    * @param {Project} fill out
+    * @returns {none}
+    */
     if ( !projectsPage ) return
     if ( projectsPage.classList.contains('page-hidden') ) toggleProjectsDetailsPage()
-    // renderToDoStatusColor(getActiveProject() as Project)
 }
 
 function addToDoHandler(event: Event) {
@@ -191,9 +222,8 @@ function addToDoHandler(event: Event) {
     * @returns {none}
     */
     event.preventDefault()
-    const newProjectFormProjectName = document.getElementById('new-project-form-project-name') as HTMLInputElement
-    if ( !newProjectFormProjectName ) return
-    else newProjectFormProjectName.value = ""
+    // if ( !todoFormInput ) return
+    // else todoFormInput.value = ""
     const project = getActiveProject()
     if ( !project || !todoForm ) return
     const todoFormData = new FormData(todoForm as HTMLFormElement)
@@ -220,8 +250,11 @@ function editTodoHandler(event: Event) {
     * @returns {none}
     */
     event.preventDefault()
-    // GETTING EXISTING TODO TEXT    
+    // GETTING EXISTING TODO TEXT AND SETTING FORM DEFAULT VALUE
     const todo = clickedEditToDo.closest('.todo')
+    const todoExistingText = todo?.querySelector(".todo-text")
+    // if ( !todoFormInput ) return
+    // todoFormInput.value = todoExistingText
     if ( !todo ) return
     const project = getActiveProject()
     if ( !project || !todoForm ) return
@@ -456,6 +489,10 @@ if ( todoBody ) {
         clickedEditToDo = event.target as HTMLElement
         if ( !clickedEditToDo || clickedEditToDo.nodeName !== "SPAN" ) return
         editingTodo = true
+        const todo = clickedEditToDo.closest('.todo')
+        const todoExistingText = todo?.querySelector(".todo-text")?.textContent
+        if ( !todoFormInput ) return
+        todoFormInput.value = todoExistingText
         showModalForm('new-todo-modal', true)
     })
 }
