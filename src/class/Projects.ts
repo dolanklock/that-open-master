@@ -79,19 +79,19 @@ export class Project {
                 <div class="project-card-body">
                     <div class="card-body">
                         <p>Status</p>
-                        <p class="project-card-status" style="color: white;">${this.status}</p>
+                        <p class="project-card-status" style="color: black;">${this.status}</p>
                     </div>
                     <div class="card-body">
                         <p>Role</p>
-                        <p class="project-card-role" style="color: white;">${this.role}</p>
+                        <p class="project-card-role" style="color: black;">${this.role}</p>
                     </div>
                     <div class="card-body">
                         <p>Cost</p>
-                        <p style="color: white;" class="cost">$2${this.cost}</p>
+                        <p style="color: black;" class="cost">$2${this.cost}</p>
                     </div>
                     <div class="card-body">
                         <p>Estimated Progress</p>
-                        <p style="color: white;">${new Intl.NumberFormat(navigator.language, { style: 'currency', currency: 'CAD' })
+                        <p style="color: black;">${new Intl.NumberFormat(navigator.language, { style: 'currency', currency: 'CAD' })
                         .format(this.progress)}%</p>
                     </div>
                     <button class="delete-project">Delete</button>

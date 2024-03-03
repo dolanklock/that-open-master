@@ -489,6 +489,7 @@ if ( todoBody ) {
         clickedEditToDo = event.target as HTMLElement
         if ( !clickedEditToDo || clickedEditToDo.nodeName !== "SPAN" ) return
         editingTodo = true
+        // SETTING FORM INPUT DEFAULT VALUE TO EXISTING TODO TEXT
         const todo = clickedEditToDo.closest('.todo')
         const todoExistingText = todo?.querySelector(".todo-text")?.textContent
         if ( !todoFormInput ) return

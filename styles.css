@@ -2,10 +2,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300&display=swap');
 
 :root {
-    --primary: #26282b;
+    /* --primary: #26282b; */
+    --primary: #d4d6d9;
     --primary-100: #029AE0;
     --primary-200: #4a4946;
-    --primary-300: #202124;
+    /* --primary-300: #202124; */
+    --primary-300: #f2f2f0;
     --background-100: #029AE0;
     --action-btn: #27d128;
     --font-xs: 10px;
@@ -38,7 +40,7 @@ body {
     height: 100vh;
     width: 100vw;
     background-color: #202124;
-    color: white;
+    color: black;
     margin: 0;
     font-weight: 100;
 }
@@ -70,6 +72,14 @@ h5 {
 
 /* ------------------- sidebar ----------------- */
 
+
+#nav-buttons li span {
+    color: black;
+}
+
+#nav-buttons li {
+    color: black;
+}
 
 #sidebar {
     background-color: var(--primary);
@@ -131,13 +141,15 @@ h5 {
     justify-content: space-between;
     margin: 20px;
     column-gap: 10px;
+    color: black;
 }
 
 #page-header button {
     background-color: var(--primary-100);
     border-radius: 5px;
     border: 1 solid var(--primary-100);
-    color: white;
+    /* color: white; */
+    color: black;
     padding: 10px;
 }
 
@@ -160,7 +172,8 @@ h5 {
 /* JSON export/import buttons */
 
 #export-json {
-    color: white;
+    /* color: white; */
+    color: black;
 }
 
 #import-child input {
@@ -191,6 +204,10 @@ h5 {
     border-radius: 50%;
     background-color: #029AE0;
     cursor: pointer;
+}
+
+#import-parent span {
+    color: black;
 }
 
 #import-child {
@@ -239,9 +256,11 @@ h5 {
     width: auto;
     height: 15%;
     display: flex;
-    background-color: #4a4946;
+    /* background-color: #4a4946; */
+    background-color: var(--primary);
     border-bottom: 1px solid var(--primary);
-    color: white;
+    /* color: white; */
+    color: black;
     padding: 15px;
     border-radius: 10px 10px 0 0;
     align-items: center;
@@ -262,7 +281,8 @@ h5 {
 
 .project-card-body {
     width: auto;
-    background-color: var(--primary-200);
+    /* background-color: var(--primary-200); */
+    background-color: var(--primary);
     border-radius: 0  0 10px 10px;
     padding: 15px;
     height: fit-content;
@@ -303,7 +323,8 @@ h5 {
 
 .delete-project {
     background-color: red;
-    color: white;
+    /* color: white; */
+    color: black;
     border-radius: 15px;
     border: 1px solid red;
     padding: 8px;
@@ -541,11 +562,11 @@ input:focus, textarea:focus, select:focus {
 
 #info-header button {
     width: 100px;
-    border: 1px solid white;
+    border: 1px solid black;
     border-radius: 20px;
     background-color: var(--primary);
     padding: 10px;
-    color: white;
+    color: black;
 }
 
 #info-sub-header {
