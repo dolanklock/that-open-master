@@ -94,7 +94,11 @@ export class Project {
                         <p style="color: black;">${new Intl.NumberFormat(navigator.language, { style: 'currency', currency: 'CAD' })
                         .format(this.progress)}%</p>
                     </div>
-                    <button class="delete-project">Delete</button>
+                </div>
+                <div class="project-card-footer">
+                    <button class="delete-project"><span class="material-symbols-outlined">
+                    delete
+                    </span></button>
                 </div>
             </div>`
         const projectList = document.getElementById('project-list');

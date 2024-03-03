@@ -97,9 +97,11 @@ export function updateProjectCardContent(project: Project) {
     const projectTitle = projectCard.querySelector('.card-title h2')
     const projectRole = projectCard.querySelector('.project-card-role')
     const projectStatus = projectCard.querySelector('.project-card-status')
-    if ( !projectTitle || !projectRole || !projectStatus ) return
+    const projectImgLetters = projectCard.querySelector('h2')
+    if ( !projectTitle || !projectRole || !projectStatus || !projectImgLetters ) return
     projectTitle.textContent = project.projectName
     projectRole.textContent = project.role
     projectStatus.textContent = project.status
+    projectImgLetters.textContent = project.projectName.slice(0, 2).toUpperCase()
 
 }

@@ -113,7 +113,6 @@ function updateProjectDetailsForm(project: Project) {
     * @returns {none}
     */
     showModalForm('new-project-modal', true)
-    const projectDetailForm = document.getElementById('new-project-form')
     const projectNameInput = document.getElementById('new-project-form-project-name') as HTMLInputElement
     const projectDescriptionInput = document.getElementById('new-project-form-description') as HTMLInputElement
     const projectRoleInput = document.getElementById('new-project-form-role') as HTMLInputElement
@@ -386,8 +385,9 @@ if ( newProjectForm && newProjectForm instanceof HTMLFormElement ) {
 if ( projectList ) {
     projectList.addEventListener('click', (event) => {
         if ( !event.target ) return
-        if ( event.target instanceof HTMLElement && event.target.classList.contains('delete-project')) {
-            const card = event.target.closest(".project-card")
+        const deleteProjectBtn = event.target.closest('.delete-project')
+        if ( deleteProjectBtn instanceof HTMLButtonElement && deleteProjectBtn.classList.contains('delete-project')) {
+            const card = deleteProjectBtn.closest(".project-card")
             // if ( !card ) return
             if ( card && card instanceof HTMLElement ) {
                 const projectId = card.dataset.id
@@ -557,7 +557,7 @@ sceneComponent.setup() // applies directional light etc.. refer to source code
 const scene = sceneComponent.get()
 
 // setting up the renderer
-const viewerContainer = document.getElementById("viewer-main") as HTMLDivElement
+const viewerContainer = document.getElementById("viewer") as HTMLDivElement
 const rendererComponent = new OBC.SimpleRenderer(viewer, viewerContainer)
 viewer.renderer = rendererComponent
 
@@ -590,6 +590,12 @@ scene.add(mesh) // add geometry to scene
 // creating ifcloader component from fragments library
 
 const ifcLoader = new OBC.FragmentIfcLoader(viewer)
+// need to do the below because ifc module from open BIM components needs additional files for loading and 
+// working with ifc's
+ifcLoader.settings.wasm = {
+    path: "https://unpkg.com/web-ifc@0.0.43/",
+    absolute: true
+}
 
 const toolbar = new OBC.Toolbar(viewer)
 
@@ -615,14 +621,16 @@ viewer.ui.addToolbar(toolbar)
 // viewer now flex's properly, why? left title block will change width, why?
 
 
-// TODO: add edit feature to the todos, have little edit pencil image and when selected will open same form with current text in it
-
-
 // TODO: FINAL CONCLUSION IT IS THE PARENT CSS THAT IS MESSING WITH 3D VIEWER CHANGING SIZE RAPIDLY "proj-details-header"
 // NEED TO FIND ANOTHER WAY TO STYLE PROJECT-DETAILS SHEET WITH CSS
 
 
 /*
+
+// TODO: add ability for UI input of cost and estimated progress and then update the progress
+// bar to move when percentage is changed
+
+// TODO: update todo UI to have same dialog as good one
 
 // TODO: when importing projects the color between the project page and the actual proejct card detail
 // page when click on card - the project image color is different between the two, make sure

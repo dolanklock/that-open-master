@@ -24,7 +24,8 @@
 /* styling all font in html doc using 'Global selector' */
 * {
     font-family: 'Inter' sans-serif;
-    /* font-weight: 100; */
+    font-weight: 100;
+    /* font-weight: 100 !important;  */
 }
 
 button:hover {
@@ -42,7 +43,6 @@ body {
     background-color: #202124;
     color: black;
     margin: 0;
-    font-weight: 100;
 }
 
 h2 {
@@ -150,7 +150,7 @@ h5 {
     border: 1 solid var(--primary-100);
     /* color: white; */
     color: black;
-    padding: 10px;
+    padding: 5px;
 }
 
 #page-header button:hover {
@@ -166,7 +166,7 @@ h5 {
 
 #page-header-buttons a:hover {
     border-radius: 50%;
-    background-color: #029AE0;
+    /* background-color: #029AE0; */
 }
 
 /* JSON export/import buttons */
@@ -186,29 +186,20 @@ h5 {
     cursor: pointer;
 }
 
-/* #import-json {
-    height: 100%;
-    width: 100%;
-} */
-
-
-/* #import-json span {
-    color: white;
-} */
-
 #import-parent {
     position: relative;
 }
 
 #import-parent:hover {
-    border-radius: 50%;
-    background-color: #029AE0;
+    /* border-radius: 50%; */
+    /* background-color: #029AE0; */
     cursor: pointer;
 }
 
 #import-parent span {
     color: black;
 }
+
 
 #import-child {
     position: absolute;
@@ -217,9 +208,7 @@ h5 {
     opacity: 0;
 }
 
-/* #import-parent:hover{
-    cursor: pointer;
-} */
+
 
 /* --------------------- project card styles ----------------------- */
 
@@ -275,7 +264,7 @@ h5 {
 .project-card-header p {
     margin: 0;
     vertical-align: top;
-    font-family: 'Open Sans', sans-serif;
+    /* font-family: 'Open Sans', sans-serif; */
     font-size: var(--font-lg);
 }
 
@@ -283,7 +272,7 @@ h5 {
     width: auto;
     /* background-color: var(--primary-200); */
     background-color: var(--primary);
-    border-radius: 0  0 10px 10px;
+    /* border-radius: 0  0 10px 10px; */
     padding: 15px;
     height: fit-content;
 }
@@ -291,6 +280,17 @@ h5 {
 /* .project-card-body:hover {
     background-color: var(--primary-100);
 } */
+
+.project-card-footer {
+    width: auto;
+    background-color: var(--primary);
+    border-radius: 0  0 10px 10px;
+    padding: 10px 40px 20px 10px;
+    height: fit-content;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
 
 .card-img {
     width: 40px;
@@ -325,15 +325,15 @@ h5 {
     background-color: red;
     /* color: white; */
     color: black;
-    border-radius: 15px;
+    border-radius: 6px;
     border: 1px solid red;
-    padding: 8px;
-    width: 120px;
-    /* margin: 5px; */
-    margin-top: 20px;
-    margin-left: 30px;
+    padding: 5px;
+    width: fit-content;
 }
 
+.delete-project span {
+   font-size: 20px;
+}
 
 /* ---------------- NEW PROJECT FORM DIALOG ---------------- */
 
@@ -429,7 +429,7 @@ input:focus, textarea:focus, select:focus {
 
 
 #project-details {
-    background-color: #27d128;
+    background-color: var(--primary-300);
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -441,15 +441,16 @@ input:focus, textarea:focus, select:focus {
 /* ---------------- header -------------- */
 
 #proj-details-header {
-    background-color: var(--primary-300);
+    background-color: var(--primary);
     width: 100%;
     height: 100px;
     min-height: 100px;
     display: flex;
     flex-direction: column;
-    margin: 0;
+    margin: 25px 0 0 20px;
     padding-left: 25px;
     justify-content: center;
+    border-radius: 20px;
 }
 
 #proj-details-header h2, p {
@@ -510,6 +511,7 @@ input:focus, textarea:focus, select:focus {
     padding: 25px;
     box-sizing: border-box;
     row-gap: 35px;
+    border-radius: 20px;
 }
 
 #todo {
@@ -520,6 +522,7 @@ input:focus, textarea:focus, select:focus {
     flex-direction: column;
     padding: 20px;
     box-sizing: border-box;
+    border-radius: 20px;
 }
 
 .todo {
@@ -542,6 +545,7 @@ input:focus, textarea:focus, select:focus {
 }
 
 /*  ----------- info panel contents ------------ */
+
 
 #info-header {
     display: flex;
@@ -581,7 +585,7 @@ input:focus, textarea:focus, select:focus {
 }
 
 .stat-title {
-    color: lightgray;
+    color: darkgray;
 }
 
 
@@ -727,13 +731,14 @@ input:focus, textarea:focus, select:focus {
 
 .warn-message {
     display: flex;
-    width: 80%;
+    width: 85%;
     align-items: center;
     justify-content: center;
 }
 
 .warn-message h3 {
     font-weight: 100;
+    color: black;
 }
 
 
