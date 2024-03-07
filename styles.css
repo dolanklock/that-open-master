@@ -603,6 +603,10 @@ input:focus, textarea:focus, select:focus {
     margin-bottom: 15px;
 }
 
+#todo-search input {
+    background-color: var(--primary-300);
+}
+
 #todo-search label {
     font-size: var(--font-xl);
 }

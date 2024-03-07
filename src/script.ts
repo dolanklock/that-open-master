@@ -404,6 +404,8 @@ if ( projectList ) {
 if ( testBtn ) {
     testBtn.addEventListener('click', (event) => {
         event.preventDefault()
+        const viewerHTML = document.getElementById("viewer")
+        viewerHTML.requestFullscreen()
         // projectsManager.importJSONReader = undefined
         // projectsManager.reader.removeEventListener('load', projectsManager.importJSONLoadReader)
         // console.log(projectsManager.importJSONReader)
@@ -505,6 +507,7 @@ if ( todoBody ) {
 // ------------------------------ THREE D VIEWER USING THREEJS ------------------------------- //
 
 
+
 // const threeDViewer = new ThreeDViewer('viewer-test', 0.4, 5)
 // threeDViewer.addAxisHelper()
 // // threeDViewer.addGridHelper(10, 10)
@@ -541,10 +544,27 @@ if ( todoBody ) {
 
 // ------------------- THREE D VIEWER USING OBC (OPEN BIM COMPONENTS FROM THAT OPEN ENGINE) ------------------------- //
 
+// const components = new OBC.Components()
+// const mainToolbar = new OBC.Toolbar(components);
+// mainToolbar.name = "Main toolbar";
+// components.ui.addToolbar(mainToolbar);
+
+
+// const alertButton = new OBC.Button(components);
+// alertButton.materialIcon = "info";
+// alertButton.tooltip = "Information";
+// mainToolbar.addChild(alertButton);
+// alertButton.onClick.add(() => {
+// alert('I\'ve been clicked!');
+// });
+
+
+
 
 // can use OBC components library to do what we did above but simplified
 // creating the viewer component
 const viewer = new OBC.Components()
+
 
 // creating the scene component
 const sceneComponent = new OBC.SimpleScene(viewer)
@@ -558,12 +578,16 @@ const scene = sceneComponent.get()
 
 // setting up the renderer
 const viewerContainer = document.getElementById("viewer") as HTMLDivElement
-const rendererComponent = new OBC.SimpleRenderer(viewer, viewerContainer)
+const rendererComponent = new OBC.PostproductionRenderer(viewer, viewerContainer)
 viewer.renderer = rendererComponent
 
 // setting up camera component
 const cameraComponent = new OBC.OrthoPerspectiveCamera(viewer)
 viewer.camera = cameraComponent
+
+// setting up the raycaster component
+const raycasterComponent = new OBC.SimpleRaycaster(viewer)
+viewer.raycaster = raycasterComponent
 
 // call init to start to render the scene
 // this is doing similar thing as we did in renderscene function
@@ -585,10 +609,13 @@ const mesh = new THREE.Mesh(geometry, material)
 // need to call the viewer.init() method after we have setup the scene the renderer and the camera..
 viewer.init()
 cameraComponent.updateAspect()
+rendererComponent.postproduction.enabled = true // need to call this after viewer.init()
 scene.add(mesh) // add geometry to scene
+// viewer.meshes.add(mesh)
+
+// IFC LOADER
 
 // creating ifcloader component from fragments library
-
 const ifcLoader = new OBC.FragmentIfcLoader(viewer)
 // need to do the below because ifc module from open BIM components needs additional files for loading and 
 // working with ifc's
@@ -597,9 +624,44 @@ ifcLoader.settings.wasm = {
     absolute: true
 }
 
+
+// FULL SCREEN BUTTON
+const fullScreenBtn = new OBC.Button(viewer);
+fullScreenBtn.materialIcon = "info";
+fullScreenBtn.tooltip = "Full screen";
+
+// EXIT FULL SCREEN BUTTON
+const exitFullScreenBtn = new OBC.Button(viewer);
+exitFullScreenBtn.materialIcon = "handshake";
+exitFullScreenBtn.tooltip = "Exit full screen";
+
+// DIMENSIONS
+
+const dimensions = new OBC.AreaMeasurement(viewer);
+dimensions.enabled = true;
+dimensions.snapDistance = 1;
+// const viewerTest = document.getElementById("viewer")
+// viewer.ondblclick = () => dimensions.create();
+// viewerTest.oncontextmenu = () => dimensions.endCreation();
+
+
+// SELECTOR
+
+const highlighter = new OBC.FragmentHighlighter(viewer)
+highlighter.setup()
+
+// IFCLOADED EVENT
+// OBC has built in event handlers. this one will get triggered when ifc is loaded
+ifcLoader.onIfcLoaded.add((model) => {
+    highlighter.update()
+})
+
+// TOOLBAR
+
 const toolbar = new OBC.Toolbar(viewer)
 
-// console.log('here test', ifcLoader.uiElement.get("main"))
+
+toolbar.addChild(dimensions.uiElement.get("main"));
 
 // all tools come with uiElement object that has all the premade user interface that the ifcloader object has
 // it is html code behind the scenes that gets added. 
@@ -608,13 +670,36 @@ const toolbar = new OBC.Toolbar(viewer)
 // can use the OBC.Toolbar object and use the addChild method to add the SimpleUIComponent object
 toolbar.addChild(ifcLoader.uiElement.get("main"))
 
+// ADDING FULL SCREEN / EXIT BUTTONS TO UI
+toolbar.addChild(fullScreenBtn);
+toolbar.addChild(exitFullScreenBtn);
+
 // append the OBC.Toolbar to the viewer object
 viewer.ui.addToolbar(toolbar)
+
+
+// FULL SCREEN BUTTON EVENT LISTENER
+fullScreenBtn.onClick.add(() => {
+    const viewerHTML = document.getElementById("viewer")
+    if ( !viewerHTML ) return
+    viewerHTML.requestFullscreen()
+});
+
+
+exitFullScreenBtn.onClick.add(() => {
+    // const viewerHTML = document.getElementById("viewer")
+    // if ( !viewerHTML ) return
+    document.exitFullscreen()
+});
+
 
 // ------------------------------------- TODO LIST --------------------------------------- //
 
 
 
+// TODO: create an icon at bottom of window similar to ifc loader one using OBC
+
+// TODO: add option to sort todos by complete or by date created 
 
 // TODO: when compied components from master files from Series 1 into project starts messing with
 // other html and the behavior of it. lots of space to right side of viewer for some reason.
