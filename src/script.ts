@@ -646,7 +646,6 @@ dimensions.snapDistance = 1;
 
 
 // SELECTOR
-
 const highlighter = new OBC.FragmentHighlighter(viewer)
 highlighter.setup()
 
@@ -693,8 +692,26 @@ exitFullScreenBtn.onClick.add(() => {
 });
 
 
+// ------------------------------------- TESTING ADDING TOOL TO ANY DIV ELEMENT --------------------------------------- //
+
+
+const componentTools = new OBC.Components()
+
+const btnTest = new OBC.Button(componentTools);
+btnTest.materialIcon = "info";
+btnTest.tooltip = "Full screen";
+
+
+const tools = new OBC.Toolbar(componentTools)
+
+tools.addChild(btnTest)
+
+
 // ------------------------------------- TODO LIST --------------------------------------- //
 
+
+// TODO: issue with bottom of contents not moving when drag window, id with "project-details" is
+// changing with window change in height but the nested divs are not... cant use the column direction and flex-grow i dont think...
 
 
 // TODO: create an icon at bottom of window similar to ifc loader one using OBC

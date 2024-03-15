@@ -32,6 +32,11 @@ button:hover {
     cursor: pointer;
 }
 
+html {
+    height: 100vh !important;
+}
+
+
 body {
     display: flex;
     /* 300 specifies the first colo=umn width and the 1fr means the second column takes the rest of the width */
@@ -43,6 +48,7 @@ body {
     background-color: #202124;
     color: black;
     margin: 0;
+    padding: 0;
 }
 
 h2 {
@@ -84,13 +90,15 @@ h5 {
 #sidebar {
     background-color: var(--primary);
     display: flex;
-    flex-basis: 300px;
+    /* flex-basis: 300px; */
+    width: 300px;
+    height: 100%;
     flex-direction: column; /* makes items stack in y direction rather than being in x direction */
     row-gap: 40px;
     padding: 25px;
     align-items: center;
     min-width: 300px;
-    min-height: 545px;
+    /* min-height: 545px; */
 }
 
 #company-logo {
@@ -133,6 +141,7 @@ h5 {
 #content {
     background-color: var(--primary-300);
     flex-grow: 1;
+    height: 100%;
 }
 
 #page-header {
@@ -432,8 +441,9 @@ input:focus, textarea:focus, select:focus {
     background-color: var(--primary-300);
     display: flex;
     flex-direction: column;
+    /* height: 100vh; */
     height: 100%;
-    max-height: 100%;
+    /* max-height: 100%; */
     width: 100%;
     
 }
@@ -442,13 +452,14 @@ input:focus, textarea:focus, select:focus {
 
 #proj-details-header {
     background-color: var(--primary);
-    width: 100%;
+    /* width: 100%; */
+    /* flex-grow: 1; */
     height: 100px;
     min-height: 100px;
     display: flex;
     flex-direction: column;
-    margin: 25px 0 0 20px;
-    padding-left: 25px;
+    margin: 20px 20px 0 20px;
+    padding-left: 20px;
     justify-content: center;
     border-radius: 20px;
 }
@@ -463,10 +474,11 @@ input:focus, textarea:focus, select:focus {
 
 #proj-details-content {
     background-color: var(--primary-300);
-    height: 100vh; /* new */
+    /* height: 100vh; new */
     flex-grow: 1;
     display: flex;
-    grid-template-columns: 500px 1fr; /* 300 specifies the first colo=umn width and the 1fr means the second column takes the rest of the width */
+    /* max-height: 75%; */
+    /* grid-template-columns: 500px 1fr; 300 specifies the first colo=umn width and the 1fr means the second column takes the rest of the width */
     padding: 20px;
 }
 
@@ -481,6 +493,7 @@ input:focus, textarea:focus, select:focus {
     display: flex;
     flex-direction: column;
     margin-right: 20px;
+    /* overflow: scroll; */
 }
 
 
@@ -488,7 +501,8 @@ input:focus, textarea:focus, select:focus {
     flex-grow: 1;
     height: 100%;
     background-color: var(--primary);
-    margin-right: 10px;
+    margin-right: 5px;
+    border-radius: 20px;
 }
 
 #viewer-main {
@@ -518,11 +532,13 @@ input:focus, textarea:focus, select:focus {
     background-color: var(--primary);
     flex-grow: 1;
     width: 100%;
+    /* height: 100%; */
     display: flex;
     flex-direction: column;
     padding: 20px;
-    box-sizing: border-box;
+    /* box-sizing: border-box; */
     border-radius: 20px;
+    /* overflow: scroll; */
 }
 
 .todo {
@@ -621,9 +637,12 @@ input:focus, textarea:focus, select:focus {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    max-height: 100%;
+    max-width: 500px;
     background-color: var(--primary);
-    row-gap: 10px;
-    height: fit-content;
+    /* row-gap: 10px; */
+    /* height: fit-content; */
+    overflow: scroll;
 }
 
 .todo {
