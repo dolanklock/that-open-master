@@ -1,0 +1,163 @@
+/* ---------------- NEW PROJECT FORM DIALOG ---------------- */
+
+
+form {
+    width: 450px;
+    border-radius: 10px;
+    background-color: var(--primary);
+    color: white;
+}
+
+form h2 {
+    padding: 20px;
+    border-bottom: 2px solid var(--primary);
+}
+
+form .input-list {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    row-gap: 25px;
+}
+
+form .form-field-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+form .form-field-title {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+}
+
+dialog {
+    background-color: transparent;
+    border: none;
+    margin: auto;
+}
+
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+}
+
+/* selecting multiple different tags */
+
+input, textarea, select {
+    color: white;
+    background-color: var(--primary-200);
+    padding: 15px;
+    border-radius: 8px;
+    border: none;
+    font-size: var(--font-base);
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: 2px solid var(--primary-200);
+}
+
+.tip {
+    font-style: italic;
+    font-size: var(--font-sm);
+    color: lightgray;
+    margin: 0;
+    padding: 0;
+}
+
+.form-submit-btn {
+    background-color: var(--action-btn);
+    border-radius: 15px;
+    padding: 5px;
+    color: white;
+    border: none;
+}
+
+.form-submit-btn:hover {
+    background-color: darkgray;
+}
+
+.form-cancel-btn {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+}
+
+.form-cancel-btn:hover {
+    color: darkgray;
+}
+
+
+/* -------------------------- warning message dialog ------------------------ */
+
+
+.warn-window {
+    background-color: var(--primary-200);
+    border: var(--primary-200);
+    border-radius: 15px;
+    color: white;
+    width: 600px;
+    height: fit-content;
+    overflow-wrap: break-word;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    row-gap: 10px;
+}
+
+
+.warn-button {
+    background-color: #e3e3e3;
+    /* border-radius: 8px; */
+    padding: 0;
+    margin: 0;
+    color: black;
+    border: none;
+    width: 125px;
+}
+
+.warn-button:hover {
+    cursor: pointer;
+    color: darkgray;
+}
+
+
+.warn-form {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #e3e3e3;
+    opacity: 50;
+    color: black;
+}
+
+#warn-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    row-gap: 20px;
+}
+
+#warn-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+
+.warn-message {
+    display: flex;
+    width: 85%;
+    align-items: center;
+    justify-content: center;
+}
+
+.warn-message h3 {
+    font-weight: 100;
+    color: black;
+}
