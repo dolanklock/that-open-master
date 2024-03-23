@@ -1,13 +1,12 @@
-/* ------------ main content ----------- */
-
-
-#content {
+#content-project-details {
     background-color: var(--primary-300);
     /* background-color: #27d128; */
     flex-grow: 1;
-    height: 100%;
     display: flex;
     flex-direction: column;
+    height: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 

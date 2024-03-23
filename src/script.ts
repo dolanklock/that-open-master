@@ -31,8 +31,10 @@ import * as OBC from "openbim-components"
 // ------------------------ VARIABLES -------------------------- //
 
 
-const projectsPage = document.getElementById('projects-page')
-const projectDetails = document.getElementById('project-details')
+// const projectsPage = document.getElementById('projects-page')
+// const projectDetails = document.getElementById('project-details')
+const projectsPage = document.querySelector('.projects-page')
+const projectDetails = document.querySelector('.project-details')
 const newProjectBtn = document.querySelector('.new-project-btn');
 const newProjectForm = document.getElementById('new-project-form');
 const newProjectDialog = document.getElementById('new-project-modal')

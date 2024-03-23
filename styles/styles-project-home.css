@@ -1,3 +1,12 @@
+#content-projects-page {
+    background-color: var(--primary-300);
+    /* background-color: #27d128; */
+    flex-grow: 1;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 #page-header {
     display: flex;
     align-items: center;
@@ -194,8 +203,7 @@
 }
 
 .delete-project:hover {
-    background-color: lightgray;
-    border: 1px solid lightgrey;
+    background-color: #fc3f5c;
 }
 
 .delete-project span {
