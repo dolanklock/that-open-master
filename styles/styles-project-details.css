@@ -13,7 +13,7 @@
 /* ------------------- project details page ----------------- */
 
 
-#project-details {
+/* #project-details {
     background-color: var(--primary-300);
     display: flex;
     flex-direction: column;
@@ -21,7 +21,7 @@
     width: 100%;
     padding: 0;
     margin: 0;
-}
+} */
 
 /* ---------------- header -------------- */
 

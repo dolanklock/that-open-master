@@ -13,15 +13,15 @@
 // ---------------------------- IMPORTS ----------------------------- //
 
 
-import { ThreeDViewer } from "./class/ThreeDViewer"
-import { Project, IProject, projectRole, projectStatus, ToDo } from "./class/Projects"
-import { ProjectsManager } from "./class/ProjectsManager"
+import { ThreeDViewer } from "./ArchiveThreeDViewer"
+import { Project, IProject, projectRole, projectStatus, ToDo } from "./Projects"
+import { ProjectsManager } from "./ProjectsManager"
 import { showWarnModalForm,
      showModalForm,
       dateFormat,
        showWarnModalFormImportJson,
         updateProjectDetailsContent,
-         updateProjectCardContent } from "./class/ProjectFunctions"
+         updateProjectCardContent } from "./ProjectFunctions"
 
 // importing three.js
 import * as THREE from "three"
