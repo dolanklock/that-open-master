@@ -193,6 +193,11 @@
     width: fit-content;
 }
 
+.delete-project:hover {
+    background-color: lightgray;
+    border: 1px solid lightgrey;
+}
+
 .delete-project span {
    font-size: 20px;
 }
