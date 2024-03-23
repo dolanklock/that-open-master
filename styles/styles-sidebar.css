@@ -12,7 +12,7 @@
     /* flex-basis: 300px; */
     width: 300px;
     height: 100%;
-    min-height: 840px;
+    min-height: 920px;
     flex-direction: column; /* makes items stack in y direction rather than being in x direction */
     row-gap: 40px;
     padding: 25px;
