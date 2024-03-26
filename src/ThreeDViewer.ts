@@ -9,8 +9,8 @@ import * as OBC from "openbim-components"
 
 // ------------------------ viewer 3D --------------------------- //
 
-
-// can use OBC components library to do what we did above but simplified
+export function ThreeDViewer() {
+    // can use OBC components library to do what we did above but simplified
 // creating the viewer component
 const viewer = new OBC.Components()
 
@@ -50,15 +50,15 @@ viewer.raycaster = raycasterComponent
 // }
 
 // creating simple mesh to display in viewer
-const geometry = new THREE.BoxGeometry() // creating geometry to see in viewer
-const material = new THREE.MeshStandardMaterial({color: '#4287f5'}) // create material using threejs for mesh below
-const mesh = new THREE.Mesh(geometry, material)
+// const geometry = new THREE.BoxGeometry() // creating geometry to see in viewer
+// const material = new THREE.MeshStandardMaterial({color: '#4287f5'}) // create material using threejs for mesh below
+// const mesh = new THREE.Mesh(geometry, material)
 
 // need to call the viewer.init() method after we have setup the scene the renderer and the camera..
 viewer.init()
 cameraComponent.updateAspect()
 rendererComponent.postproduction.enabled = true // need to call this after viewer.init()
-scene.add(mesh) // add geometry to scene
+// scene.add(mesh) // add geometry to scene
 // viewer.meshes.add(mesh)
 
 // IFC LOADER
@@ -97,16 +97,33 @@ dimensions.snapDistance = 1;
 const highlighter = new OBC.FragmentHighlighter(viewer)
 highlighter.setup()
 
+// LETS US GROUP ELEMENTS
+const classifier = new OBC.FragmentClassifier(viewer)
+// CREATING WINDOW FOR MODEL VIEWER
+const classificationWindow = new OBC.FloatingWindow(viewer)
+viewer.ui.add(classificationWindow)
+
 // IFCLOADED EVENT
 // OBC has built in event handlers. this one will get triggered when ifc is loaded
-ifcLoader.onIfcLoaded.add((model) => {
+ifcLoader.onIfcLoaded.add(async (model) => {
     highlighter.update()
+    console.log('MODEL IFC - ', model)
+    classifier.byStorey(model)
+    classifier.byEntity(model)
+    console.log("CLASSIFIER", classifier.get())
+    // fragment tree will create a UI for the groups based on the classifier
+    const fragmentTree = new OBC.FragmentTree(viewer)
+    await fragmentTree.init()
+    await fragmentTree.update(['storeys', 'entities'])
+    const tree = fragmentTree.get().uiElement.get("tree") // gets the html element for the fragment tree
+    // now need to append the html element to the classification window. All UI compoenents have the addChild method
+    // which allows you to append html to it
+    classificationWindow.addChild(tree)
 })
 
 // TOOLBAR
 
 const toolbar = new OBC.Toolbar(viewer)
-
 
 toolbar.addChild(dimensions.uiElement.get("main"));
 
@@ -143,16 +160,20 @@ exitFullScreenBtn.onClick.add(() => {
 // ------------------------------------- TESTING ADDING TOOL TO ANY DIV ELEMENT --------------------------------------- //
 
 
-const componentTools = new OBC.Components()
+// const componentTools = new OBC.Components()
 
-const btnTest = new OBC.Button(componentTools);
-btnTest.materialIcon = "info";
-btnTest.tooltip = "Full screen";
+// const btnTest = new OBC.Button(componentTools);
+// btnTest.materialIcon = "info";
+// btnTest.tooltip = "Full screen";
 
 
-const tools = new OBC.Toolbar(componentTools)
+// const tools = new OBC.Toolbar(componentTools)
 
-tools.addChild(btnTest)
+// tools.addChild(btnTest)
+
+}
+
+
 
 
 
