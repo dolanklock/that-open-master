@@ -62,7 +62,6 @@ rendererComponent.postproduction.enabled = true // need to call this after viewe
 // viewer.meshes.add(mesh)
 
 // IFC LOADER
-
 // creating ifcloader component from fragments library
 const ifcLoader = new OBC.FragmentIfcLoader(viewer)
 // need to do the below because ifc module from open BIM components needs additional files for loading and 
@@ -71,7 +70,6 @@ ifcLoader.settings.wasm = {
     path: "https://unpkg.com/web-ifc@0.0.43/",
     absolute: true
 }
-
 
 // FULL SCREEN BUTTON
 const fullScreenBtn = new OBC.Button(viewer);
@@ -84,14 +82,12 @@ exitFullScreenBtn.materialIcon = "handshake";
 exitFullScreenBtn.tooltip = "Exit full screen";
 
 // DIMENSIONS
-
 const dimensions = new OBC.AreaMeasurement(viewer);
 dimensions.enabled = true;
 dimensions.snapDistance = 1;
 // const viewerTest = document.getElementById("viewer")
 // viewer.ondblclick = () => dimensions.create();
 // viewerTest.oncontextmenu = () => dimensions.endCreation();
-
 
 // SELECTOR
 const highlighter = new OBC.FragmentHighlighter(viewer)
@@ -122,7 +118,6 @@ ifcLoader.onIfcLoaded.add(async (model) => {
 })
 
 // TOOLBAR
-
 const toolbar = new OBC.Toolbar(viewer)
 
 toolbar.addChild(dimensions.uiElement.get("main"));
@@ -148,7 +143,6 @@ fullScreenBtn.onClick.add(() => {
     if ( !viewerHTML ) return
     viewerHTML.requestFullscreen()
 });
-
 
 exitFullScreenBtn.onClick.add(() => {
     // const viewerHTML = document.getElementById("viewer")
