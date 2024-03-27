@@ -93,11 +93,13 @@ dimensions.snapDistance = 1;
 const highlighter = new OBC.FragmentHighlighter(viewer)
 highlighter.setup()
 
-// LETS US GROUP ELEMENTS
+// LETS US GROUP ELEMENTS, FROM THE FRAGEMENT GROUPS OBJECT
 const classifier = new OBC.FragmentClassifier(viewer)
 // CREATING WINDOW FOR MODEL VIEWER
 const classificationWindow = new OBC.FloatingWindow(viewer)
 viewer.ui.add(classificationWindow)
+classificationWindow.description = "Building Components"
+classificationWindow.title = "Main Window"
 
 // IFCLOADED EVENT
 // OBC has built in event handlers. this one will get triggered when ifc is loaded
@@ -112,6 +114,9 @@ ifcLoader.onIfcLoaded.add(async (model) => {
     await fragmentTree.init()
     await fragmentTree.update(['storeys', 'entities'])
     const tree = fragmentTree.get().uiElement.get("tree") // gets the html element for the fragment tree
+
+    // need to remove the
+    await classificationWindow.slots.content.dispose(true)
     // now need to append the html element to the classification window. All UI compoenents have the addChild method
     // which allows you to append html to it
     classificationWindow.addChild(tree)
