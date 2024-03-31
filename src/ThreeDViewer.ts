@@ -61,6 +61,7 @@ rendererComponent.postproduction.enabled = true // need to call this after viewe
 // scene.add(mesh) // add geometry to scene
 // viewer.meshes.add(mesh)
 
+
 // IFC LOADER
 // creating ifcloader component from fragments library
 const ifcLoader = new OBC.FragmentIfcLoader(viewer)
@@ -101,26 +102,42 @@ viewer.ui.add(classificationWindow)
 classificationWindow.description = "Building Components"
 classificationWindow.title = "Main Window"
 
+
+async function createModelTree(): Promise<OBC.SimpleUIComponent> {
+    // fragment tree will create a UI for the groups based on the classifier
+    const fragmentTree = new OBC.FragmentTree(viewer)
+    console.log("FRAGMENT TREE", fragmentTree)
+    await fragmentTree.init()
+    await fragmentTree.update(['model', 'storeys', 'entities'])
+    fragmentTree.onHovered.add((fragmentMap) => {
+        highlighter.highlightByID("hover", fragmentMap)
+    })
+    fragmentTree.onSelected.add((fragmentMap) => {
+        highlighter.highlightByID("select", fragmentMap)
+    })
+    const tree = fragmentTree.get().uiElement.get("tree") // gets the html element for the fragment tree
+    return tree
+}
+
 // IFCLOADED EVENT
 // OBC has built in event handlers. this one will get triggered when ifc is loaded
 ifcLoader.onIfcLoaded.add(async (model) => {
     highlighter.update()
     console.log('MODEL IFC - ', model)
+    classifier.byModel(model.name, model)
     classifier.byStorey(model)
     classifier.byEntity(model)
     console.log("CLASSIFIER", classifier.get())
-    // fragment tree will create a UI for the groups based on the classifier
-    const fragmentTree = new OBC.FragmentTree(viewer)
-    await fragmentTree.init()
-    await fragmentTree.update(['storeys', 'entities'])
-    const tree = fragmentTree.get().uiElement.get("tree") // gets the html element for the fragment tree
-
-    // need to remove the
+    // Creating fragment tree
+    const tree = await createModelTree()
+    // need to remove the previously generated tree before new one added
     await classificationWindow.slots.content.dispose(true)
     // now need to append the html element to the classification window. All UI compoenents have the addChild method
     // which allows you to append html to it
     classificationWindow.addChild(tree)
+
 })
+
 
 // TOOLBAR
 const toolbar = new OBC.Toolbar(viewer)
