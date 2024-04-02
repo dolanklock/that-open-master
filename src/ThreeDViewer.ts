@@ -7,7 +7,8 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import * as OBC from "openbim-components"
 
 
-// ------------------------ viewer 3D --------------------------- //
+// ------------------------ 3D Viewer setup --------------------------- //
+
 
 export function ThreeDViewer() {
     // can use OBC components library to do what we did above but simplified
@@ -37,29 +38,25 @@ viewer.camera = cameraComponent
 const raycasterComponent = new OBC.SimpleRaycaster(viewer)
 viewer.raycaster = raycasterComponent
 
-// call init to start to render the scene
-// this is doing similar thing as we did in renderscene function
-
-// renderScene() {
-//     // this will allow to run a function the next time the browser creates or renders a "frame" (fps)
-//     window.requestAnimationFrame(() => this.renderScene())
-//     // FINAL SETUP (this code needs to be at the end!!!) this takes frames (fps) frames (pictures) per second
-//     // so in order to capture all threeD viewer changes or additions, we need this at the end
-//     // need to tell the renderer the camera and the scene to use
-//     this.renderer.render(this.scene, this.camera)
-// }
-
-// creating simple mesh to display in viewer
-// const geometry = new THREE.BoxGeometry() // creating geometry to see in viewer
-// const material = new THREE.MeshStandardMaterial({color: '#4287f5'}) // create material using threejs for mesh below
-// const mesh = new THREE.Mesh(geometry, material)
-
 // need to call the viewer.init() method after we have setup the scene the renderer and the camera..
 viewer.init()
 cameraComponent.updateAspect()
 rendererComponent.postproduction.enabled = true // need to call this after viewer.init()
 // scene.add(mesh) // add geometry to scene
 // viewer.meshes.add(mesh)
+
+
+// -------------------------------- Toolbar Setup --------------------------------- //
+
+
+// TOOLBAR
+const toolbar = new OBC.Toolbar(viewer)
+
+// add toolbar to the viewer UI
+viewer.ui.addToolbar(toolbar)
+
+
+// ------------------------ IFC Loader Setup/Config --------------------------- //
 
 
 // IFC LOADER
@@ -70,53 +67,6 @@ const ifcLoader = new OBC.FragmentIfcLoader(viewer)
 ifcLoader.settings.wasm = {
     path: "https://unpkg.com/web-ifc@0.0.43/",
     absolute: true
-}
-
-// FULL SCREEN BUTTON
-const fullScreenBtn = new OBC.Button(viewer);
-fullScreenBtn.materialIcon = "info";
-fullScreenBtn.tooltip = "Full screen";
-
-// EXIT FULL SCREEN BUTTON
-const exitFullScreenBtn = new OBC.Button(viewer);
-exitFullScreenBtn.materialIcon = "handshake";
-exitFullScreenBtn.tooltip = "Exit full screen";
-
-// DIMENSIONS
-const dimensions = new OBC.AreaMeasurement(viewer);
-dimensions.enabled = true;
-dimensions.snapDistance = 1;
-// const viewerTest = document.getElementById("viewer")
-// viewer.ondblclick = () => dimensions.create();
-// viewerTest.oncontextmenu = () => dimensions.endCreation();
-
-// SELECTOR
-const highlighter = new OBC.FragmentHighlighter(viewer)
-highlighter.setup()
-
-// LETS US GROUP ELEMENTS, FROM THE FRAGEMENT GROUPS OBJECT
-const classifier = new OBC.FragmentClassifier(viewer)
-// CREATING WINDOW FOR MODEL VIEWER
-const classificationWindow = new OBC.FloatingWindow(viewer)
-viewer.ui.add(classificationWindow)
-classificationWindow.description = "Building Components"
-classificationWindow.title = "Main Window"
-
-
-async function createModelTree(): Promise<OBC.SimpleUIComponent> {
-    // fragment tree will create a UI for the groups based on the classifier
-    const fragmentTree = new OBC.FragmentTree(viewer)
-    console.log("FRAGMENT TREE", fragmentTree)
-    await fragmentTree.init()
-    await fragmentTree.update(['model', 'storeys', 'entities'])
-    fragmentTree.onHovered.add((fragmentMap) => {
-        highlighter.highlightByID("hover", fragmentMap)
-    })
-    fragmentTree.onSelected.add((fragmentMap) => {
-        highlighter.highlightByID("select", fragmentMap)
-    })
-    const tree = fragmentTree.get().uiElement.get("tree") // gets the html element for the fragment tree
-    return tree
 }
 
 // IFCLOADED EVENT
@@ -135,14 +85,7 @@ ifcLoader.onIfcLoaded.add(async (model) => {
     // now need to append the html element to the classification window. All UI compoenents have the addChild method
     // which allows you to append html to it
     classificationWindow.addChild(tree)
-
 })
-
-
-// TOOLBAR
-const toolbar = new OBC.Toolbar(viewer)
-
-toolbar.addChild(dimensions.uiElement.get("main"));
 
 // all tools come with uiElement object that has all the premade user interface that the ifcloader object has
 // it is html code behind the scenes that gets added. 
@@ -151,26 +94,107 @@ toolbar.addChild(dimensions.uiElement.get("main"));
 // can use the OBC.Toolbar object and use the addChild method to add the SimpleUIComponent object
 toolbar.addChild(ifcLoader.uiElement.get("main"))
 
-// ADDING FULL SCREEN / EXIT BUTTONS TO UI
-toolbar.addChild(fullScreenBtn);
-toolbar.addChild(exitFullScreenBtn);
 
-// append the OBC.Toolbar to the viewer object
-viewer.ui.addToolbar(toolbar)
+// -------------------------------- Buttons --------------------------------- //
 
 
+// FULL SCREEN BUTTON
+const fullScreenBtn = new OBC.Button(viewer);
+fullScreenBtn.materialIcon = "info";
+fullScreenBtn.tooltip = "Full screen";
 // FULL SCREEN BUTTON EVENT LISTENER
 fullScreenBtn.onClick.add(() => {
     const viewerHTML = document.getElementById("viewer")
     if ( !viewerHTML ) return
     viewerHTML.requestFullscreen()
 });
+toolbar.addChild(fullScreenBtn);
 
+// EXIT FULL SCREEN BUTTON
+const exitFullScreenBtn = new OBC.Button(viewer);
+exitFullScreenBtn.materialIcon = "handshake";
+exitFullScreenBtn.tooltip = "Exit full screen";
 exitFullScreenBtn.onClick.add(() => {
     // const viewerHTML = document.getElementById("viewer")
     // if ( !viewerHTML ) return
     document.exitFullscreen()
 });
+toolbar.addChild(exitFullScreenBtn);
+
+// DIMENSIONS
+const dimensions = new OBC.AreaMeasurement(viewer);
+dimensions.enabled = true;
+dimensions.snapDistance = 1;
+toolbar.addChild(dimensions.uiElement.get("main"));
+
+// OPEN CLASSIFICATION WINDOW
+const classificationWindowOpenBtn = new OBC.Button(viewer)
+classificationWindowOpenBtn.materialIcon = "open_in_new"
+classificationWindowOpenBtn.tooltip = "Classification Window"
+classificationWindowOpenBtn.onClick.add(() => {
+    classificationWindow.visible = true
+})
+toolbar.addChild(classificationWindowOpenBtn)
+
+
+// -------------------------------- Fragments Highlighter --------------------------------- //
+
+
+// SELECTOR
+const highlighter = new OBC.FragmentHighlighter(viewer)
+highlighter.setup()
+
+
+// -------------------------------- Fragments Classifier --------------------------------- //
+
+
+// LETS US GROUP ELEMENTS, FROM THE FRAGEMENT GROUPS OBJECT
+const classifier = new OBC.FragmentClassifier(viewer)
+
+
+// -------------------------------- Classification Window UI --------------------------------- //
+
+
+// CREATING WINDOW FOR MODEL VIEWER
+const classificationWindow = new OBC.FloatingWindow(viewer)
+viewer.ui.add(classificationWindow)
+classificationWindow.description = "Building Components"
+classificationWindow.title = "Main Window"
+
+
+
+
+
+
+
+
+
+
+
+// ----------------------------- Functions ------------------------------- //
+
+
+async function createModelTree(): Promise<OBC.SimpleUIComponent> {
+    // fragment tree will create a UI for the groups based on the classifier
+    const fragmentTree = new OBC.FragmentTree(viewer)
+    console.log("FRAGMENT TREE", fragmentTree)
+    await fragmentTree.init()
+    await fragmentTree.update(['model', 'storeys', 'entities'])
+    fragmentTree.onHovered.add((fragmentMap) => {
+        highlighter.highlightByID("hover", fragmentMap)
+    })
+    fragmentTree.onSelected.add((fragmentMap) => {
+        highlighter.highlightByID("select", fragmentMap)
+    })
+    const tree = fragmentTree.get().uiElement.get("tree") // gets the html element for the fragment tree
+    return tree
+}
+
+
+
+
+
+
 
 
 // ------------------------------------- TESTING ADDING TOOL TO ANY DIV ELEMENT --------------------------------------- //
@@ -188,8 +212,6 @@ exitFullScreenBtn.onClick.add(() => {
 // tools.addChild(btnTest)
 
 }
-
-
 
 
 
