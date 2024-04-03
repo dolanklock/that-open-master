@@ -74,10 +74,11 @@ ifcLoader.settings.wasm = {
 ifcLoader.onIfcLoaded.add(async (model) => {
     highlighter.update()
     console.log('MODEL IFC - ', model)
+    console.log("CLASSIFIER BEFORE", classifier.get())
     classifier.byModel(model.name, model)
     classifier.byStorey(model)
     classifier.byEntity(model)
-    console.log("CLASSIFIER", classifier.get())
+    console.log("CLASSIFIER AFTER", classifier.get())
     // Creating fragment tree
     const tree = await createModelTree()
     // need to remove the previously generated tree before new one added
@@ -174,6 +175,8 @@ classificationWindow.title = "Main Window"
 // ----------------------------- Functions ------------------------------- //
 
 
+
+
 async function createModelTree(): Promise<OBC.SimpleUIComponent> {
     // fragment tree will create a UI for the groups based on the classifier
     const fragmentTree = new OBC.FragmentTree(viewer)
@@ -191,6 +194,12 @@ async function createModelTree(): Promise<OBC.SimpleUIComponent> {
 }
 
 
+// UNDERSTAND THE fragmentTree.update() method
+
+// RE-CREATE THE FRAGMENT CLASSIFIER AND FRAGMENT TREE PORTION WITHOUT LOOKING AT CODE AND SEE IF I CAN DO IT ON MY OWN AND MAKE SENSE OF IT
+
+// TRY TO UNDERSTAND THE BELOW CODE
+// const tree = fragmentTree.get().uiElement.get("tree")
 
 
 
