@@ -69,31 +69,13 @@ ifcLoader.settings.wasm = {
     absolute: true
 }
 
-// IFCLOADED EVENT
-// OBC has built in event handlers. this one will get triggered when ifc is loaded
-ifcLoader.onIfcLoaded.add(async (model) => {
-    highlighter.update()
-    console.log('MODEL IFC - ', model)
-    console.log("CLASSIFIER BEFORE", classifier.get())
-    classifier.byModel(model.name, model)
-    classifier.byStorey(model)
-    classifier.byEntity(model)
-    console.log("CLASSIFIER AFTER", classifier.get())
-    // Creating fragment tree
-    const tree = await createModelTree()
-    // need to remove the previously generated tree before new one added
-    await classificationWindow.slots.content.dispose(true)
-    // now need to append the html element to the classification window. All UI compoenents have the addChild method
-    // which allows you to append html to it
-    classificationWindow.addChild(tree)
-})
-
 // all tools come with uiElement object that has all the premade user interface that the ifcloader object has
 // it is html code behind the scenes that gets added. 
 // its a uiElement with a get method that we pass in the name of the uiElement we want to get
 // now as you can see, the "main" is oof type OBC.SimpleUIComponent. This OBC.SimpleUIComponent object contains the html for the button
 // can use the OBC.Toolbar object and use the addChild method to add the SimpleUIComponent object
 toolbar.addChild(ifcLoader.uiElement.get("main"))
+
 
 
 // -------------------------------- Buttons --------------------------------- //
@@ -133,7 +115,8 @@ const classificationWindowOpenBtn = new OBC.Button(viewer)
 classificationWindowOpenBtn.materialIcon = "open_in_new"
 classificationWindowOpenBtn.tooltip = "Classification Window"
 classificationWindowOpenBtn.onClick.add(() => {
-    classificationWindow.visible = true
+    classificationWindow.visible = !classificationWindow.visible
+    classificationWindow.active = classificationWindow.visible
 })
 toolbar.addChild(classificationWindowOpenBtn)
 
@@ -161,6 +144,15 @@ const classificationWindow = new OBC.FloatingWindow(viewer)
 viewer.ui.add(classificationWindow)
 classificationWindow.description = "Building Components"
 classificationWindow.title = "Main Window"
+classificationWindow.visible = false
+
+
+// -------------------------------- IFC properties processor --------------------------------- //
+
+
+const ifcPropertiesProcessor = new OBC.IfcPropertiesProcessor(viewer)
+
+toolbar.addChild(ifcPropertiesProcessor.uiElement.get("main"))
 
 
 
@@ -169,12 +161,46 @@ classificationWindow.title = "Main Window"
 
 
 
+// --------------------------------- Event Handlers ---------------------------------- //
+
+
+// IFCLOADED EVENT
+// OBC has built in event handlers. this one will get triggered when ifc is loaded
+ifcLoader.onIfcLoaded.add(async (model) => {
+    highlighter.update()
+
+    // ------ classifier config ------- //
+    console.log('MODEL IFC - ', model)
+    console.log("CLASSIFIER BEFORE", classifier.get())
+    classifier.byModel(model.name, model)
+    classifier.byStorey(model)
+    classifier.byEntity(model)
+    console.log("CLASSIFIER AFTER", classifier.get())
+
+    // ------ fragmentTree and tree config ------- //
+    // Creating fragment tree
+    const tree = await createModelTree()
+    // need to remove the previously generated tree before new one added
+    await classificationWindow.slots.content.dispose(true)
+    // now need to append the html element to the classification window. All UI compoenents have the addChild method
+    // which allows you to append html to it
+    classificationWindow.addChild(tree)
+
+    // ------ IFC properties processor config ------- //
+    ifcPropertiesProcessor.process(model)
+    highlighter.events.select.onHighlight.add((fragmentMap) => {
+        console.log('FRAGMENT MAP ON SELECT', fragmentMap)
+        const expressID = [...Object.values(fragmentMap)[0]][0]
+        ifcPropertiesProcessor.renderProperties(model, Number(expressID))
+
+    })
+
+})
 
 
 
-// ----------------------------- Functions ------------------------------- //
 
-
+// ---------------------------- Functions ------------------------------- //
 
 
 async function createModelTree(): Promise<OBC.SimpleUIComponent> {
@@ -184,6 +210,7 @@ async function createModelTree(): Promise<OBC.SimpleUIComponent> {
     await fragmentTree.init()
     await fragmentTree.update(['model', 'storeys', 'entities'])
     fragmentTree.onHovered.add((fragmentMap) => {
+        // console.log("FRAGEMENT MAP", fragmentMap)
         highlighter.highlightByID("hover", fragmentMap)
     })
     fragmentTree.onSelected.add((fragmentMap) => {
@@ -194,13 +221,43 @@ async function createModelTree(): Promise<OBC.SimpleUIComponent> {
 }
 
 
-// UNDERSTAND THE fragmentTree.update() method
 
-// RE-CREATE THE FRAGMENT CLASSIFIER AND FRAGMENT TREE PORTION WITHOUT LOOKING AT CODE AND SEE IF I CAN DO IT ON MY OWN AND MAKE SENSE OF IT
 
-// TRY TO UNDERSTAND THE BELOW CODE
-// const tree = fragmentTree.get().uiElement.get("tree")
 
+
+
+
+
+
+
+
+
+// ----------------------------- TESTING ------------------------------- //
+
+// const classifier = new OBC.FragmentClassifier(viewer)
+// const fragmentTree = new OBC.FragmentTree(viewer)
+
+// ifcLoader.onIfcLoaded.add( async (fragmentGroup) => {
+//     // classifier config
+//     highlighter.update()
+//     classifier.byModel(fragmentGroup.name, fragmentGroup)
+//     classifier.byStorey(fragmentGroup)
+//     classifier.byEntity(fragmentGroup)
+//     await fragmentTree.init()
+//     await fragmentTree.update(["model", "storeys", "entities"])
+//     fragmentTree.onHovered.add((fragmentMap) => {
+//         highlighter.highlightByID("hover", fragmentMap)
+//     })
+//     fragmentTree.onSelected.add((fragmentMap) => {
+//         highlighter.highlightByID("select", fragmentMap)
+//     })
+//     const tree = fragmentTree.get().uiElement.get("tree")
+//     classificationWindow.slots.content.dispose(true)
+//     classificationWindow.addChild(tree)
+// })
+
+
+// ----------------------------- TESTING ------------------------------- //
 
 
 
