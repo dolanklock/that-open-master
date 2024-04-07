@@ -5,6 +5,8 @@
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import * as OBC from "openbim-components"
+import { Fragment } from "bim-fragment"
+import { FragmentsGroup } from "bim-fragment"
 
 
 // ------------------------ 3D Viewer setup --------------------------- //
@@ -54,6 +56,12 @@ const toolbar = new OBC.Toolbar(viewer)
 
 // add toolbar to the viewer UI
 viewer.ui.addToolbar(toolbar)
+
+
+// ------------------------ Fragments manager --------------------------- //
+
+
+const fragmentManager = new OBC.FragmentManager(viewer)
 
 
 // ------------------------ IFC Loader Setup/Config --------------------------- //
@@ -167,6 +175,7 @@ toolbar.addChild(ifcPropertiesProcessor.uiElement.get("main"))
 // IFCLOADED EVENT
 // OBC has built in event handlers. this one will get triggered when ifc is loaded
 ifcLoader.onIfcLoaded.add(async (model) => {
+    exportFragments(model)
     highlighter.update()
 
     // ------ classifier config ------- //
@@ -198,6 +207,9 @@ ifcLoader.onIfcLoaded.add(async (model) => {
 })
 
 
+highlighter.events.select.onClear.add(() => {
+    ifcPropertiesProcessor.cleanPropertiesList()
+})
 
 
 // ---------------------------- Functions ------------------------------- //
@@ -220,10 +232,19 @@ async function createModelTree(): Promise<OBC.SimpleUIComponent> {
     return tree
 }
 
-
-
-
-
+function exportFragments(model: FragmentsGroup) {
+    const fragmentBinary = fragmentManager.export(model)
+    // blob represents a file like object of immutable raw-data
+    const blob = new Blob( [ fragmentBinary ]);
+    // URL.createObject creates a string containing a URL representing the object given in the parameter. 
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    // the download method will download the given link url that we set with the file name we passed in
+    a.download = `${model.name.replace(".ifc", "")}.frag` // setting html button element attribute 'download' to the filename string
+    a.click()
+    URL.revokeObjectURL(url)
+}
 
 
 
