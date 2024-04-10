@@ -166,8 +166,12 @@ classificationWindow.visible = false
 
 
 const ifcPropertiesProcessor = new OBC.IfcPropertiesProcessor(viewer)
-
 toolbar.addChild(ifcPropertiesProcessor.uiElement.get("main"))
+
+
+// -------------------------------- Culler --------------------------------- //
+
+const culler = new OBC.ScreenCuller(viewer)
 
 
 
@@ -194,6 +198,10 @@ fragmentManager.onFragmentsLoaded.add((model) => {
     console.log("model fragment loader", model)
     importProperties(model)
 })
+
+cameraComponent.controls.addEventListener("sleep", () => {
+    culler.needsUpdate = true
+})  
 
 
 // ---------------------------- Functions ------------------------------- //
@@ -287,6 +295,10 @@ function importFragments() {
 
 async function viewerUIOnLoaded(model: FragmentsGroup) {
     highlighter.update()
+    
+    for ( const fragment of model.items ) {culler.add(fragment.mesh)}
+    culler.needsUpdate = true
+
     try {
         // ------ classifier config ------- //
         console.log('MODEL IFC - ', model)
