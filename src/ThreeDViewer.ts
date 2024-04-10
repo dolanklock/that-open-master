@@ -5,7 +5,7 @@
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import * as OBC from "openbim-components"
-import { Fragment } from "bim-fragment"
+import { Fragment, IfcProperties } from "bim-fragment"
 import { FragmentsGroup } from "bim-fragment"
 
 
@@ -113,10 +113,10 @@ exitFullScreenBtn.onClick.add(() => {
 toolbar.addChild(exitFullScreenBtn);
 
 // DIMENSIONS
-const dimensions = new OBC.AreaMeasurement(viewer);
-dimensions.enabled = true;
-dimensions.snapDistance = 1;
-toolbar.addChild(dimensions.uiElement.get("main"));
+// const dimensions = new OBC.AreaMeasurement(viewer);
+// dimensions.enabled = true;
+// dimensions.snapDistance = 1;
+// toolbar.addChild(dimensions.uiElement.get("main"));
 
 // OPEN CLASSIFICATION WINDOW
 const classificationWindowOpenBtn = new OBC.Button(viewer)
@@ -127,6 +127,13 @@ classificationWindowOpenBtn.onClick.add(() => {
     classificationWindow.active = classificationWindow.visible
 })
 toolbar.addChild(classificationWindowOpenBtn)
+
+
+// IMPORT FRAGMENT BUTTON
+const importFragmentBtn = new OBC.Button(viewer)
+importFragmentBtn.materialIcon = "upload"
+importFragmentBtn.tooltip = "Import Fragment Group"
+toolbar.addChild(importFragmentBtn)
 
 
 // -------------------------------- Fragments Highlighter --------------------------------- //
@@ -164,51 +171,28 @@ toolbar.addChild(ifcPropertiesProcessor.uiElement.get("main"))
 
 
 
-
-
-
-
-
-// --------------------------------- Event Handlers ---------------------------------- //
+// -------------------------------- Event Handlers ---------------------------------- //
 
 
 // IFCLOADED EVENT
 // OBC has built in event handlers. this one will get triggered when ifc is loaded
-ifcLoader.onIfcLoaded.add(async (model) => {
+ifcLoader.onIfcLoaded.add((model) => {
     exportFragments(model)
-    highlighter.update()
-
-    // ------ classifier config ------- //
-    console.log('MODEL IFC - ', model)
-    console.log("CLASSIFIER BEFORE", classifier.get())
-    classifier.byModel(model.name, model)
-    classifier.byStorey(model)
-    classifier.byEntity(model)
-    console.log("CLASSIFIER AFTER", classifier.get())
-
-    // ------ fragmentTree and tree config ------- //
-    // Creating fragment tree
-    const tree = await createModelTree()
-    // need to remove the previously generated tree before new one added
-    await classificationWindow.slots.content.dispose(true)
-    // now need to append the html element to the classification window. All UI compoenents have the addChild method
-    // which allows you to append html to it
-    classificationWindow.addChild(tree)
-
-    // ------ IFC properties processor config ------- //
-    ifcPropertiesProcessor.process(model)
-    highlighter.events.select.onHighlight.add((fragmentMap) => {
-        console.log('FRAGMENT MAP ON SELECT', fragmentMap)
-        const expressID = [...Object.values(fragmentMap)[0]][0]
-        ifcPropertiesProcessor.renderProperties(model, Number(expressID))
-
-    })
-
+    exportProperties(model)
+    viewerUIOnLoaded(model)
 })
-
 
 highlighter.events.select.onClear.add(() => {
     ifcPropertiesProcessor.cleanPropertiesList()
+})
+
+importFragmentBtn.onClick.add(() => {
+    importFragments()
+})
+
+fragmentManager.onFragmentsLoaded.add((model) => {
+    console.log("model fragment loader", model)
+    importProperties(model)
 })
 
 
@@ -232,10 +216,44 @@ async function createModelTree(): Promise<OBC.SimpleUIComponent> {
     return tree
 }
 
+function exportProperties(model: FragmentsGroup) {
+    const propertiesJSON = JSON.stringify(model.properties, null, 2)
+    // blob represents a file like object of immutable raw-data
+    const blob = new Blob( [ propertiesJSON ], { type: "application/json" } );
+    // URL.createObject creates a string containing a URL representing the object given in the parameter. 
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${model.name.replace(".ifc", "")}` // downloaded file name
+    a.click()
+    URL.revokeObjectURL(url)
+}
+
+function importProperties(model: FragmentsGroup) {
+    // creating an anonymous input
+    const input = document.createElement('input')
+    input.type = "file"
+    input.accept = 'application/json'
+    const reader = new FileReader()
+    reader.addEventListener("load", () => {
+        console.log('running import properties load')
+        const json = reader.result
+        if ( !json ) {return}
+        model.properties = JSON.parse(json as string)
+        viewerUIOnLoaded(model)
+    })
+    input.addEventListener("change", () => {
+        const filesList = input.files
+        if ( !filesList ) {return}
+        reader.readAsText(filesList[0])
+    })
+    input.click() // when we click the importFragmentBtn it clicks the input
+}   
+
 function exportFragments(model: FragmentsGroup) {
     const fragmentBinary = fragmentManager.export(model)
     // blob represents a file like object of immutable raw-data
-    const blob = new Blob( [ fragmentBinary ]);
+    const blob = new Blob([ fragmentBinary ]);
     // URL.createObject creates a string containing a URL representing the object given in the parameter. 
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -246,6 +264,60 @@ function exportFragments(model: FragmentsGroup) {
     URL.revokeObjectURL(url)
 }
 
+function importFragments() {
+    // creating an anonymous input
+    let fragGroup: FragmentsGroup
+    const input = document.createElement('input')
+    input.type = "file"
+    input.accept = ".frag"
+    const reader = new FileReader()
+    input.addEventListener("change", () => {
+        const filesList = input.files
+        if ( !filesList ) {return}
+        reader.readAsArrayBuffer(filesList[0])
+    })
+    reader.addEventListener("load", () => {
+        const binary = reader.result
+        if ( !(binary instanceof ArrayBuffer) ) {return}
+        const fragmentBinary = new Uint8Array(binary)
+        fragmentManager.load(fragmentBinary) // this will invoke the fragmentManager.onFragmentsLoaded event listener
+    })
+    input.click() // when we click the importFragmentBtn it clicks the input
+}
+
+async function viewerUIOnLoaded(model: FragmentsGroup) {
+    highlighter.update()
+    try {
+        // ------ classifier config ------- //
+        console.log('MODEL IFC - ', model)
+        console.log("CLASSIFIER BEFORE", classifier.get())
+        classifier.byModel(model.name, model)
+        classifier.byStorey(model)
+        classifier.byEntity(model)
+        console.log("CLASSIFIER AFTER", classifier.get())
+    
+        // ------ fragmentTree and tree config ------- //
+        // Creating fragment tree
+        const tree = await createModelTree()
+        // need to remove the previously generated tree before new one added
+        await classificationWindow.slots.content.dispose(true)
+        // now need to append the html element to the classification window. All UI compoenents have the addChild method
+        // which allows you to append html to it
+        classificationWindow.addChild(tree)
+    
+        // ------ IFC properties processor config ------- //
+        ifcPropertiesProcessor.process(model)
+        highlighter.events.select.onHighlight.add((fragmentMap) => {
+            console.log('FRAGMENT MAP ON SELECT', fragmentMap)
+            const expressID = [...Object.values(fragmentMap)[0]][0]
+            ifcPropertiesProcessor.renderProperties(model, Number(expressID))
+    
+        })
+        
+    } catch (error) {
+        alert(error)
+    }
+}
 
 
 
