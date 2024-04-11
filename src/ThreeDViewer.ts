@@ -62,7 +62,7 @@ viewer.ui.addToolbar(toolbar)
 
 
 const fragmentManager = new OBC.FragmentManager(viewer)
-
+toolbar.addChild(fragmentManager.uiElement.get("main"))
 
 // ------------------------ IFC Loader Setup/Config --------------------------- //
 
@@ -202,7 +202,7 @@ fragmentManager.onFragmentsLoaded.add((model) => {
 cameraComponent.controls.addEventListener("sleep", () => {
     culler.needsUpdate = true
 })  
-
+ 
 
 // ---------------------------- Functions ------------------------------- //
 
@@ -274,7 +274,6 @@ function exportFragments(model: FragmentsGroup) {
 
 function importFragments() {
     // creating an anonymous input
-    let fragGroup: FragmentsGroup
     const input = document.createElement('input')
     input.type = "file"
     input.accept = ".frag"
@@ -295,7 +294,7 @@ function importFragments() {
 
 async function viewerUIOnLoaded(model: FragmentsGroup) {
     highlighter.update()
-    
+
     for ( const fragment of model.items ) {culler.add(fragment.mesh)}
     culler.needsUpdate = true
 
