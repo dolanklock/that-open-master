@@ -7,7 +7,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import * as OBC from "openbim-components"
 import { Fragment, IfcProperties } from "bim-fragment"
 import { FragmentsGroup } from "bim-fragment"
-
+import { ToDoCreator } from "./bim-components/ToDoCreator"
 
 // ------------------------ 3D Viewer setup --------------------------- //
 
@@ -172,6 +172,11 @@ toolbar.addChild(ifcPropertiesProcessor.uiElement.get("main"))
 // -------------------------------- Culler --------------------------------- //
 
 const culler = new OBC.ScreenCuller(viewer)
+
+
+// -------------------------------- Culler --------------------------------- //
+
+const todoCreator = new ToDoCreator(viewer)
 
 
 
