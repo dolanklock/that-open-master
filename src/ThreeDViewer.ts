@@ -171,13 +171,15 @@ toolbar.addChild(ifcPropertiesProcessor.uiElement.get("main"))
 
 // -------------------------------- Culler --------------------------------- //
 
+
 const culler = new OBC.ScreenCuller(viewer)
 
 
 // -------------------------------- Culler --------------------------------- //
 
-const todoCreator = new ToDoCreator(viewer)
 
+const todoCreator = new ToDoCreator(viewer)
+toolbar.addChild(todoCreator.uiElement.get("activationButton"))
 
 
 // -------------------------------- Event Handlers ---------------------------------- //
