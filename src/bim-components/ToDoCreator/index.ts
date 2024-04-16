@@ -1,10 +1,11 @@
 import  *  as OBC from "openbim-components"
 import { ToDoCard } from "./src/ToDoCard"
+import { dateFormat } from "../../ProjectFunctions";
 
-interface ToDo {
+export interface ToDo {
     description: string,
     date: Date,
-    fragmentMap: OBC.FragmentIdMap
+    fragmentMap: OBC.FragmentIdMap | undefined
 }
 
 export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
@@ -29,9 +30,11 @@ export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
             fragmentMap: highlighter.selection.select
         }
         const todoCard = new ToDoCard(this._components)
+        todoCard.description = todo.description
+        todoCard.date = todo.date
         const todoCardList = this.uiElement.get("todoList")
         todoCardList.addChild(todoCard)
-        // this._list.push(todo)
+        this._list.push(todo)
     }
 
     private setUI() {
@@ -42,8 +45,9 @@ export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
         form.onCancel.add(() => {
             form.visible = !form.visible
         })
-        form.onAccept.add(() => {
-            this.addToDo(todoDescriptionInput.value)
+        form.onAccept.add(async () => {
+            await this.addToDo(todoDescriptionInput.value)
+            form.visible = false
         })
         // form input
         const todoDescriptionInput = new OBC.TextArea(this._components)
