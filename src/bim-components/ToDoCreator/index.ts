@@ -23,11 +23,12 @@ export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
     }
 
     async addToDo(description: string) {
+        // getting the existing highlighter we created from the main components
         const highlighter = await this._components.tools.get(OBC.FragmentHighlighter)
         const todo: ToDo = {
             description: description,
             date: new Date(),
-            fragmentMap: highlighter.selection.select
+            fragmentMap: highlighter.selection.select // this gets the fragmentMap from highlighter of elements selected
         }
         const todoCard = new ToDoCard(this._components)
         todoCard.description = todo.description
