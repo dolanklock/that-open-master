@@ -84,7 +84,8 @@ export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
         this._components.ui.add(todoList)
         todoList.visible = false
         todoList.title = "ToDo List"
-        this.uiElement.set({activationButton, todoList})
+        this.uiElement.set({activationButton: activationButton, todoList: todoList})
+        // console.log("TESTER", this.uiElement)
     }
 
     get(): ToDo[] {
