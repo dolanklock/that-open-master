@@ -55,6 +55,8 @@ export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
         todoDescriptionInput.label = "Description"
         // adding an obc object to another simpleUIComponent object like OBC.Modal we use slots.content.addChild()
         // slots.centent will return another simpleUIComponent
+        // and the get method will return the HTML element for that simpleUIComponent. see source code for exact understanding
+        // basically each UI component contains HTML that is associated with it and slots.content.get() returns that exact HTML element
         form.slots.content.addChild(todoDescriptionInput)
         form.slots.content.get().style.padding = "20px"
         form.slots.content.get().style.display = "flex"
