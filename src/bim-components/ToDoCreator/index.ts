@@ -39,7 +39,8 @@ export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
     }
 
     private setUI() {
-        // creating the todo form
+        // ------- creating the todo form --------- //
+
         const form = new OBC.Modal(this._components)
         form.title = "Create Todo Note"
         this._components.ui.add(form)
@@ -48,6 +49,7 @@ export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
         })
         form.onAccept.add(async () => {
             await this.addToDo(todoDescriptionInput.value)
+            todoDescriptionInput.value = ""
             form.visible = false
         })
         // form input
@@ -62,6 +64,8 @@ export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
         form.slots.content.get().style.display = "flex"
         form.slots.content.get().style.flexDirection = "column"
         form.slots.content.get().style.rowGap = "20px"
+
+        // ------- creating the component tools buttons --------- //
 
         // creating button
         const activationButton = new OBC.Button(this._components)
@@ -81,6 +85,8 @@ export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
             todoList.visible = !todoList.visible
         })
 
+        // ------- creating a floating window that will display todos --------- //
+
         //Creating floating window
         const todoList = new OBC.FloatingWindow(this._components)
         this._components.ui.add(todoList)
@@ -95,7 +101,6 @@ export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
     }
 
 }
-
 
 
 
