@@ -31,13 +31,25 @@ export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
             fragmentMap: highlighter.selection.select // this gets the fragmentMap from highlighter of elements selected
         }
         const todoCard = new ToDoCard(this._components)
+        todoCard.domElement.style.cursor = "pointer"
+        todoCard.domElement.addEventListener("click", this.changeToDoCardEventHandler)
         todoCard.description = todo.description
         todoCard.date = todo.date
         const todoCardList = this.uiElement.get("todoList")
         todoCardList.addChild(todoCard)
         this._list.push(todo)
     }
-
+    private changeToDoCardEventHandler(e: Event) {
+        let targetClicked = e.target as HTMLElement
+        const clickedParentToDoHTMLElement = targetClicked.closest(".todo-item")
+        console.log("parent", clickedParentToDoHTMLElement)
+        const clickedParagraphToDoHTMLElement = clickedParentToDoHTMLElement?.querySelector("p")
+        console.log("paragraph", clickedParagraphToDoHTMLElement)
+        // TODO: are we tracking todo objects and their state? if so should update the todoobject that is 
+        // being stored in the _list. currently on todo object is and not the instance of the todocard class??
+        // if how it is is fine,,, then how can we update the correct todo object description? currently has no
+        // way to find it and identify it in the todo object that is in the _list....
+    }
     private setUI() {
         // ------- creating the todo form --------- //
 
@@ -94,6 +106,13 @@ export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
         todoList.title = "ToDo List"
         this.uiElement.set({activationButton: activationButton, todoList: todoList})
         // console.log("TESTER", this.uiElement)
+
+        // ------ form event listeners ------- //
+        // const formHTMLDialogElement = form.get()
+        // formHTMLDialogElement.addEventListener("click", (event: Event) => {
+        //     form.visible = true
+        // })
+
     }
 
     get(): ToDo[] {
