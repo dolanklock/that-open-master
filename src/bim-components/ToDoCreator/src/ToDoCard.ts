@@ -17,6 +17,11 @@ export class ToDoCard extends OBC.SimpleUIComponent {
     get date(): string {
         return this.getInnerElement("date")!.textContent as string
     }
+    // creating a custom event on our UI component. All custom events must be of type OBC.Event.
+    // here I am setting the generic type to be of Function.
+    // we can then call the onCardClick.trigger() method to call all callback functions added
+    // to this event
+    readonly onCardClick = new OBC.Event()
     constructor(components: OBC.Components) {
         // for the template we can use whatever html we want.. this is the poin tof why we are creating
         // our own custom SimpleUIComponent, so we can have a custom HTML item and add it inside of another UI compontent
@@ -34,5 +39,10 @@ export class ToDoCard extends OBC.SimpleUIComponent {
             </div>
         `
         super(components, template)
+        // this.get() will return the main div element of our template (assigns this behind the scenes)
+        this.get().addEventListener("click", () => {
+            // trigger() will call every function we added to the event "onCardClick.add()"
+            this.onCardClick.trigger()
+        })
     }
 }
