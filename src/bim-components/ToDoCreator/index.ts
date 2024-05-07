@@ -22,7 +22,6 @@ export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
         this._components.tools.add(ToDoCreator.uuid, this)
         this.setUI()
     }
-
     async addToDo(description: string) {
         // getting the existing highlighter we created from the main components
         const highlighter = await this._components.tools.get(OBC.FragmentHighlighter)
@@ -37,7 +36,7 @@ export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
             highlighter.highlightByID("select", todo.fragmentMap)
         })
         // TODO: build in so if user selects create todo, if they dont have anything
-        // selected in viewer it will prompt them to select something
+        // selected in viewer it will prompt them to select something first before creating todo
         todoCard.description = todo.description
         todoCard.date = todo.date
         const todoCardList = this.uiElement.get("todoList")
@@ -80,7 +79,13 @@ export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
         // new todo button
         const newToDoBtn = new OBC.Button(this._components, {name: "Create"})
         activationButton.addChild(newToDoBtn)
-        newToDoBtn.onClick.add(() => {
+        newToDoBtn.onClick.add(async () => {
+            // check to see if user has object selected in viewer before adding a todo note
+            const highlighter = await this._components.tools.get(OBC.FragmentHighlighter)
+            if ( Object.keys(highlighter.selection.select).length === 0 ) {
+                alert("Select elements from the viewer first before making a todo note")
+                return
+            }
             form.visible = true
         })
 
