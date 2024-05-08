@@ -31,8 +31,8 @@ export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
             fragmentMap: highlighter.selection.select // this gets the fragmentMap from highlighter of elements selected
         }
         const todoCard = new ToDoCard(this._components)
-        todoCard.domElement.style.cursor = "pointer"
         todoCard.onCardClick.add(() => {
+            console.log("FRAG MAP LOOK INSIDE: ", todo.fragmentMap)
             highlighter.highlightByID("select", todo.fragmentMap)
         })
         // TODO: build in so if user selects create todo, if they dont have anything
@@ -111,8 +111,21 @@ export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
     get(): ToDo[] {
         return this._list
     }
-
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

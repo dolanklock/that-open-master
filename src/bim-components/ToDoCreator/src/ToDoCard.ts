@@ -40,6 +40,10 @@ export class ToDoCard extends OBC.SimpleUIComponent {
         `
         super(components, template)
         // this.get() will return the main div element of our template (assigns this behind the scenes)
+        this.get().style.padding = "5px"
+        this.get().style.boxSizing = "border-box"
+        this.get().style.cursor = "pointer"
+        this.get().style.borderRadius = "5px"
         this.get().addEventListener("click", () => {
             // trigger() will call every function we added to the event "onCardClick.add()"
             this.onCardClick.trigger()
