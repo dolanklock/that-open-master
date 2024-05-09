@@ -35,8 +35,6 @@ export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
             console.log("FRAG MAP LOOK INSIDE: ", todo.fragmentMap)
             highlighter.highlightByID("select", todo.fragmentMap)
         })
-        // TODO: build in so if user selects create todo, if they dont have anything
-        // selected in viewer it will prompt them to select something first before creating todo
         todoCard.description = todo.description
         todoCard.date = todo.date
         const todoCardList = this.uiElement.get("todoList")

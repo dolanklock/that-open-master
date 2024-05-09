@@ -8,14 +8,15 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <!-- <link rel="stylesheet" href="styles/components.css"> -->
-    <link rel="stylesheet" href="styles/components-copy.css">
     <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/components-copy.css">
     <link rel="stylesheet" href="./styles/components-custom.css">
     <link rel="stylesheet" href="styles/styles-sidebar.css">
     <link rel="stylesheet" href="styles/styles-project-details.css">
     <link rel="stylesheet" href="styles/styles-project-home.css">
     <link rel="stylesheet" href="styles/styles-form-dialog.css">
 </head>
+
 <body>
     <!-- projects page main -->
     <dialog id="new-project-modal">
@@ -67,8 +68,8 @@
                     <input id="new-project-form-date" name="finish-date" type="date">
                 </div>
                 <div>
-                    <button type="reset" class="form-cancel-btn">Cancel</button>
-                    <button type="submit" class="form-submit-btn">Accept</button>
+                    <button type="reset" class="form-cancel-btn form-btn">Cancel</button>
+                    <button type="submit" class="form-submit-btn form-btn">Accept</button>
                 </div>
             </div>
         </form>
@@ -94,10 +95,8 @@
     <!-- dialog for same name error window -->
     <dialog id="warning-dialog">
         <form class="warn-form" id="warn-form" action="">
+            <span class="material-symbols-outlined">error</span>
             <div id="warn-body">
-                <span class="material-symbols-outlined">
-                    error
-                    </span>
                 <div class="">
                     <h3 id="warn-message"></h3>
                 </div>
