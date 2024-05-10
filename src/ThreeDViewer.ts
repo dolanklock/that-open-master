@@ -232,7 +232,9 @@ async function createModelTree(): Promise<OBC.SimpleUIComponent> {
 }
 
 function exportProperties(model: FragmentsGroup) {
-    const propertiesJSON = JSON.stringify(model.properties, null, 2)
+    let properties = JSON.parse(JSON.stringify(model.properties, null, 2))
+    properties.modelName = model.name
+    const propertiesJSON = JSON.stringify(properties, null, 2)
     // blob represents a file like object of immutable raw-data
     const blob = new Blob( [ propertiesJSON ], { type: "application/json" } );
     // URL.createObject creates a string containing a URL representing the object given in the parameter. 
@@ -254,7 +256,14 @@ function importProperties(model: FragmentsGroup) {
         console.log('running import properties load')
         const json = reader.result
         if ( !json ) {return}
-        model.properties = JSON.parse(json as string)
+        const properties = JSON.parse(json as string)
+        if (properties.modelName !== model.name) {
+            alert("JSON properties file selected does not match the fragment group. Please select the matching file or load a new model\
+            which will generate new matching pairs.")
+            fragmentManager.reset()
+            return
+        }
+        model.properties = properties
         viewerUIOnLoaded(model)
     })
     input.addEventListener("change", () => {
@@ -278,7 +287,6 @@ function exportFragments(model: FragmentsGroup) {
     a.click()
     URL.revokeObjectURL(url)
 }
-
 function importFragments() {
     // creating an anonymous input
     const input = document.createElement('input')
@@ -298,13 +306,12 @@ function importFragments() {
     })
     input.click() // when we click the importFragmentBtn it clicks the input
 }
-
 async function viewerUIOnLoaded(model: FragmentsGroup) {
     highlighter.update()
 
     for ( const fragment of model.items ) {culler.add(fragment.mesh)}
-    culler.needsUpdate = true
 
+    culler.needsUpdate = true
     try {
         // ------ classifier config ------- //
         console.log('MODEL IFC - ', model)
@@ -313,7 +320,7 @@ async function viewerUIOnLoaded(model: FragmentsGroup) {
         classifier.byStorey(model)
         classifier.byEntity(model)
         console.log("CLASSIFIER AFTER", classifier.get())
-    
+        
         // ------ fragmentTree and tree config ------- //
         // Creating fragment tree
         const tree = await createModelTree()
@@ -329,9 +336,9 @@ async function viewerUIOnLoaded(model: FragmentsGroup) {
             console.log('FRAGMENT MAP ON SELECT', fragmentMap)
             const expressID = [...Object.values(fragmentMap)[0]][0]
             ifcPropertiesProcessor.renderProperties(model, Number(expressID))
-    
         })
-        
+        console.log("*** MODEL ***", model)
+        console.log("*** MODEL PROPERTIES ***", model.properties)
     } catch (error) {
         alert(error)
     }

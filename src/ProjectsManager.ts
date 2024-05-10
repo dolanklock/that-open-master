@@ -167,7 +167,6 @@ export class ProjectsManager {
         } catch (error) {
             console.log(`ERROR: ${error}`)
         }
-
     }
 
     importJSONLoadReader() {

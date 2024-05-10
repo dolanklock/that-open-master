@@ -5,8 +5,8 @@
     --action-btn: #27d128;
     --cancel-btn: #fa4141;
     --primary-100: #029AE0;
-    /* --secondary-color-100: #000000bb; */
-    --secondary-color-100: #d4d6d9;
+    --secondary-color-100: #000000bb;
+    --secondary-color-200: #d4d6d9;
     --primary-color: #BCF124;
 }
 
@@ -14,7 +14,7 @@ form {
     width: 450px;
     border-radius: 10px;
     color: black;
-    background-color: var(--secondary-color-100);
+    background-color: var(--secondary-color-200);
     font-family: "Plus Jakarta Sans", sans-serif;
 }
 
