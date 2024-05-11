@@ -217,8 +217,11 @@ cameraComponent.controls.addEventListener("update", async () => {
     // TODO: get the selected objects position
     // const highlighter = await viewer.tools.get(OBC.FragmentHighlighter)
     console.log("selectedelement")
-    const selectedElement = highlighter.selection
-    console.log(selectedElement)
+    const selectedElement = highlighter.selection.select
+    console.log("SELECTED ELEMENT!!", selectedElement)
+    console.log("FRAGMENT MANAGER!!", fragmentManager)
+    // selectedElement
+    // cameraComponent.controls.setOrbitPoint(selectedElement)
 })
 
 // ---------------------------- Functions ------------------------------- //
