@@ -1,12 +1,14 @@
 import  *  as OBC from "openbim-components"
 import { ToDoCard } from "./src/ToDoCard"
 import { dateFormat } from "../../ProjectFunctions";
+import * as THREE from "three"
 
 
 export interface ToDo {
     description: string,
     date: Date,
-    fragmentMap: OBC.FragmentIdMap
+    fragmentMap: OBC.FragmentIdMap,
+    cameraPosition: {position: THREE.Vector3, target: THREE.Vector3}
 }
 
 export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
@@ -23,17 +25,35 @@ export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
         this.setUI()
     }
     async addToDo(description: string) {
+        // need to capture the camera position at the time the user selects "create todo"
+        const camera = this._components.camera
+        if (!(camera instanceof OBC.OrthoPerspectiveCamera)) {
+            throw new Error("ToDoCreator needs an OrthPerspectiveCamera in order to work.")
+        }
+        const positionVector = new THREE.Vector3()
+        const cameraPosition = camera.controls.getPosition(positionVector)
+        const targetVector = new THREE.Vector3()
+        const cameraTarget = camera.controls.getTarget(targetVector)
         // getting the existing highlighter we created from the main components
         const highlighter = await this._components.tools.get(OBC.FragmentHighlighter)
+        // creating todo object
         const todo: ToDo = {
             description: description,
             date: new Date(),
-            fragmentMap: highlighter.selection.select // this gets the fragmentMap from highlighter of elements selected
+            fragmentMap: highlighter.selection.select, // this gets the fragmentMap from highlighter of elements selected
+            cameraPosition: {position: cameraPosition, target: cameraTarget}
         }
         const todoCard = new ToDoCard(this._components)
         todoCard.onCardClick.add(() => {
             console.log("FRAG MAP LOOK INSIDE: ", todo.fragmentMap)
             highlighter.highlightByID("select", todo.fragmentMap)
+            camera.controls.setLookAt(todo.cameraPosition.position.x,
+                                      todo.cameraPosition.position.y,
+                                      todo.cameraPosition.position.z,
+                                      todo.cameraPosition.target.x,
+                                      todo.cameraPosition.target.y,
+                                      todo.cameraPosition.target.z,
+                                      true)
         })
         todoCard.description = todo.description
         todoCard.date = todo.date
