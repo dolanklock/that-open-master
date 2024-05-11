@@ -30,6 +30,14 @@ export class ToDoCreator extends OBC.Component<ToDo[]> implements OBC.UI {
         if (!(camera instanceof OBC.OrthoPerspectiveCamera)) {
             throw new Error("ToDoCreator needs an OrthPerspectiveCamera in order to work.")
         }
+        // camera.controls.addEventListener("update", async () => {
+        //     console.log("*** ORBITING ***")
+        //     // TODO: get the selected objects position
+        //     const highlighter = await this._components.tools.get(OBC.FragmentHighlighter)
+        //     console.log(`**HIGHLIGHTER**: ${highlighter}`)
+        //     const selectedElement = highlighter.selection
+        //     console.log(`**SELECTED ELEMENT**: ${selectedElement}`)
+        // })
         const positionVector = new THREE.Vector3()
         const cameraPosition = camera.controls.getPosition(positionVector)
         const targetVector = new THREE.Vector3()

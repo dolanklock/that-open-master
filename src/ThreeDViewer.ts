@@ -36,6 +36,7 @@ viewer.renderer = rendererComponent
 const cameraComponent = new OBC.OrthoPerspectiveCamera(viewer)
 viewer.camera = cameraComponent
 
+
 // setting up the raycaster component
 const raycasterComponent = new OBC.SimpleRaycaster(viewer)
 viewer.raycaster = raycasterComponent
@@ -209,7 +210,16 @@ fragmentManager.onFragmentsLoaded.add((model) => {
 cameraComponent.controls.addEventListener("sleep", () => {
     culler.needsUpdate = true
 })  
- 
+
+cameraComponent.controls.addEventListener("update", async () => {
+    console.log("*** ORBITING ***")
+    console.log(viewer)
+    // TODO: get the selected objects position
+    // const highlighter = await viewer.tools.get(OBC.FragmentHighlighter)
+    console.log("selectedelement")
+    const selectedElement = highlighter.selection
+    console.log(selectedElement)
+})
 
 // ---------------------------- Functions ------------------------------- //
 
