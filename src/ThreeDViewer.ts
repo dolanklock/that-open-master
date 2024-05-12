@@ -216,10 +216,61 @@ cameraComponent.controls.addEventListener("update", async () => {
     console.log(viewer)
     // TODO: get the selected objects position
     // const highlighter = await viewer.tools.get(OBC.FragmentHighlighter)
-    console.log("selectedelement")
+    // console.log("selectedelement")
+    
     const selectedElement = highlighter.selection.select
-    console.log("SELECTED ELEMENT!!", selectedElement)
-    console.log("FRAGMENT MANAGER!!", fragmentManager)
+    const fragmentGroup = fragmentManager.groups[0]
+    console.log(fragmentGroup)
+    console.log("** test **")
+    if (fragmentGroup) {
+        for ( const fragment of fragmentGroup.items ) {
+            console.log(fragment?.mesh.position)
+            console.log(fragment?.mesh.geometry)
+            console.log(fragment?.mesh.children)
+            console.log(fragment?.mesh.getObjectById(2))
+        }
+    }
+    console.log("** test **")
+
+    // trying something... selecting by object id from fragment manager
+    const test = fragmentManager.list.getElementById
+    const test1 = fragmentManager.list.getObjectById
+    console.log("TEST??", test, test1)
+
+    console.log("SELECTED ELEMENT", selectedElement)
+    console.log("SELECTED ELEMENT tyoe", typeof selectedElement)
+    const fragments = fragmentManager.list
+    console.log("list of fragments", fragments)
+    let fragment: Fragment | undefined
+    const selectedElementFragmentId = Object.keys(selectedElement)[0]
+    console.log("id", selectedElementFragmentId)
+    Object.keys(fragments).forEach((frag) => {
+        console.log("frag print test", fragment)
+        if ( frag === selectedElementFragmentId ) {
+            fragment = fragments[frag]
+            return
+        }
+    })
+    if (!fragment) return
+    console.log("SELECT ELEMENTS FRAGMENT", fragment)
+    console.log("FRAGMENT ITEMS", fragment.items)
+    console.log("FRAGMENTS MESH", fragment.mesh)
+    // console.log("SELECTED ELEMENT!!", selectedElement)
+    // console.log("SELECTED ELEMENT!!", Object.keys(selectedElement)[0])
+    // console.log("FRAGMENT LIST", fragmentManager.list)
+    // TODO: neeed to get the mesh and position of the mesh for the element select so that can pass in the xyz into
+    // cameraComponent.controls.setOrbitPoint(selectedElement) method
+    // console.log("FRAGMENT MANAGER!!", fragmentManager)
+
+    // const fragment = fragmentManager.get()
+    // console.log("FRAGMENT", fragment)
+    // console.log("FRAGMENT AT INDEX 0", fragment[0])
+
+    // console.log("FRAGMENT meshes!!", fragmentManager.meshes)
+    // console.log("FRAGMENT group!!", fragmentManager.groups[0].getObjectById())
+    // console.log("test getting mesh!!", fragmentManager.groups.find((fragment) => {
+    //     fragment
+    // }))
     // selectedElement
     // cameraComponent.controls.setOrbitPoint(selectedElement)
 })
