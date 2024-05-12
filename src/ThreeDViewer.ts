@@ -211,68 +211,80 @@ cameraComponent.controls.addEventListener("sleep", () => {
     culler.needsUpdate = true
 })  
 
+// ----------------------   TESTING ----------------------- //
+
+let coords: number = 0
+const geometryCube = new THREE.BoxGeometry(50, 50, 50, 50, 50, 50)
+const materialCube = new THREE.MeshStandardMaterial()
+
+const testMesh = new THREE.Mesh(geometryCube, materialCube)
+testMesh.position.set(coords, coords, coords);
+scene.add(testMesh)
+
+const testButton = new OBC.Button(viewer)
+testButton.onClick.add(() => {
+    coords += 30
+    testMesh.position.set(coords, coords, coords)
+})
+toolbar.addChild(testButton)
+
+//TODO: i think i need to try and get all geometries from BufferGeometry, right now they all all as array ints and i need them
+// as three js geometries just like the testMesh above so i can simply get their positions
+
 cameraComponent.controls.addEventListener("update", async () => {
     console.log("*** ORBITING ***")
     console.log(viewer)
+    // testMesh.position.set(30, 30, 30)
+    cameraComponent.controls.setOrbitPoint(coords, coords, coords)
+    // console.log("TEST POSITION", testMesh.position)
+    // console.log("TEST POSITION", testMesh)
     // TODO: get the selected objects position
     // const highlighter = await viewer.tools.get(OBC.FragmentHighlighter)
     // console.log("selectedelement")
-    
     const selectedElement = highlighter.selection.select
-    const fragmentGroup = fragmentManager.groups[0]
-    console.log(fragmentGroup)
-    console.log("** test **")
-    if (fragmentGroup) {
-        for ( const fragment of fragmentGroup.items ) {
-            console.log(fragment?.mesh.position)
-            console.log(fragment?.mesh.geometry)
-            console.log(fragment?.mesh.children)
-            console.log(fragment?.mesh.getObjectById(2))
-        }
+    for (const fragID in selectedElement) {
+        const fragment = fragmentManager.list[fragID];
+        console.log("FRAGMENT!!**", fragment)
+        console.log("FRAGMENT POSITION", fragment.mesh.geometry.getAttribute("position"))
+        // console.log(fragment.fragments)
+        // console.log(fragment.fragments.select)
+        // const g = fragment.fragments.select.mesh.getVertexPosition()
+        // console.log("GEOMETRY", g)
+        // const position = g.attributes.position;
+        // const x = position.getX(1);
+        // const y = position.getY(1);
+        // const z = position.getZ(1);
+        // console.log(x, y, z);
+        // cameraComponent.controls.setOrbitPoint(0, 0, 0)
+        // cameraComponent.controls.setLookAt(10,10,10,0,0,0,true)
+        // const frag = fragment.fragments.select
+        // const t = new THREE.Vector3()
+        // const pos = frag.mesh.getWorldPosition(t)
+        // console.log("POSITIONS")
+        // console.log(t)
+        // console.log(pos)
     }
-    console.log("** test **")
 
-    // trying something... selecting by object id from fragment manager
-    const test = fragmentManager.list.getElementById
-    const test1 = fragmentManager.list.getObjectById
-    console.log("TEST??", test, test1)
 
-    console.log("SELECTED ELEMENT", selectedElement)
-    console.log("SELECTED ELEMENT tyoe", typeof selectedElement)
-    const fragments = fragmentManager.list
-    console.log("list of fragments", fragments)
-    let fragment: Fragment | undefined
-    const selectedElementFragmentId = Object.keys(selectedElement)[0]
-    console.log("id", selectedElementFragmentId)
-    Object.keys(fragments).forEach((frag) => {
-        console.log("frag print test", fragment)
-        if ( frag === selectedElementFragmentId ) {
-            fragment = fragments[frag]
-            return
-        }
-    })
-    if (!fragment) return
-    console.log("SELECT ELEMENTS FRAGMENT", fragment)
-    console.log("FRAGMENT ITEMS", fragment.items)
-    console.log("FRAGMENTS MESH", fragment.mesh)
-    // console.log("SELECTED ELEMENT!!", selectedElement)
-    // console.log("SELECTED ELEMENT!!", Object.keys(selectedElement)[0])
-    // console.log("FRAGMENT LIST", fragmentManager.list)
-    // TODO: neeed to get the mesh and position of the mesh for the element select so that can pass in the xyz into
-    // cameraComponent.controls.setOrbitPoint(selectedElement) method
-    // console.log("FRAGMENT MANAGER!!", fragmentManager)
+    // USE getWorldCoordinates rerfer to chat gpt web page
 
-    // const fragment = fragmentManager.get()
-    // console.log("FRAGMENT", fragment)
-    // console.log("FRAGMENT AT INDEX 0", fragment[0])
-
-    // console.log("FRAGMENT meshes!!", fragmentManager.meshes)
-    // console.log("FRAGMENT group!!", fragmentManager.groups[0].getObjectById())
-    // console.log("test getting mesh!!", fragmentManager.groups.find((fragment) => {
-    //     fragment
-    // }))
-    // selectedElement
-    // cameraComponent.controls.setOrbitPoint(selectedElement)
+    // const fragmentGroup = fragmentManager.groups[0]
+    // console.log("FRAGMENT MANAGER", fragmentManager)
+    // console.log("FRAGMENT GROUP", fragmentGroup)
+    // console.log("** test **")
+    // if (fragmentGroup) {
+    //     for ( const fragment of fragmentGroup.items ) {
+    //         console.log(fragment?.mesh)
+    //         const { geometry, material } = fragment.mesh
+    //         // var geometryTest = THREE.Geometry.fromBufferGeometry( geometry )
+    //         console.log("GEOMETRY", geometry.getAttribute("position"))
+    //         console.log("MATERIAL", material)
+    //         // console.log(fragment?.mesh.geometry)
+    //         // console.log(fragment?.mesh.children)
+    //         // console.log(fragment?.mesh.getObjectById(2))
+    //     }
+    // }
+  
 })
 
 // ---------------------------- Functions ------------------------------- //
