@@ -207,7 +207,9 @@ function projectsClicked(event: Event) {
         console.log("truree")
         projectDetails!.classList.toggle("page-hidden")
     }
-    projectsPage.classList.toggle("page-hidden")
+    if (projectsPage.classList.contains("page-hidden")) {
+        projectsPage.classList.toggle("page-hidden")
+    }
 }
 
 function addToDoHandler(event: Event) {
@@ -451,16 +453,6 @@ if ( editProjectDetails ) {
     editProjectDetails.addEventListener('click', (event) => editProjectCard(event))
 }
 
-// const bimViewerBtn = document.querySelectorAll("bim-viewer-btn") as NodeListOf<HTMLElement>
-// bimViewerBtn.forEach((e) => {
-//     console.log(e)
-//     e.addEventListener("click", (event: Event) => {
-//         console.log(event.target)
-//         event.stopPropagation()
-//         console.log("***** 3d bim vieweer clicked *****")
-//         bimViewerContainer.classList.toggle("page-hidden") 
-//     })
-// })
 
 // ------------------------ todo Event Listeners ------------------------------ #
 
