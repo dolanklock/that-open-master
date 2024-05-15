@@ -42,6 +42,7 @@ const todoBody = document.getElementById('todo-body')
 const todoForm = document.getElementById('new-todo-form')
 const projectList = document.getElementById('project-list')
 const todoFormInput = document.getElementById('todo-form-input') as HTMLInputElement
+const bimViewerContainer = document.getElementById("bim-viewer") as HTMLElement
 
 const projectsManager = new ProjectsManager()
 const testBtn = document.getElementById('test')
@@ -49,17 +50,6 @@ const testBtn = document.getElementById('test')
 
 // -------------------------- FUNCTIONS ------------------------ // 
 
-
-function toggleProjectsDetailsPage() {
-    /*
-
-    * @param {Project} fill out
-    * @returns {none}
-    */
-    if ( !projectsPage || !projectDetails ) return
-    projectsPage.classList.toggle('page-hidden')
-    projectDetails.classList.toggle('page-hidden')
-}
 
 function getProject(projectId: string | number) {
     /*
@@ -180,13 +170,15 @@ function projectCardClicked(event: Event) {
     * @param {Project} fill out
     * @returns {none}
     */
+    console.log("HERE", event.target)
     const projectCard = ( event.target as HTMLElement).closest('.project-card')
     if ( !projectCard ) return
     const project = getProject(projectCard.dataset.id)
     if ( !project ) return
     updateProjectDetailsContent(project)
     renderToDoList(project)
-    toggleProjectsDetailsPage()
+    projectDetails!.classList.toggle("page-hidden")
+    projectsPage!.classList.toggle("page-hidden")
 }
 
 function editProjectCard(event: Event) {
@@ -208,7 +200,14 @@ function projectsClicked(event: Event) {
     * @returns {none}
     */
     if ( !projectsPage ) return
-    if ( projectsPage.classList.contains('page-hidden') ) toggleProjectsDetailsPage()
+    if (!(bimViewerContainer.classList.contains("page-hidden"))) {
+        bimViewerContainer.classList.toggle("page-hidden")
+    }
+    if (!(projectDetails!.classList.contains("page-hidden"))) {
+        console.log("truree")
+        projectDetails!.classList.toggle("page-hidden")
+    }
+    projectsPage.classList.toggle("page-hidden")
 }
 
 function addToDoHandler(event: Event) {
@@ -381,23 +380,6 @@ if ( newProjectForm && newProjectForm instanceof HTMLFormElement ) {
     newProjectForm.addEventListener('submit', (event) => newProjectFormHandler(event, newProjectForm))
 }
 
-// adding event listener to delete button on project cards. using event delegation
-if ( projectList ) {
-    projectList.addEventListener('click', (event) => {
-        if ( !event.target ) return
-        const deleteProjectBtn = event.target.closest('.delete-project')
-        if ( deleteProjectBtn instanceof HTMLButtonElement && deleteProjectBtn.classList.contains('delete-project')) {
-            const card = deleteProjectBtn.closest(".project-card")
-            // if ( !card ) return
-            if ( card && card instanceof HTMLElement ) {
-                const projectId = card.dataset.id
-                if ( !projectId ) return
-                projectsManager.deleteProject(projectId)
-            }
-        }
-    })
-}
-
 
 // ** FOR TESTING ONLY ** //
 
@@ -436,7 +418,26 @@ if (importJSONBtn) {
 
 // project card click
 if (projectList) {
-    projectList.addEventListener('click', (event) => projectCardClicked(event))
+    // using event delegation here for 3d bim viewer and delete buttons in project card
+    projectList.addEventListener('click', (event) => {
+        const clickedElement = event.target as HTMLElement
+        if ( !clickedElement ) return
+        if ( clickedElement.classList.contains('delete-project')) {
+            const card = clickedElement.closest(".project-card")
+            // if ( !card ) return
+            if ( card && card instanceof HTMLElement ) {
+                const projectId = card.dataset.id
+                if ( !projectId ) return
+                projectsManager.deleteProject(projectId)
+            }
+        } else if (clickedElement.classList.contains("bim-viewer-btn")) {
+            bimViewerContainer.classList.toggle("page-hidden")
+            projectsPage!.classList.toggle("page-hidden")
+
+        } else {
+            projectCardClicked(event)
+        }
+    })
 }
 
 // Projects button on sidebar clicked
@@ -450,6 +451,16 @@ if ( editProjectDetails ) {
     editProjectDetails.addEventListener('click', (event) => editProjectCard(event))
 }
 
+// const bimViewerBtn = document.querySelectorAll("bim-viewer-btn") as NodeListOf<HTMLElement>
+// bimViewerBtn.forEach((e) => {
+//     console.log(e)
+//     e.addEventListener("click", (event: Event) => {
+//         console.log(event.target)
+//         event.stopPropagation()
+//         console.log("***** 3d bim vieweer clicked *****")
+//         bimViewerContainer.classList.toggle("page-hidden") 
+//     })
+// })
 
 // ------------------------ todo Event Listeners ------------------------------ #
 

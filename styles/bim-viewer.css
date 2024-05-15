@@ -1,0 +1,23 @@
+#bim-viewer {
+    width: 100vw;
+    height: 100vh !important;
+    display: flex;
+    background-color: aqua;
+}
+
+#viewer {
+    /* height: 100% !important;
+    width: 100% !important; */
+    display: flex;
+    background-color: var(--primary);
+    min-width: 0;
+    position: relative;
+  
+}
+
+.testing {
+    width: 1000px;
+    height: 1000px;
+    display: flex;
+    background-color: aqua;
+}

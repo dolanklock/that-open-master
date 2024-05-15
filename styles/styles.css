@@ -47,8 +47,9 @@ body {
     /* grid-template-areas: 'sidebar content';  */
     height: 100vh !important;
     /* min-height: 700px !important; */
-    width: 100vw;
-    background-color: #202124;
+    width: 100vw !important;
+    /* background-color: #202124; */
+    background-color: blue;
     color: black;
     margin: 0;
     padding: 0;

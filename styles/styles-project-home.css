@@ -148,6 +148,12 @@
     display: flex;
     justify-content: end;
     align-items: center;
+    column-gap: 10px;
+}
+
+.bim-viewer-btn:hover {
+    cursor: pointer;
+    color: #fc3f5c;
 }
 
 .card-img {

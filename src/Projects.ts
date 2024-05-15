@@ -62,6 +62,7 @@ export class Project {
         this.id = uuidv4()
         this.iconColor = this.getRandomColor()
         this.addProject();
+        
     };
 
     addProject() {
@@ -96,12 +97,15 @@ export class Project {
                     </div>
                 </div>
                 <div class="project-card-footer">
-                    <button class="delete-project"><span class="material-symbols-outlined">
-                    delete
-                    </span></button>
+                    <i class='bx bx-sm bx-cube-alt bim-viewer-btn'></i>
+                    <i class='bx bxs-message-square-x delete-project'></i>
                 </div>
             </div>`
         const projectList = document.getElementById('project-list');
+        const projectCardHTMLElement = document.createElement("div")
+        projectCardHTMLElement.innerHTML = html
+        // this.threeDBIMViewerBtnEventListener(projectCardHTMLElement)
+
         if ( projectList ) {
             projectList.insertAdjacentHTML('beforeend', html);
         };
@@ -132,6 +136,18 @@ export class Project {
                             `
                             
             todoBody.insertAdjacentHTML('afterbegin', htmlToDo)
+        })
+    }
+
+    threeDBIMViewerBtnEventListener(htmlElement: HTMLElement) {
+        const bimViewerContainer = document.getElementById("bim-viewer") as HTMLElement
+        console.log(htmlElement)
+        const viewerBtn = htmlElement.querySelector(".bim-viewer-btn") as HTMLElement
+        console.log(viewerBtn)
+        viewerBtn.addEventListener("click", (event: Event) => {
+            event.stopPropagation()
+            console.log("***** 3d bim vieweer clicked *****")
+            bimViewerContainer.classList.toggle("page-hidden") 
         })
     }
 

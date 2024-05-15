@@ -1,7 +1,6 @@
 
 // ------------------- importing three.js -------------------- //
 
-
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import * as OBC from "openbim-components"
