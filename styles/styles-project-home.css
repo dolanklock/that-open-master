@@ -1,3 +1,12 @@
+:root {
+    --action-btn: #27d128;
+    --cancel-btn: #fa4141;
+    --primary-100: #029AE0;
+    --secondary-color-100: #000000bb;
+    --secondary-color-200: #d4d6d9;
+    --primary-color: #BCF124;
+}
+
 #content-projects-page {
     background-color: var(--primary-300);
     /* background-color: #27d128; */
@@ -32,7 +41,7 @@
 
 #page-header-buttons {
     display: flex;
-    column-gap: 10px;
+    column-gap: 20px;
     align-items: center;
 }
 
@@ -78,6 +87,20 @@
     top: 0;
     left: 0;
     opacity: 0;
+}
+
+.import-export-btn {
+    display: flex;
+    align-items: center;
+    background-color: var(--primary-100);
+    padding: 8px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    margin: 0;
+}
+
+.import-export-btn:hover {
+    cursor: pointer;;
 }
 
 

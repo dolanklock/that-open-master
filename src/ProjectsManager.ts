@@ -142,7 +142,8 @@ export class ProjectsManager {
         const blob = new Blob( [ json ], { type: "application/json" } );
         // URL.createObject creates a string containing a URL representing the object given in the parameter. 
         const url = URL.createObjectURL(blob)
-        const exportBtn = document.getElementById('export-json')
+        const exportBtn = document.getElementById('export-json') as HTMLAnchorElement
+        exportBtn.click()
         if ( exportBtn && exportBtn instanceof HTMLAnchorElement ) {
             exportBtn.href = url
             // the download method will download the given link url that we set with the
@@ -205,11 +206,13 @@ export class ProjectsManager {
     }
 
     importProjectDataJSON(event: Event) {
-        const importJSONInput = document.getElementById('import-json')
+        // const importJSONInput = document.querySelector('.import-json')
+        const importJSONInput = document.createElement("input") as HTMLInputElement
+        importJSONInput.type = "file"
+        importJSONInput.click()
         if (importJSONInput && importJSONInput instanceof HTMLInputElement) {
             importJSONInput.value = null // need to do this so it clears value if same path is chosen twice to import.
             // without it, if import a json then import json again the load and change eventlisteners below wont be triggered
-
             // getting the HTML input element
             if ( !importJSONInput ) return
             importJSONInput.accept = 'application/json' // assigning accept attr to element in html

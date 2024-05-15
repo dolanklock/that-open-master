@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="styles/styles-project-details.css">
     <link rel="stylesheet" href="styles/styles-project-home.css">
     <link rel="stylesheet" href="styles/styles-form-dialog.css">
+    <link rel="stylesheet" href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
 </head>
 
 <body>
@@ -138,22 +139,19 @@
             <header id="page-header">
                 <h2>Projects</h2>
                 <div id="page-header-buttons">
-                    <!-- <button id="test">*TEST ONLY*</button> -->
-                    <div id="import-parent">
-                        <span class="material-symbols-outlined">upload
-                            <div id="import-child">
-                                <input id="import-json" type="file">
-                            </div>
-                        </span>
+                    <div class="import-export-btn import-json">
+                        <i class='bx bx-sm bxs-file-import'></i>
+                        <h4>Import Projects</h4>
                     </div>
-                    <a href="" id="export-json">
-                        <span class="material-symbols-outlined">download
-                            
-                        </span>
-                    </a>
-                    <button class="new-project-btn"><span class="material-symbols-outlined">
-                        playlist_add
-                        </span></button>
+                    <div class="import-export-btn export-json">
+                        <i class='bx bx-sm bxs-file-export'></i>
+                        <h4>Export Projects</h4>                
+                        <a href="" id="export-json"></a>
+                    </div>
+                    <div class="import-export-btn">
+                        <i class='bx bx-sm bxs-file-plus' ></i>
+                        <button class="new-project-btn">New Project</button>
+                    </div>
                 </div>
             </header>
             <div id="project-list">

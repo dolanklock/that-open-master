@@ -421,14 +421,17 @@ document.getElementById('warn-form')?.addEventListener('click', (event) => {
     if ( warnModal && warnModal instanceof HTMLDialogElement ) warnModal.close()
 })
 
-const exportJSONBtn = document.getElementById('export-json')
+const exportJSONBtn = document.querySelector('.export-json')
 if (exportJSONBtn) {
     exportJSONBtn.addEventListener('click', () => projectsManager.exportProjectDataJSON())
 }
 
-const importJSONBtn = document.getElementById('import-json')
+const importJSONBtn = document.querySelector('.import-json')
 if (importJSONBtn) {
-    importJSONBtn.addEventListener("click", (event) => projectsManager.importProjectDataJSON(event))
+    importJSONBtn.addEventListener("click", (event) => {
+        console.log("import clicked")
+        projectsManager.importProjectDataJSON(event)
+    })
 }
 
 // project card click
