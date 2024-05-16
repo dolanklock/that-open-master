@@ -14,6 +14,7 @@
 
 
 // import { ThreeDViewer } from "./ArchiveThreeDViewer"
+import {KeyBoardShortCutManager} from "./bim-components/KeyBoardShortCut"
 import { Project, IProject, projectRole, projectStatus, ToDo } from "./Projects"
 import { ProjectsManager } from "./ProjectsManager"
 import { showWarnModalForm, showModalForm, dateFormat,
@@ -25,8 +26,8 @@ import {ThreeDViewer} from "./ThreeDViewer"
 import * as THREE from "three"
 // import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import * as OBC from "openbim-components"
-// import { UIManager } from "@thatopen/ui"
-import { UIManager, Button, Grid } from "@thatopen/ui"
+
+import { UIManager } from "@thatopen/ui"
 
 UIManager.registerComponents()
 
@@ -530,6 +531,15 @@ if ( todoBody ) {
 ThreeDViewer()
 
 
+const keyBoardShortcutManager = new KeyBoardShortCutManager()
+
+function printSomething() {
+    console.log("** ran keyboard shortcut ****")
+}
+
+keyBoardShortcutManager.addCommand("Print Statement", "p", printSomething)
+
+keyBoardShortcutManager.updateCommandKey("p")
 // ------------------------------------- TODO LIST --------------------------------------- //
 
 
