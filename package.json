@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@thatopen/ui": "^2.0.0-alpha.0",
     "bim-fragment": "^1.0.22",
     "esbuild": "^0.19.9",
     "exact": "^0.8.0",

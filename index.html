@@ -135,7 +135,7 @@
         </ul>
     </aside>
 
-    <main id="content-projects-page" class="projects-page">
+    <main id="content-projects-page" class="projects-page page-hidden">
         <div id="projects-page" class="">
             <header id="page-header">
                 <h2>Projects</h2>
@@ -263,8 +263,48 @@
     </main>
     <main id="bim-viewer" class="page-hidden">
         <div id="viewer" style="width: calc(100vw - 300px); height: 100%; min-width: 0; position: relative;">
-                
         </div>
+    </main>
+    <main style="width: 100vw; height: 100vh; background-color: orange;">
+        <bim-grid id="grid">
+            <bim-toolbars-container style="grid-area: header">
+              <bim-toolbar label="Toolbar A" active>
+                <bim-toolbar-section label="Build">
+                  <bim-button vertical label="My Button" icon="solar:bookmark-square-minimalistic-bold"></bim-button>
+                  <bim-toolbar-group>
+                    <bim-button icon="solar:album-bold"></bim-button>
+                    <bim-button icon="solar:archive-linear"></bim-button>
+                    <bim-button icon="solar:battery-charge-minimalistic-broken"></bim-button>
+                    <bim-button icon="solar:bluetooth-square-outline"></bim-button>
+                  </bim-toolbar-group>
+                </bim-toolbar-section>
+              </bim-toolbar>
+              <bim-toolbar label="Toolbar B">
+                <bim-toolbar-section label="Section">
+                  <bim-button vertical label="Button A" icon="bx:command"></bim-button>
+                  <bim-button vertical label="Button B" icon="bx:fast-forward-circle"></bim-button>
+                  <bim-button vertical label="Button C" icon="bx:support"></bim-button>
+                </bim-toolbar-section>
+              </bim-toolbar>
+            </bim-toolbars-container>
+            <bim-panels-container id="my-panel" style="grid-area: sidebar">
+              <bim-panel label="Panel A">
+                <bim-panel-section label="Build">
+                  <bim-text-input label="Tool Name" value="BCFManager"></bim-text-input>
+                  <bim-input label="Position" vertical>
+                    <bim-number-input pref="X" min="1" value="10" max="50" sufix="m" slider></bim-number-input>
+                    <bim-number-input pref="X" min="1" value="20" max="50" sufix="m" slider></bim-number-input>
+                    <bim-number-input pref="X" min="1" value="30" max="50" sufix="m" slider></bim-number-input>
+                  </bim-input>
+                  <bim-dropdown label="IFC Entity">
+                    <bim-option label="IFCWALL"></bim-option>
+                    <bim-option label="IFCWINDOW"></bim-option>
+                    <bim-option label="IFCSLAB"></bim-option>
+                  </bim-dropdown>
+                </bim-panel-section>
+              </bim-panel>
+            </bim-panels-container>
+          </bim-grid>
     </main>
 
   

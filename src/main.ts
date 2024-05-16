@@ -23,8 +23,28 @@ import {ThreeDViewer} from "./ThreeDViewer"
 
 // importing three.js
 import * as THREE from "three"
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
+// import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import * as OBC from "openbim-components"
+// import { UIManager } from "@thatopen/ui"
+import { UIManager, Button, Grid } from "@thatopen/ui"
+
+UIManager.registerComponents()
+
+
+const grid = document.getElementById("grid") as Grid
+console.log(grid)
+
+grid.layouts = {
+  main: `
+    "header header" auto
+    "sidebar content" 1fr
+    "sidebar content" 1fr
+    / auto 1fr
+  `
+}
+
+// grid.setLayout("main")
+
 
 // ------------------------ VARIABLES -------------------------- //
 

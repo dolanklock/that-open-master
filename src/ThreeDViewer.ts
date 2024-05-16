@@ -2,13 +2,14 @@
 // ------------------- importing three.js -------------------- //
 
 import * as THREE from "three"
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
+// import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import * as OBC from "openbim-components"
 import { Fragment, IfcProperties } from "bim-fragment"
 import { FragmentsGroup } from "bim-fragment"
 import { ToDoCreator } from "./bim-components/ToDoCreator"
 
 // ------------------------ 3D Viewer setup --------------------------- //
+
 
 
 export function ThreeDViewer() {
