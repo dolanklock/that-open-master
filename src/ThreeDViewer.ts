@@ -192,6 +192,9 @@ function printSomething() {
 const keyboardShortcutManager = new KeyBoardShortCutManager(viewer)
 toolbar.addChild(keyboardShortcutManager.uiElement.get("activationBtn"))
 keyboardShortcutManager.addCommand("Print Statement", "p", printSomething)
+keyboardShortcutManager.addCommand("Print Statement", "t", printSomething)
+keyboardShortcutManager.addCommand("Print Statement", "pdf", printSomething)
+keyboardShortcutManager.addCommand("Print Statement", "psd", printSomething)
 
 // -------------------------------- Event Handlers ---------------------------------- //
 

@@ -108,19 +108,23 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
         // TODO: each time i create a new command i need to create a new CommandUIComponent and ShortcutUIComponent
         // object and append it to main keyboardShortcutUI using the keyboardShortcutUI.appendChild method
         // and when create these two objects need to pass in all required args. everything will be linked through its uuid
-
-        // this.commands[key] = {commandName: fn}
         if ( this.getCommand(shortcut) ) {
             throw new Error("shortcut is in use")
         }
+        // creating new command
         const command = new Command(commandName, shortcut, fn)
         this._commands.push(command)
-        const commandUI = new CommandUIComponent(this._components, uuidv4, commandName)
-        commandUI.onCommandClick.add(() => {
-            this.form.visible = !this.form.visible
+        // id for both command ui and shortcut ui components
+        const id = uuidv4
+        // creating new commandUI
+        const commandUI = new CommandUIComponent(this._components, id, commandName)
+        this.keyboardShortcutUI.appendCommandChild(commandUI.get())
+        // creating new shortcutUI
+        const shortcutUI = new ShortcutUIComponent(this._components, id, shortcut)
+        shortcutUI.onCommandClick.add(() => {
+            this.form.visible = true
         })
-        this.keyboardShortcutUI.addChild(commandUI)
-        // this.addKeyOnClick(command.shortcut, command.fn)
+        this.keyboardShortcutUI.appendShortcutChild(shortcutUI.get())
     }
     
     addShortcut() {
