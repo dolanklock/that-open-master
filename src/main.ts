@@ -32,7 +32,7 @@ import { UIManager } from "@thatopen/ui"
 UIManager.registerComponents()
 
 
-const grid = document.getElementById("grid") as Grid
+const grid = document.getElementById("grid")
 console.log(grid)
 
 grid.layouts = {
@@ -539,7 +539,8 @@ function printSomething() {
 
 keyBoardShortcutManager.addCommand("Print Statement", "p", printSomething)
 
-keyBoardShortcutManager.updateCommandKey("p")
+console.log(keyBoardShortcutManager.getCommands())
+console.log(keyBoardShortcutManager.getCommand("p"))
 // ------------------------------------- TODO LIST --------------------------------------- //
 
 

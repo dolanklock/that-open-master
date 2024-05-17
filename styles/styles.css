@@ -134,3 +134,100 @@ h5 {
     height: 100%;
     border-radius: 15px;
 }
+
+
+
+/* ------------- keyboard shortcuts --------------- */
+
+
+td {
+border: 2px solid black;
+padding: 0;
+margin: 0px;
+overflow: auto;
+}
+
+#shortcut-container {
+    display: grid;
+    height: auto;
+    width: auto;
+    height: 50px;
+    grid-template: "header" auto
+    "assignments" 1fr
+}
+
+#shortcut-header {
+    grid-area: header;
+    background-color: #029AE0;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* #shortcut-assignments {
+    grid-area: assignments;
+    background-color: #27d128;
+    padding: 10px;
+    box-sizing: border-box;
+} */
+#shortcut-assignments {
+    grid-area: assignments;
+    background-color: #27d128;
+    padding: 10px;
+    display: flex;
+    justify-content: row;
+
+    box-sizing: border-box;
+}
+
+.commands {
+    display: flex;
+    flex-direction: column;
+    resize: horizontal;
+    overflow: auto;
+    width: 300px;
+    height: auto;
+    margin: 0px;
+    padding: 0px;
+    border: 1px solid black;
+    /* display:block; */
+}
+
+.shortcut {
+    display: flex;
+    flex-direction: column;
+    resize: horizontal;
+    overflow: auto;
+    width: 300px;
+    height: auto;
+    margin: 0px;
+    padding: 0px;
+    border: 1px solid black;
+}
+
+.command {
+    overflow-x: hidden;
+}
+
+.command-line {
+    /* resize:horizontal; */
+    margin: 10px;
+    padding: 0px;
+    border: 1px solid black;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

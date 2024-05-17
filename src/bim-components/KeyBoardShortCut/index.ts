@@ -1,4 +1,4 @@
-
+import { v4 as uuidv4 } from 'uuid'
 
 function addKeyBoardShortcut(key: string, fn: Function) {
     window.document.addEventListener("keypress", () => {
@@ -20,19 +20,45 @@ interface ICommands {
 //     }
 // }
 
+class Command {
+    id: uuidv4
+    fn: Function
+    name: string
+    shortcut: string
+    constructor(name: string, shortcut: string, fn: Function) {
+        this.id = uuidv4()
+        this.name = name
+        this.shortcut = shortcut
+        this.fn = fn
+    }
+}
+
+
 export class KeyBoardShortCutManager {
     HTMLtemplate: string = `
         <div>
 
         </div>
     `
-    private commands: ICommands = {}
-    HTMLContainer: HTMLElement
+    private _commands: Command[] = []
+    HTMLContainer?: HTMLElement
     // private commandManager: KeyboardCommandManager
-    constructor(HTMLContainer: HTMLElement) {
+    constructor(HTMLContainer?: HTMLElement) {
         this.HTMLContainer = HTMLContainer
         // this.commandManager = new KeyboardCommandManager()
     }
+    // private checkCommandExists(key: string) {
+    //     // this method should check if a command already exists with the same key. for developers only
+    //     // should throw error
+    //     for (const command of this.commands) {
+    //         if ( command.shortcut === key ) {
+    //             return true
+    //         }
+    //     }
+    //     return false
+    // }
+    // TODO: if reassign key will need to clear all event listeners for that jey and then reassign
+    // event listener again, otherwise old event listener function will be run on key still
     private addKeyOnClick(key: string, fn: Function) {
         window.document.addEventListener("keypress", (e) => {
             console.log(e)
@@ -42,28 +68,53 @@ export class KeyBoardShortCutManager {
             }
         })
     }
-    getCommand(key: string) {
-        return this.commands[key]
+    getCommands() {
+        return this._commands
     }
-    addCommand(commandName: string, key: string, fn: Function) {
+    getCommand(key: string): Command | undefined {
+        const command = this._commands.find((command) => {
+            if ( command.shortcut === key ) {
+                return command
+            }
+        })
+        return command
+    }
+    addCommand(commandName: string, shortcut: string, fn: Function) {
         // this.commands[key] = {commandName: fn}
-        this.commands[key] = [commandName, fn]
-        this.addKeyOnClick(key, fn)
+        if ( this.getCommand(shortcut) ) {
+            throw new Error("shortcut is in use")
+        }
+        const command = new Command(commandName, shortcut, fn)
+        this._commands.push(command)
+        this.addKeyOnClick(command.shortcut, command.fn)
     }
-    updateCommandKey(key: string) {
+    // changeKey(obj, oldKey, newKey) {
+    //     if (oldKey !== newKey &amp;&amp; obj.hasOwnProperty(oldKey)) {
+    //         obj[newKey] = obj[oldKey];
+    //         delete obj[oldKey];
+    //     }
+    // }
+    private updateCommandKey(key: string) {
         // check if key is assigned somewhere else if so warn user its assigned to ** command already
         // and prompt for them to remove the key assign on the other before assigning to this
         // or allow them to set other key to none and then go ahead with that assignment
         const command = this.getCommand(key)
-        if (key in this.commands) { 
-            throw new Error(`This key is already assigned to "${this.commands[key][0]}" command`)
+        if (key in this._commands) {
+            alert(`This key is already assigned to "${this._commands[key][0]}" command`)
+            // TODO: checking if key is in use already, if so prompt use and ask to move forward
+            // (set other to none and assign key to command assigning to or cancel)
+            // if assign clicked then change the key to the command and change the other to none
+            // if cancel then simply cancel and return and do nothing
+
+            // throw new Error(`This key is already assigned to "${this.commands[key][0]}" command`)
         } else {
-            this.commands[key] = key
+            this._commands[key] = key
         }
         console.log(command)
     }
 
 }
+
 
 
 

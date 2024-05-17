@@ -265,7 +265,7 @@
         <div id="viewer" style="width: calc(100vw - 300px); height: 100%; min-width: 0; position: relative;">
         </div>
     </main>
-    <main style="width: 100vw; height: 100vh; background-color: orange;">
+    <main style="width: 100vw; height: 100vh; background-color: orange;" class="page-hidden">
         <bim-grid id="grid">
             <bim-toolbars-container style="grid-area: header">
               <bim-toolbar label="Toolbar A" active>
@@ -306,7 +306,45 @@
             </bim-panels-container>
           </bim-grid>
     </main>
-
+    <main id="content-project-details" class="project-details" style="display: flex; justify-content: center; align-items: center;">
+        <div id="shortcut-container" style="width: 500px; height: 500px; background-color: lightgray;">
+            <div id="shortcut-header">
+                <label for="">Search</label>
+                <input type="text">
+            </div>
+            <div id="shortcut-assignments">
+                <div class="commands">
+                    <div class="command-line">
+                        <p class="command">Create new Create new projectCreate new projectproject</p>
+                    </div>
+                    <div class="command-line">
+                        <p class="command">Create new project</p>
+                    </div>
+                    <div class="command-line">
+                        <p class="command">Create new project</p>
+                    </div>
+                    <div class="command-line">
+                        <p class="command">Create new project</p>
+                    </div>
+                </div>
+                <div class="shortcut">
+                    <div class="command-line">
+                        <p class="key">cnp</p>
+                    </div>
+                    <div class="command-line">
+                        <p class="key">cnp</p>
+                    </div>
+                    <div class="command-line">
+                        <p class="key">cnp</p>
+                    </div>
+                    <div class="command-line">
+                        <p class="key">cnp</p>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </main>
   
     <script type="module" src="src/main.ts"></script>
 </body>
