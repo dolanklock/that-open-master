@@ -7,6 +7,7 @@ import * as OBC from "openbim-components"
 import { Fragment, IfcProperties } from "bim-fragment"
 import { FragmentsGroup } from "bim-fragment"
 import { ToDoCreator } from "./bim-components/ToDoCreator"
+import { KeyBoardShortCutManager } from "./bim-components/KeyBoardShortCut"
 
 // ------------------------ 3D Viewer setup --------------------------- //
 
@@ -176,11 +177,16 @@ toolbar.addChild(ifcPropertiesProcessor.uiElement.get("main"))
 const culler = new OBC.ScreenCuller(viewer)
 
 
-// -------------------------------- Culler --------------------------------- //
+// -------------------------------- ToDoCreator --------------------------------- //
 
 
 const todoCreator = new ToDoCreator(viewer)
 toolbar.addChild(todoCreator.uiElement.get("activationButton"))
+
+// -------------------------------- keyboard shortcut manager --------------------------------- //
+
+const keyboardShortcutManager = new KeyBoardShortCutManager(viewer)
+toolbar.addChild(keyboardShortcutManager.uiElement.get("activationBtn"))
 
 
 // -------------------------------- Event Handlers ---------------------------------- //

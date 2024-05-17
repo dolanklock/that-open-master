@@ -531,16 +531,16 @@ if ( todoBody ) {
 ThreeDViewer()
 
 
-const keyBoardShortcutManager = new KeyBoardShortCutManager()
+// const keyBoardShortcutManager = new KeyBoardShortCutManager()
 
-function printSomething() {
-    console.log("** ran keyboard shortcut ****")
-}
+// function printSomething() {
+//     console.log("** ran keyboard shortcut ****")
+// }
 
-keyBoardShortcutManager.addCommand("Print Statement", "p", printSomething)
+// keyBoardShortcutManager.addCommand("Print Statement", "p", printSomething)
 
-console.log(keyBoardShortcutManager.getCommands())
-console.log(keyBoardShortcutManager.getCommand("p"))
+// console.log(keyBoardShortcutManager.getCommands())
+// console.log(keyBoardShortcutManager.getCommand("p"))
 // ------------------------------------- TODO LIST --------------------------------------- //
 
 
