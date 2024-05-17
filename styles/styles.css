@@ -149,9 +149,10 @@ overflow: auto;
 
 #shortcut-container {
     display: grid;
-    height: auto;
-    width: auto;
-    height: 50px;
+    height: 100%;
+    width: 100%;
+    background-color: #27d128;
+    /* height: 50px; */
     grid-template: "header" auto
     "assignments" 1fr
 }

@@ -3,6 +3,7 @@ import * as OBC from "openbim-components"
 import { dateFormat } from "../../../ProjectFunctions"
 
 export class CommandUIComponent extends OBC.SimpleUIComponent {
+    onCommandClick = new OBC.Event()
     constructor(components: OBC.Components, id: string, commandName: string) {
         // for the template we can use whatever html we want.. this is the poin tof why we are creating
         // our own custom SimpleUIComponent, so we can have a custom HTML item and add it inside of another UI compontent
@@ -14,7 +15,11 @@ export class CommandUIComponent extends OBC.SimpleUIComponent {
             </div>
         `
         super(components, template)
+        this.get().addEventListener("click", () => {
+            this.onCommandClick.trigger()
+        })
     }
+    
 }
 
 export class ShortcutUIComponent extends OBC.SimpleUIComponent {

@@ -42,6 +42,8 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
     enabled: true
     static uuid: string = uuidv4
     private _components: OBC.Components
+    private keyboardShortcutUI: KeyBoardShortcutUIComponent
+    private form: OBC.Modal
     HTMLtemplate: string = `
         <div>
 
@@ -64,15 +66,42 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
         activationBtn.onClick.add(() => {
             keyboardShortcutWindow.visible = true
         })
-        const keyboardShortcutUI = new KeyBoardShortcutUIComponent(this._components)
+        this.keyboardShortcutUI = new KeyBoardShortcutUIComponent(this._components)
 
         const keyboardShortcutWindow = new OBC.FloatingWindow(this._components)
         this._components.ui.add(keyboardShortcutWindow)
         keyboardShortcutWindow.visible = false
         keyboardShortcutWindow.title = "Keyboard Shortcuts"
-        keyboardShortcutWindow.addChild(keyboardShortcutUI)
+        keyboardShortcutWindow.addChild(this.keyboardShortcutUI)
         
-        this.uiElement.set({activationBtn: activationBtn, keyboardShortcutUI: keyboardShortcutUI})
+        // form for when command is clicked, this form will open for new command to be added
+        this.form = new OBC.Modal(this._components)
+        this.form.title = "Create Todo Note"
+        this._components.ui.add(this.form)
+        // form input
+        const todoDescriptionInput = new OBC.TextArea(this._components)
+        todoDescriptionInput.label = "Description"
+        // adding an obc object to another simpleUIComponent object like OBC.Modal we use slots.content.addChild()
+        // slots.centent will return another simpleUIComponent
+        // and the get method will return the HTML element for that simpleUIComponent. see source code for exact understanding
+        // basically each UI component contains HTML that is associated with it and slots.content.get() returns that exact HTML element
+        this.form.slots.content.addChild(todoDescriptionInput)
+        this.form.slots.content.get().style.padding = "20px"
+        this.form.slots.content.get().style.display = "flex"
+        this.form.slots.content.get().style.flexDirection = "column"
+        this.form.slots.content.get().style.rowGap = "20px"
+        this.form.onCancel.add(() => {
+            this.form.visible = !this.form.visible
+        })
+        this.form.onAccept.add(async () => {
+            console.log(`added: ${todoDescriptionInput.value}`)
+        })
+
+        this.keyboardShortcutUI.get().addEventListener!("click", (e: Event) => {
+            
+        })
+
+        this.uiElement.set({activationBtn: activationBtn, keyboardShortcutUI: this.keyboardShortcutUI})
     }
 
     addCommand(commandName: string, shortcut: string, fn: Function) {
@@ -86,7 +115,12 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
         }
         const command = new Command(commandName, shortcut, fn)
         this._commands.push(command)
-        this.addKeyOnClick(command.shortcut, command.fn)
+        const commandUI = new CommandUIComponent(this._components, uuidv4, commandName)
+        commandUI.onCommandClick.add(() => {
+            this.form.visible = !this.form.visible
+        })
+        this.keyboardShortcutUI.addChild(commandUI)
+        // this.addKeyOnClick(command.shortcut, command.fn)
     }
     
     addShortcut() {
