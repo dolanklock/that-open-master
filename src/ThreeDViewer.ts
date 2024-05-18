@@ -185,16 +185,19 @@ toolbar.addChild(todoCreator.uiElement.get("activationButton"))
 
 // -------------------------------- keyboard shortcut manager --------------------------------- //
 
-function printSomething() {
-    console.log("** ran keyboard shortcut ****")
+function printSomethingOne() {
+    console.log("** one ****")
+}
+
+function printSomethingTwo() {
+    console.log("** two ****")
 }
 
 const keyboardShortcutManager = new KeyBoardShortCutManager(viewer)
 toolbar.addChild(keyboardShortcutManager.uiElement.get("activationBtn"))
-keyboardShortcutManager.addCommand("Print Statement", "p", printSomething)
-keyboardShortcutManager.addCommand("Print Statement", "t", printSomething)
-keyboardShortcutManager.addCommand("Print Statement", "pdf", printSomething)
-keyboardShortcutManager.addCommand("Print Statement", "psd", printSomething)
+keyboardShortcutManager.addCommand("Print Statement", "o", printSomethingOne)
+keyboardShortcutManager.addCommand("Print Statement", "t", printSomethingTwo)
+
 
 // -------------------------------- Event Handlers ---------------------------------- //
 
