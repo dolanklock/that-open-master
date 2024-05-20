@@ -12,6 +12,14 @@ import {CommandUIComponent, ShortcutUIComponent} from "./src/CommandUI"
 
 // TODO: need to not let key event get fired if typing in any dialogs. typed in form and it fires event...
 
+// TODO: need to add a keystroke validator. should only allow two characters min. for key shortcut (revit does this) and 
+// need to figure out how to deal with if keys have the same pattern and not executing the one if other is intended to be ran
+// or figure out a way to deal with it? example, if one command has key stroke "PNN" and another has "PN"
+
+// TODO: need to put event listener for key press that is in createEvent method right now in the constructor function once
+// . Right now it is being added each time command is added and every time a key is pressed an event listener callback function is
+// executed which is unnecessary. can have it once in constructor and each time it should look through command list to see if shortcut matches
+
 // TODO: verify interface is correct
 
 // TODO: need to figure out how to have so that we can do multiple keys for event listeners and not just single keys
@@ -50,6 +58,7 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
     private form: OBC.Modal
     private _commands: Command[] = []
     private activeModified: HTMLElement
+    private _keysPressed: string[] = []
     uiElement = new OBC.UIElement<{activationBtn: OBC.Button, keyboardShortcutUI: KeyBoardShortcutUIComponent}>()
 
     constructor(components: OBC.Components) {
@@ -57,6 +66,7 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
         this._components = components
         this._components.tools.add(KeyBoardShortCutManager.uuid, this)
         this._setUI()
+        this._keyEventSetup()
     }
 
     private _setUI() {
@@ -126,12 +136,28 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
     private _createEvent(shortcut:string, fn: Function): OBC.Event<Function> {
         const event = new OBC.Event()
         event.add(fn)
-        window.addEventListener("keypress", (e: KeyboardEvent) => {
-            if (e.key === shortcut) {
-                event.trigger()
-            } 
-        })
+        // window.addEventListener("keypress", (e: KeyboardEvent) => {
+        //     if (e.key === shortcut) {
+        //         event.trigger()
+        //     } 
+        // })
         return event
+    }
+
+    private _keyEventSetup() {
+        document.addEventListener("keypress", (e: KeyboardEvent) => {
+            const keyPressed = e.key
+            this._keysPressed.push(keyPressed)
+            // this._keysPressed.splice(-5)
+            this._commands.forEach((command) => {
+                const currentKeys = this._keysPressed.slice(-command.shortcut.length).join("").toLowerCase()
+                console.log(currentKeys, command.shortcut)
+                if (currentKeys === command.shortcut.toLowerCase()) {
+                    console.log("shortcut keys activated")
+                    command?.event.trigger()
+                }
+            })
+        })
     }
     
     private _changeShortcutEventHandler() {
@@ -150,8 +176,8 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
                 key.textContent = inputValue
                 const command = this.getCommand(this.activeModified.dataset.uuid!) as Command
                 command.shortcut = inputValue
-                command.event.reset()
-                this._createEvent(command.shortcut, command.fn)
+                // command.event.reset()
+                // this._createEvent(command.shortcut, command.fn)
                 this.form.visible = false
             }
             input!.value = ""

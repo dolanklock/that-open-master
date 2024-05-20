@@ -205,10 +205,31 @@ function newProject() {
 
 const keyboardShortcutManager = new KeyBoardShortCutManager(viewer)
 toolbar.addChild(keyboardShortcutManager.uiElement.get("activationBtn"))
-keyboardShortcutManager.addCommand("Print One Console", "o", printSomethingOne)
+keyboardShortcutManager.addCommand("Print One Console", "one", printSomethingOne)
 keyboardShortcutManager.addCommand("Print Two Console", "t", printSomethingTwo)
 keyboardShortcutManager.addCommand("Open ToDo List", "l", openToDoList)
-keyboardShortcutManager.addCommand("Create New Project", "n", newProject)
+keyboardShortcutManager.addCommand("Create New Project", "q", newProject)
+
+// let keys = {}
+// document.addEventListener("keyup", (e: KeyboardEvent) => {
+//     keys[e.key] = true
+//     console.log(keys, Object.keys(keys).join(""))
+//     if (Object.keys(keys).join("") === "as") {
+//         console.log("CLICKED 'AS'")
+//     }
+// })
+
+// let keys1: string[] = []
+// const shortcut = "eod"
+// document.addEventListener("keypress", (e: KeyboardEvent) => {
+//     const keyPressed = e.key
+//     keys1.push(keyPressed)
+//     const keysTrimmed = keys1.slice(-shortcut.length)
+//     console.log(keysTrimmed)
+//     if (keysTrimmed.join("").toLowerCase() === shortcut.toLowerCase()) {
+//         console.log("shortcut keys activated")
+//     }
+// })
 
 
 // -------------------------------- Event Handlers ---------------------------------- //
