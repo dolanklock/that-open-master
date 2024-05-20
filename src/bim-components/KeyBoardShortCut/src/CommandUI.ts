@@ -37,7 +37,7 @@ export class ShortcutUIComponent extends OBC.SimpleUIComponent {
         })
         this.get().style.cursor = "pointer"
         this.get().style.border = "none"
-        this.get().style.backgroundColor = "lightgray"
+        this.get().style.backgroundColor = "darkgray"
         this.get().style.borderRadius = "8px"
         this.get().style.padding = "6px"
         this.get().style.display = "flex"

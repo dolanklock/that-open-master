@@ -189,14 +189,20 @@ function printSomethingOne() {
     console.log("** one ****")
 }
 
-function printSomethingTwo() {
-    console.log("** two ****")
+function printSomethingTwo(val: string) {
+    console.log("** two ****" + val)
 }
+
+function openToDoList() {
+    todoCreator.uiElement.get("todoList").visible = true
+}
+
 
 const keyboardShortcutManager = new KeyBoardShortCutManager(viewer)
 toolbar.addChild(keyboardShortcutManager.uiElement.get("activationBtn"))
-keyboardShortcutManager.addCommand("Print Statement", "o", printSomethingOne)
-keyboardShortcutManager.addCommand("Print Statement", "t", printSomethingTwo)
+keyboardShortcutManager.addCommand("Print One Console", "o", printSomethingOne)
+keyboardShortcutManager.addCommand("Print Two Console", "t", printSomethingTwo)
+keyboardShortcutManager.addCommand("Open ToDo List", "l", openToDoList)
 
 
 // -------------------------------- Event Handlers ---------------------------------- //

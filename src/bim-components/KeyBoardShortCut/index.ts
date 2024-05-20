@@ -34,13 +34,15 @@ interface ICommands {
 class Command {
     id: string
     fn: Function
+    event: OBC.Event<Function>
     name: string
     shortcut: string
-    constructor(id: string, name: string, shortcut: string, fn: Function) {
+    constructor(id: string, name: string, shortcut: string, fn: Function, event: OBC.Event<Function>) {
         this.id = id
         this.name = name
         this.shortcut = shortcut
         this.fn = fn
+        this.event = event
     }
 }
 
@@ -94,7 +96,7 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
         this.form.onCancel.add(() => {
             this.form.visible = !this.form.visible
         })
-        this.changeShortcutEvent()
+        this._changeShortcutEventHandler()
         this.uiElement.set({activationBtn: activationBtn, keyboardShortcutUI: this.keyboardShortcutUI})
     }
 
@@ -107,17 +109,10 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
         }
         // id for both command ui and shortcut ui components
         const id = uuidv4()
-        // const eventHandler = (e: KeyboardEvent, fn: Function) => {
-        //     if (e.key === shortcut) {
-        //         // console.log("clicked")
-        //         fn()
-        //     }
-        // }
-        this.addKeyOnClick(shortcut, fn)
+        const event = this._createEvent(shortcut, fn)
         // creating new command
-        const command = new Command(id, commandName, shortcut, fn)
+        const command = new Command(id, commandName, shortcut, fn, event)
         this._commands.push(command)
-        
         // creating new commandUI
         const commandUI = new CommandUIComponent(this._components, id, commandName)
         this.keyboardShortcutUI.appendCommandChild(commandUI.get())
@@ -131,11 +126,21 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
         this.keyboardShortcutUI.appendShortcutChild(shortcutUI.get())
         
     }
+
+    private _createEvent(shortcut:string, fn: Function): OBC.Event<Function> {
+        const event = new OBC.Event()
+        event.add(fn)
+        window.addEventListener("keypress", (e: KeyboardEvent) => {
+            if (e.key === shortcut) {
+                event.trigger()
+            } 
+        })
+        return event
+    }
     
-    private changeShortcutEvent() {
+    private _changeShortcutEventHandler() {
         this.form.onAccept.add(() => {
             const input = this.form.get().querySelector("textarea")?.value
-            console.log(input)
             if (!input) {
                 alert("Please enter valid key")
             }
@@ -146,37 +151,21 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
                     return
                 }
                 key.textContent = input
-                this.updateEventHandler(this.activeModified.dataset.uuid!)
                 const command = this.getCommand(this.activeModified.dataset.uuid!) as Command
-                const commandFn = command.fn
-                this.addKeyOnClick(key.textContent, commandFn)
+                command.shortcut = input
+                command.event.reset()
+                this._createEvent(command.shortcut, command.fn)
                 this.form.visible = false
             }
         })
     }
-    removeShortcut() {
-
-    }
-    private updateEventHandler(id: string) {
-        const command = this.getCommand(id)
-        console.log("COMMAND FOUND", command)
-        // const commandFn = command!.fn as EventListenerObject
-        // window.document.removeEventListener("keypress", commandFn)
-    }
+ 
     // TODO: if reassign key will need to clear all event listeners for that jey and then reassign
     // event listener again, otherwise old event listener function will be run on key still
-    private addKeyOnClick(shortcut: string, fn: Function) {
-        const eventHandler = (e: KeyboardEvent) => {
-            if (e.key === shortcut) {
-                // console.log("clicked")
-                fn()
-            }
-        }
-        window.document.addEventListener("keypress", eventHandler)
-    }
     getCommands() {
         return this._commands
     }
+
     getCommand(id: string): Command | undefined {
         const command = this._commands.find((command) => {
             if ( command.id === id ) {
@@ -185,25 +174,7 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
         })
         return command
     }
-  
-    // private updateCommand(key: string) {
-    //     // check if key is assigned somewhere else if so warn user its assigned to ** command already
-    //     // and prompt for them to remove the key assign on the other before assigning to this
-    //     // or allow them to set other key to none and then go ahead with that assignment
-    //     const command = this.getCommand(key)
-    //     if (key in this._commands) {
-    //         alert(`This key is already assigned to "${this._commands[key][0]}" command`)
-    //         // TODO: checking if key is in use already, if so prompt use and ask to move forward
-    //         // (set other to none and assign key to command assigning to or cancel)
-    //         // if assign clicked then change the key to the command and change the other to none
-    //         // if cancel then simply cancel and return and do nothing
 
-    //         // throw new Error(`This key is already assigned to "${this.commands[key][0]}" command`)
-    //     } else {
-    //         this._commands[key] = key
-    //     }
-    //     console.log(command)
-    // }
     get() {
         console.log("add something here later")
     }
