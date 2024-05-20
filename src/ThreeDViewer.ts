@@ -8,6 +8,7 @@ import { Fragment, IfcProperties } from "bim-fragment"
 import { FragmentsGroup } from "bim-fragment"
 import { ToDoCreator } from "./bim-components/ToDoCreator"
 import { KeyBoardShortCutManager } from "./bim-components/KeyBoardShortCut"
+import { showModalForm } from "./ProjectFunctions"
 
 // ------------------------ 3D Viewer setup --------------------------- //
 
@@ -198,11 +199,16 @@ function openToDoList() {
 }
 
 
+function newProject() {
+    showModalForm('new-project-modal', true)
+}
+
 const keyboardShortcutManager = new KeyBoardShortCutManager(viewer)
 toolbar.addChild(keyboardShortcutManager.uiElement.get("activationBtn"))
 keyboardShortcutManager.addCommand("Print One Console", "o", printSomethingOne)
 keyboardShortcutManager.addCommand("Print Two Console", "t", printSomethingTwo)
 keyboardShortcutManager.addCommand("Open ToDo List", "l", openToDoList)
+keyboardShortcutManager.addCommand("Create New Project", "n", newProject)
 
 
 // -------------------------------- Event Handlers ---------------------------------- //
