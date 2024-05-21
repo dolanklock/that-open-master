@@ -190,14 +190,13 @@ function printSomethingOne() {
     console.log("** one ****")
 }
 
-function printSomethingTwo(val: string) {
-    console.log("** two ****" + val)
+function printSomethingTwo() {
+    console.log("** two ****")
 }
 
 function openToDoList() {
     todoCreator.uiElement.get("todoList").visible = !todoCreator.uiElement.get("todoList").visible
 }
-
 
 function newProject() {
     showModalForm('new-project-modal', true)
@@ -205,10 +204,12 @@ function newProject() {
 
 const keyboardShortcutManager = new KeyBoardShortCutManager(viewer)
 toolbar.addChild(keyboardShortcutManager.uiElement.get("activationBtn"))
+
 keyboardShortcutManager.addCommand("Print One Console", "one", printSomethingOne)
 keyboardShortcutManager.addCommand("Print Two Console", "two", printSomethingTwo)
 keyboardShortcutManager.addCommand("Open ToDo List", "tdl", openToDoList)
 keyboardShortcutManager.addCommand("Create New Project", "np", newProject)
+
 
 // let keys = {}
 // document.addEventListener("keyup", (e: KeyboardEvent) => {

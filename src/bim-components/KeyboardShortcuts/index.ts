@@ -88,7 +88,13 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
             keyboardShortcutWindow.visible = !keyboardShortcutWindow.visible
         })
     }
-
+    /** This method is responsible for adding commands of your application to the keyboard manager. These commands will then be available to the user of the app
+     * and they will be able to configure different keys to these commands
+     * 
+     * @param commandName [string] the name if the command, this will display in the UI as the command name
+     * @param shortcut [string] the shortcut key to assign to the command, when this key is pressed, the command will execute
+     * @param fn [Function] the callback function to be executed when shortcut key is pressed
+     */
     addCommand(commandName: string, shortcut: string, fn: Function) {
         try {
             this._validateShortcut(shortcut)
