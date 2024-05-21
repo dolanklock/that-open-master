@@ -14,7 +14,13 @@ export class CommandUIComponent extends OBC.SimpleUIComponent {
             </div>
         `
         super(components, template)
+        this.get().style.cursor = "pointer"
         this.get().style.border = "none"
+        this.get().style.backgroundColor = "transparent"
+        this.get().style.padding = "6px"
+        this.get().style.display = "flex"
+        this.get().style.justifyContent = "center"
+        this.get().style.alignItems = "center"
     }
     
 }
