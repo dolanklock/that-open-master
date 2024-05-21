@@ -1,4 +1,4 @@
-<h1>Keyboard Shortcut Manager Tool⌨️</h1>
+<h1>Keyboard Shortcut Manager Tool ⌨️</h1>
 
 ### About
 
