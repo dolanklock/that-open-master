@@ -11,6 +11,10 @@ import { comma } from 'postcss/lib/list';
 
 // NEXT STEPS
 
+// TODO: if changing shortcut that is one for example should be able to change it to "on" without getting same leading two characters error
+
+// TODO: make so they "ks" is default keyboard shortcut for the keyboard shortcut dialog
+
 // TODO: need to not let key event get fired if typing in any dialogs. typed in form and it fires event...
 
 // TODO: need to add a keystroke validator. should only allow two characters min. for key shortcut (revit does this) and 
@@ -105,21 +109,25 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
         })
         this._changeShortcutEventHandler()
         this.uiElement.set({activationBtn: activationBtn, keyboardShortcutUI: this.keyboardShortcutUI})
+        this.addCommand("Keyboard Shortcuts", "ks", () => {
+            console.log(this._commands)
+            keyboardShortcutWindow.visible = !keyboardShortcutWindow.visible
+        })
     }
 
     addCommand(commandName: string, shortcut: string, fn: Function) {
         // TODO: each time i create a new command i need to create a new CommandUIComponent and ShortcutUIComponent
         // object and append it to main keyboardShortcutUI using the keyboardShortcutUI.appendChild method
         // and when create these two objects need to pass in all required args. everything will be linked through its uuid
-        
         try {
             this._validateShortcut(shortcut)
         } catch (error) {
-            console.log(error)
+            throw error
         }
         // id for both command ui and shortcut ui components
         const id = uuidv4()
-        const event = this._createEvent(shortcut, fn)
+        const event = new OBC.Event()
+        event.add(fn)
         // creating new command
         const command = new Command(id, commandName, shortcut, fn, event)
         this._commands.push(command)
@@ -137,41 +145,21 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
         
     }
 
-    private _createEvent(shortcut:string, fn: Function): OBC.Event<Function> {
-        const event = new OBC.Event()
-        event.add(fn)
-        // window.addEventListener("keypress", (e: KeyboardEvent) => {
-        //     if (e.key === shortcut) {
-        //         event.trigger()
-        //     } 
-        // })
-        return event
-    }
     private _validateShortcut(shortcut: string) {
+        console.log(this._commands)
         this._commands.forEach((command) => {
             if ( shortcut.length <= 1 || shortcut.length > 3 ) {
                 throw new Error("Shortcut must be 2-3 characters long")
-                // alert("Shortcut must be two characters or more")
-                // return
             } else if ( shortcut.toLowerCase() === command.shortcut.toLowerCase() ) {
                 throw new Error(`Shortcut "${shortcut}" is already in use`)
-                // alert(`Shortcut "${shortcut} is already in use"`)
-                // return
-            } else if ( shortcut.slice(2).toLowerCase() == command.shortcut.slice(2).toLowerCase() ) {
+            } else if ( shortcut.slice(0, 2).toLowerCase() == command.shortcut.slice(0, 2).toLowerCase() ) {
                 throw new Error("Can't have the same first two characters of another command")
-                // alert("Can't have the same first two characters of another command")
-                // return
             }
         })
     }
+
     private _keyEventSetup() {
-        // in revit it seems the longer key stroke will take preseidents over the shorter one if they both share same keys at beginning
-        // for example, the pin command assigned to PN and the type properties command assigned to PNN the PN wont do anything but PNN will work...
-
         // we need the set timeout so that later it does not trigger an event if someone types a key and then minute later hits another one and sets off function
-
-        // TODO: need to disable this key press down event listener whenever someone is typing inside of an form or textarea, input, etc...
-
         document.addEventListener("keypress", (e: KeyboardEvent) => {
             const target = e.target as HTMLElement
             if ( target.tagName === "INPUT" || target.tagName === "TEXTAREA" ) return
@@ -180,6 +168,7 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
             this._commands.forEach((command) => {
                 const currentKeys = this._keysPressed.slice(-command.shortcut.length).join("").toLowerCase()
                 if (currentKeys === command.shortcut.toLowerCase()) {
+                    this._keysPressed.length = 0
                     command?.event.trigger()
                 }
             })
@@ -188,7 +177,7 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
             }
         })
     }
-    
+
     private _changeShortcutEventHandler() {
         this.form.onAccept.add(() => {
             const input = this.form.get().querySelector("textarea")
@@ -200,34 +189,15 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
                     console.log("returning", key, this.activeModified)
                     return
                 }
-                key.textContent = inputValue
+                key.textContent = inputValue.toUpperCase()
                 const command = this.getCommand(this.activeModified.dataset.uuid!) as Command
                 command.shortcut = inputValue
-                // command.event.reset()
-                // this._createEvent(command.shortcut, command.fn)
                 this.form.visible = false
             } catch (error) {
                 alert(error)
             } finally {
                 input!.value = ""
             }
-            // if (!inputValue) {
-            //     alert("Please enter valid key")
-            // }
-            // else {
-            //     const key = this.activeModified.querySelector(".key") as HTMLParagraphElement 
-            //     if (!key) {
-            //         console.log("returning", key, this.activeModified)
-            //         return
-            //     }
-            //     key.textContent = inputValue
-            //     const command = this.getCommand(this.activeModified.dataset.uuid!) as Command
-            //     command.shortcut = inputValue
-            //     // command.event.reset()
-            //     // this._createEvent(command.shortcut, command.fn)
-            //     this.form.visible = false
-            // }
-            
         })
     }
  

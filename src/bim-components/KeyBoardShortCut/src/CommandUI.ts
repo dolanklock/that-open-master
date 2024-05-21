@@ -28,7 +28,7 @@ export class ShortcutUIComponent extends OBC.SimpleUIComponent {
         // UI components, we need to create our own custom ones just like this
         const template = `
         <div class="command-line" data-uuid=${id}>
-            <p class="key">${shortcut}</p>
+            <p class="key">${shortcut.toUpperCase()}</p>
         </div>
     `
         super(components, template)
@@ -43,8 +43,5 @@ export class ShortcutUIComponent extends OBC.SimpleUIComponent {
         this.get().style.display = "flex"
         this.get().style.justifyContent = "center"
         this.get().style.alignItems = "center"
-        
-
-        
     }
 }
