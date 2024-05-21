@@ -1,14 +1,11 @@
 import { v4 as uuidv4 } from 'uuid'
 import  *  as OBC from "openbim-components"
-import { ToDoCard } from "./src/ToDoCard"
-import { dateFormat } from "../../ProjectFunctions";
-import * as THREE from "three"
 import {KeyBoardShortcutUIComponent} from "./src/KeyboardShortcutUI"
 import {CommandUIComponent, ShortcutUIComponent} from "./src/CommandUI"
-import { comma } from 'postcss/lib/list';
-
 
 // NEXT STEPS
+
+// TODO: configure dispose method for garbage collection
 
 // TODO: if changing shortcut that is one for example should be able to change it to "on" without getting same leading two characters error
 
@@ -66,11 +63,9 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
         keyboardShortcutWindow.visible = false
         keyboardShortcutWindow.title = "Keyboard Shortcuts"
         keyboardShortcutWindow.addChild(this._keyboardShortcutUI)
-        // form for when command is clicked, this form will open for new command to be added
         this._form = new OBC.Modal(this._components)
         this._form.title = "Edit Shortcut"
         this._components.ui.add(this._form)
-        // form input
         const todoDescriptionInput = new OBC.TextArea(this._components)
         todoDescriptionInput.label = "Key"
         this._form.slots.content.addChild(todoDescriptionInput)
@@ -101,17 +96,14 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
         } catch (error) {
             throw error
         }
-        // id for both command ui and shortcut ui components and command object
+        // id for command ui, shortcut ui components and command object so they can all be tied together
         const id = uuidv4()
         const event = new OBC.Event()
         event.add(fn)
-        // creating new command
         const command = new Command(id, commandName, shortcut, fn, event)
         this._commands.push(command)
-        // creating new commandUI
         const commandUI = new CommandUIComponent(this._components, id, commandName)
         this._keyboardShortcutUI.appendCommandChild(commandUI.get())
-        // creating new shortcutUI
         const shortcutUI = new ShortcutUIComponent(this._components, id, shortcut)
         shortcutUI.onclick.add((e) => {
             const target = (e as Event).target as HTMLDivElement
@@ -120,7 +112,11 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
         })
         this._keyboardShortcutUI.appendShortcutChild(shortcutUI.get())
     }
-
+    /**
+     * this method validates the shortcut being passed in by the user or developer and checks to make
+     * sure that it is valid and does not conflict with any existing shortcut key
+     * @param shortcut [string]
+     */
     private _validateShortcut(shortcut: string) {
         this._commands.forEach((command) => {
             if ( shortcut.length <= 1 || shortcut.length > 3 ) {
@@ -132,7 +128,9 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
             }
         })
     }
-
+    /**
+     * all logic for keypress event.
+     */
     private _keyEventSetup() {
         // we need the set timeout so that later it does not trigger an event if someone types a key and then minute later hits another one and sets off function
         document.addEventListener("keypress", (e: KeyboardEvent) => {
@@ -152,7 +150,9 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
             }
         })
     }
-
+    /**
+     * logic for when the user changes the keyboard shortcut in the UI
+     */
     private _changeShortcutEventHandler() {
         this._form.onAccept.add(() => {
             const input = this._form.get().querySelector("textarea")
@@ -175,11 +175,18 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
             }
         })
     }
- 
+    /**
+     * returns the array of Command objects stored in the instance of this class
+     * @returns [Command[]]
+     */
     getCommands() {
         return this._commands
     }
-
+    /**
+     * finds the command stored in this instances commands attribute based on id passed in
+     * @param id [string] uuid of the Command object to return
+     * @returns [Command]
+     */
     getCommand(id: string): Command | undefined {
         const command = this._commands.find((command) => {
             if ( command.id === id ) {
