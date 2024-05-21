@@ -11,6 +11,7 @@ Since the tool extends the OBC.Components class it behaves like any other tool i
 ```js
 import * as THREE from "three";
 import * as OBC from "openbim-components";
+import { KeyBoardShortCutManager } from "./bim-components/KeyboardShortcuts"
 
 // ------ test functions ------ //
 
