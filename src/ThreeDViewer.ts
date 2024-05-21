@@ -206,9 +206,9 @@ function newProject() {
 const keyboardShortcutManager = new KeyBoardShortCutManager(viewer)
 toolbar.addChild(keyboardShortcutManager.uiElement.get("activationBtn"))
 keyboardShortcutManager.addCommand("Print One Console", "one", printSomethingOne)
-keyboardShortcutManager.addCommand("Print Two Console", "t", printSomethingTwo)
-keyboardShortcutManager.addCommand("Open ToDo List", "l", openToDoList)
-keyboardShortcutManager.addCommand("Create New Project", "q", newProject)
+keyboardShortcutManager.addCommand("Print Two Console", "two", printSomethingTwo)
+keyboardShortcutManager.addCommand("Open ToDo List", "omn", openToDoList)
+keyboardShortcutManager.addCommand("Create New Project", "qq", newProject)
 
 // let keys = {}
 // document.addEventListener("keyup", (e: KeyboardEvent) => {

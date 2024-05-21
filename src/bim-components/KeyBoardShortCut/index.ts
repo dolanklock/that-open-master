@@ -5,6 +5,7 @@ import { dateFormat } from "../../ProjectFunctions";
 import * as THREE from "three"
 import {KeyBoardShortcutUIComponent} from "./src/KeyboardShortcutUI"
 import {CommandUIComponent, ShortcutUIComponent} from "./src/CommandUI"
+import { comma } from 'postcss/lib/list';
 
 
 
@@ -110,8 +111,11 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
         // TODO: each time i create a new command i need to create a new CommandUIComponent and ShortcutUIComponent
         // object and append it to main keyboardShortcutUI using the keyboardShortcutUI.appendChild method
         // and when create these two objects need to pass in all required args. everything will be linked through its uuid
-        if ( this.getCommand(shortcut) ) {
-            throw new Error("shortcut is in use")
+        
+        try {
+            this._validateShortcut(shortcut)
+        } catch (error) {
+            console.log(error)
         }
         // id for both command ui and shortcut ui components
         const id = uuidv4()
@@ -143,20 +147,45 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
         // })
         return event
     }
-
+    private _validateShortcut(shortcut: string) {
+        this._commands.forEach((command) => {
+            if ( shortcut.length <= 1 || shortcut.length > 3 ) {
+                throw new Error("Shortcut must be 2-3 characters long")
+                // alert("Shortcut must be two characters or more")
+                // return
+            } else if ( shortcut.toLowerCase() === command.shortcut.toLowerCase() ) {
+                throw new Error(`Shortcut "${shortcut}" is already in use`)
+                // alert(`Shortcut "${shortcut} is already in use"`)
+                // return
+            } else if ( shortcut.slice(2).toLowerCase() == command.shortcut.slice(2).toLowerCase() ) {
+                throw new Error("Can't have the same first two characters of another command")
+                // alert("Can't have the same first two characters of another command")
+                // return
+            }
+        })
+    }
     private _keyEventSetup() {
+        // in revit it seems the longer key stroke will take preseidents over the shorter one if they both share same keys at beginning
+        // for example, the pin command assigned to PN and the type properties command assigned to PNN the PN wont do anything but PNN will work...
+
+        // we need the set timeout so that later it does not trigger an event if someone types a key and then minute later hits another one and sets off function
+
+        // TODO: need to disable this key press down event listener whenever someone is typing inside of an form or textarea, input, etc...
+
         document.addEventListener("keypress", (e: KeyboardEvent) => {
+            const target = e.target as HTMLElement
+            if ( target.tagName === "INPUT" || target.tagName === "TEXTAREA" ) return
             const keyPressed = e.key
             this._keysPressed.push(keyPressed)
-            // this._keysPressed.splice(-5)
             this._commands.forEach((command) => {
                 const currentKeys = this._keysPressed.slice(-command.shortcut.length).join("").toLowerCase()
-                console.log(currentKeys, command.shortcut)
                 if (currentKeys === command.shortcut.toLowerCase()) {
-                    console.log("shortcut keys activated")
                     command?.event.trigger()
                 }
             })
+            if ( this._keysPressed.length > 3 ) {
+                this._keysPressed = this._keysPressed.slice(-3)
+            }
         })
     }
     
@@ -164,10 +193,8 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
         this.form.onAccept.add(() => {
             const input = this.form.get().querySelector("textarea")
             const inputValue = input!.value
-            if (!inputValue) {
-                alert("Please enter valid key")
-            }
-            else {
+            try {
+                this._validateShortcut(inputValue)
                 const key = this.activeModified.querySelector(".key") as HTMLParagraphElement 
                 if (!key) {
                     console.log("returning", key, this.activeModified)
@@ -179,8 +206,27 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
                 // command.event.reset()
                 // this._createEvent(command.shortcut, command.fn)
                 this.form.visible = false
+            } catch (error) {
+                alert(error)
+            } finally {
+                input!.value = ""
             }
-            input!.value = ""
+            // if (!inputValue) {
+            //     alert("Please enter valid key")
+            // }
+            // else {
+            //     const key = this.activeModified.querySelector(".key") as HTMLParagraphElement 
+            //     if (!key) {
+            //         console.log("returning", key, this.activeModified)
+            //         return
+            //     }
+            //     key.textContent = inputValue
+            //     const command = this.getCommand(this.activeModified.dataset.uuid!) as Command
+            //     command.shortcut = inputValue
+            //     // command.event.reset()
+            //     // this._createEvent(command.shortcut, command.fn)
+            //     this.form.visible = false
+            // }
             
         })
     }
