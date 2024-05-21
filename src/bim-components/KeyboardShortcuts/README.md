@@ -1,15 +1,3 @@
-<p align="center">
-  <a href="https://thatopen.com/">TOC</a>
-  |
-  <a href="https://docs.thatopen.com/intro">documentation</a>
-  |
-  <a href="https://thatopen.github.io/engine_components/src/fragments/FragmentIfcLoader/index.html">demo</a>
-  |
-  <a href="https://people.thatopen.com/">community</a>
-  |
-  <a href="https://www.npmjs.com/package/openbim-components">npm package</a>
-</p>
-
 This library is a collection of BIM tools based on [Three.js](https://github.com/mrdoob/three.js/) and other libraries. It includes pre-made features to easily build browser-based 3D BIM applications, such as postproduction, dimensions, floorplan navigation, DXF export and much more. 
 
 ### Usage
