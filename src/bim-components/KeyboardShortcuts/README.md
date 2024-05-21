@@ -11,9 +11,6 @@
 </p>
 
 ![cover](resources/cover.png)
-
-<h1>Open BIM Components <img src="https://thatopen.github.io/engine_components/resources/favicon.ico" width="32"/></h1>
-
 [![NPM Package][npm]][npm-url]
 [![NPM Package][npm-downloads]][npm-url]
 [![Tests](https://github.com/ThatOpen/engine_components/actions/workflows/tests.yml/badge.svg)](https://github.com/ThatOpen/engine_components/actions/workflows/tests.yaml)
@@ -22,7 +19,7 @@ This library is a collection of BIM tools based on [Three.js](https://github.com
 
 ### Usage
 
-You need to be familiar with [Three.js API](https://github.com/mrdoob/three.js/) to be able to use this library effectively. In the following example, we will create a cube in a 3D scene that can be navigated with the mouse or touch events. You can see the full example [here](https://github.com/ThatOpen/engine_components/blob/main/src/core/SimpleScene/index.html) and the deployed app [here](https://thatopen.github.io/engine_components/src/core/SimpleScene/index.html).
+Import the 
 
 ```js
 import * as THREE from "three";
