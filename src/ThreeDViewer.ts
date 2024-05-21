@@ -7,7 +7,7 @@ import * as OBC from "openbim-components"
 import { Fragment, IfcProperties } from "bim-fragment"
 import { FragmentsGroup } from "bim-fragment"
 import { ToDoCreator } from "./bim-components/ToDoCreator"
-import { KeyBoardShortCutManager } from "./bim-components/KeyBoardShortCut"
+import { KeyBoardShortCutManager } from "./bim-components/KeyboardShortcuts"
 import { showModalForm } from "./ProjectFunctions"
 
 // ------------------------ 3D Viewer setup --------------------------- //

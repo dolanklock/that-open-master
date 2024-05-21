@@ -14,7 +14,7 @@
 
 
 // import { ThreeDViewer } from "./ArchiveThreeDViewer"
-import {KeyBoardShortCutManager} from "./bim-components/KeyBoardShortCut"
+import {KeyBoardShortCutManager} from "./bim-components/KeyboardShortcuts"
 import { Project, IProject, projectRole, projectStatus, ToDo } from "./Projects"
 import { ProjectsManager } from "./ProjectsManager"
 import { showWarnModalForm, showModalForm, dateFormat,
