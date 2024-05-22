@@ -27,24 +27,11 @@ import * as THREE from "three"
 // import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import * as OBC from "openbim-components"
 
-import { UIManager } from "@thatopen/ui"
+import * as BUI from "@thatopen/ui"
 
-UIManager.registerComponents()
+BUI.UIManager.registerComponents()
 
-
-const grid = document.getElementById("grid")
-console.log(grid)
-
-grid.layouts = {
-  main: `
-    "header header" auto
-    "sidebar content" 1fr
-    "sidebar content" 1fr
-    / auto 1fr
-  `
-}
-
-// grid.setLayout("main")
+// TODO: need to add button while inside bim viewer to go back to home or project info page. toggle sidebar too!
 
 
 // ------------------------ VARIABLES -------------------------- //
@@ -64,6 +51,7 @@ const todoForm = document.getElementById('new-todo-form')
 const projectList = document.getElementById('project-list')
 const todoFormInput = document.getElementById('todo-form-input') as HTMLInputElement
 const bimViewerContainer = document.getElementById("bim-viewer") as HTMLElement
+const sidebar = document.getElementById("sidebar") as HTMLElement
 
 const projectsManager = new ProjectsManager()
 const testBtn = document.getElementById('test')
@@ -216,7 +204,6 @@ function editProjectCard(event: Event) {
 
 function projectsClicked(event: Event) {
     /*
-
     * @param {Project} fill out
     * @returns {none}
     */
@@ -455,6 +442,7 @@ if (projectList) {
             }
         } else if (clickedElement.classList.contains("bim-viewer-btn")) {
             bimViewerContainer.classList.toggle("page-hidden")
+            sidebar.classList.toggle("page-hidden")
             projectsPage!.classList.toggle("page-hidden")
 
         } else {

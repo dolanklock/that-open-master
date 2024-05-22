@@ -1,5 +1,5 @@
 #bim-viewer {
-    width: 100vw;
+    width: 100vw !important;
     height: 100vh !important;
     display: flex;
     background-color: aqua;
