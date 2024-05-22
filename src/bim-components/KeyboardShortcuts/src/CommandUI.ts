@@ -14,7 +14,6 @@ export class CommandUIComponent extends OBC.SimpleUIComponent {
             </div>
         `
         super(components, template)
-        this.get().style.cursor = "pointer"
         this.get().style.border = "none"
         this.get().style.backgroundColor = "transparent"
         this.get().style.padding = "6px"
@@ -42,6 +41,7 @@ export class ShortcutUIComponent extends OBC.SimpleUIComponent {
             this.onclick.trigger(e)
         })
         this.get().style.cursor = "pointer"
+        this.get().style.width = "150px"
         this.get().style.border = "none"
         this.get().style.backgroundColor = "darkgray"
         this.get().style.borderRadius = "8px"

@@ -18,17 +18,21 @@ export class KeyBoardShortcutUIComponent extends OBC.SimpleUIComponent {
                 <label for="">Search</label>
                 <input type="text" style="border: 1px solid darkgray; height: 25px">
             </div>
-            <div id="shortcut-assignments" style="column-gap: 10px; display: flex; flex-direction: row; border-color: black; margin: 10px;">
-                <div style="display: flex; flex-direction: column; row-gap: 10px;">
+            <div id="shortcut-assignments" style="width: fit-content; display: flex; flex-direction: row; 10px; margin: 10px;">
+                <div style="display: flex; flex-direction: column; align-items: center;">
                     <h5>Commands</h5>
+                    <hr>
+                    <br>
                     <div id="commands" style="display: flex; flex-direction: column; resize: horizontal;
-                    overflow: auto; width: 300px; height: auto; border: 1px solid darkgray; padding: 10px; border-radius: 10px;">
+                    overflow: auto; width: 250px; height: auto; border-right: 1px solid darkgray; align-items: center; padding: 10px;">
                     </div>
                 </div>
-                <div style="display: flex; flex-direction: column; row-gap: 10px;">
+                <div style="display: flex; flex-direction: column; align-items: center;">
                     <h5>Shortcuts</h5>
+                    <hr>
+                    <br>
                     <div id="shortcut" style="display: flex; flex-direction: column; resize: horizontal; 
-                    overflow: auto; width: 300px; height: auto; border: 1px solid darkgray; padding: 10px; border-radius: 10px;">
+                    overflow: auto; width: 250px; height: auto; border-left: 1px solid darkgray; align-items: center; padding: 10px;">
                     </div>
                 </div>
             </div>
