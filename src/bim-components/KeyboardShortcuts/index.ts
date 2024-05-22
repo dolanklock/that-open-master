@@ -2,10 +2,14 @@ import { v4 as uuidv4 } from 'uuid'
 import  *  as OBC from "openbim-components"
 import {KeyBoardShortcutUIComponent} from "./src/KeyboardShortcutUI"
 import {CommandUIComponent, ShortcutUIComponent} from "./src/CommandUI"
+import { Pass } from 'three/examples/jsm/postprocessing/Pass.js'
 
 // NEXT STEPS
 
 // TODO: configure dispose method for garbage collection
+
+// TODO: need to fix issue when select shortcut to edit and do it for second one it does not add existing text in the textarea
+// of the form...
 
 // TODO: if changing shortcut that is one for example should be able to change it to "on" without getting same leading two characters error
 
@@ -108,8 +112,8 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
         shortcutUI.onclick.add((e) => {
             const target = (e as Event).target as HTMLDivElement
             this.activeModified = target.closest(".command-line") as HTMLDivElement
-            // const formInput = this._form.get().querySelector("textarea") as HTMLTextAreaElement
-            // formInput.textContent = this.activeModified.querySelector(".key")!.textContent!
+            const formInput = this._form.get().querySelector("textarea") as HTMLTextAreaElement
+            formInput.textContent = this.activeModified.querySelector(".key")!.textContent!
             this._form.visible = true
         })
         this._keyboardShortcutUI.appendShortcutChild(shortcutUI.get())
@@ -120,7 +124,6 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
      * @param shortcut [string]
      */
     private _validateShortcut(shortcut: string) {
-        // check if shortcut is same or similar as the one editing
         this._commands.forEach((command) => {
             if ( shortcut.length <= 1 || shortcut.length > 3 ) {
                 throw new Error("Shortcut must be 2-3 characters long")
@@ -161,13 +164,13 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
             const input = this._form.get().querySelector("textarea")
             const inputValue = input!.value
             try {
-                this._validateShortcut(inputValue)
-                const key = this.activeModified.querySelector(".key") as HTMLParagraphElement
-                if (!key) {
-                    console.log("returning", key, this.activeModified)
-                    return
+                const existingKeyHTMLElement = this.activeModified.querySelector(".key") as HTMLParagraphElement
+                const existingKey = this.activeModified.querySelector(".key")!.textContent!.toLowerCase()
+                // checking if shortcut is same or similar as the one editing
+                if ( !(inputValue.toLowerCase() ===  existingKey || inputValue.slice(0, 2).toLowerCase() === existingKey.slice(0, 2))) {
+                    this._validateShortcut(inputValue)
                 }
-                key.textContent = inputValue.toUpperCase()
+                existingKeyHTMLElement.textContent = inputValue.toUpperCase()
                 const command = this.getCommand(this.activeModified.dataset.uuid!) as Command
                 command.shortcut = inputValue
                 this._form.visible = false
