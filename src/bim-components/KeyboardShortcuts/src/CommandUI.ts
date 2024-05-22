@@ -49,5 +49,13 @@ export class ShortcutUIComponent extends OBC.SimpleUIComponent {
         this.get().style.display = "flex"
         this.get().style.justifyContent = "center"
         this.get().style.alignItems = "center"
-    }
+        this.get().onmouseover = function() {
+            this.get().style.backgroundColor = "#BCF124"
+            this.get().style.color = "black"
+        }.bind(this)
+        this.get().onmouseleave = function() {
+            this.get().style.backgroundColor = "darkgray"
+            this.get().style.color = "white"
+        }.bind(this)
+    }   
 }

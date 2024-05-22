@@ -209,6 +209,29 @@ keyboardShortcutManager.addCommand("Print One Console", "one", printSomethingOne
 keyboardShortcutManager.addCommand("Print Two Console", "two", printSomethingTwo)
 keyboardShortcutManager.addCommand("Open ToDo List", "tdl", openToDoList)
 keyboardShortcutManager.addCommand("Create New Project", "np", newProject)
+keyboardShortcutManager.addCommand("Create New Project", "ndp", newProject)
+keyboardShortcutManager.addCommand("Create New Project", "nvp", newProject)
+keyboardShortcutManager.addCommand("Create New Project", "nbp", newProject)
+keyboardShortcutManager.addCommand("Create New Project", "nnp", newProject)
+keyboardShortcutManager.addCommand("Create New Project", "nmp", newProject)
+keyboardShortcutManager.addCommand("Create New Project", "nkp", newProject)
+keyboardShortcutManager.addCommand("Create New Project", "nlp", newProject)
+keyboardShortcutManager.addCommand("Create New Project", "nqp", newProject)
+keyboardShortcutManager.addCommand("Create New Project", "nwp", newProject)
+keyboardShortcutManager.addCommand("Create New Project", "nep", newProject)
+keyboardShortcutManager.addCommand("Create New Project", "nrp", newProject)
+keyboardShortcutManager.addCommand("Create New Project", "ntp", newProject)
+keyboardShortcutManager.addCommand("Create New Project", "nyp", newProject)
+keyboardShortcutManager.addCommand("Create New Project", "nup", newProject)
+keyboardShortcutManager.addCommand("Create New Project", "nip", newProject)
+keyboardShortcutManager.addCommand("Create New Project", "nop", newProject)
+
+console.log(keyboardShortcutManager.isDisposeable())
+const testBtn = new OBC.Button(viewer)
+toolbar.addChild(testBtn)
+testBtn.onClick.add(() => {
+    keyboardShortcutManager.dispose()
+})
 
 
 // let keys = {}

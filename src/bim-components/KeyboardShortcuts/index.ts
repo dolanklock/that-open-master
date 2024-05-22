@@ -32,7 +32,7 @@ class Command {
 }
 
 export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUIComponent> implements OBC.UI{
-    enabled: true
+    enabled: boolean = true
     static uuid: string = uuidv4
     private _components: OBC.Components
     private _keyboardShortcutUI: KeyBoardShortcutUIComponent
@@ -98,8 +98,8 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
         }
         // id for command ui, shortcut ui components and command object so they can all be tied together
         const id = uuidv4()
-        const event = new OBC.Event()
-        event.add(fn)
+        const event = new OBC.Event<Function>()
+        event.add(()=>{fn()})
         const command = new Command(id, commandName, shortcut, fn, event)
         this._commands.push(command)
         const commandUI = new CommandUIComponent(this._components, id, commandName)
@@ -108,6 +108,8 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
         shortcutUI.onclick.add((e) => {
             const target = (e as Event).target as HTMLDivElement
             this.activeModified = target.closest(".command-line") as HTMLDivElement
+            // const formInput = this._form.get().querySelector("textarea") as HTMLTextAreaElement
+            // formInput.textContent = this.activeModified.querySelector(".key")!.textContent!
             this._form.visible = true
         })
         this._keyboardShortcutUI.appendShortcutChild(shortcutUI.get())
@@ -118,6 +120,7 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
      * @param shortcut [string]
      */
     private _validateShortcut(shortcut: string) {
+        // check if shortcut is same or similar as the one editing
         this._commands.forEach((command) => {
             if ( shortcut.length <= 1 || shortcut.length > 3 ) {
                 throw new Error("Shortcut must be 2-3 characters long")
@@ -196,8 +199,16 @@ export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUICom
         return command
     }
 
-    get() {
-        console.log("add something here later")
+    dispose() {
+        this.enabled = false
+        this._commands.forEach((command) => {
+            command.event.reset()
+        })
+        this._commands = []
+    }
+
+    get(): KeyBoardShortcutUIComponent {
+        return this._keyboardShortcutUI
     }
 }
 
