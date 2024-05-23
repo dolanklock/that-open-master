@@ -17,6 +17,19 @@
     <link rel="stylesheet" href="styles/styles-project-home.css">
     <link rel="stylesheet" href="styles/styles-form-dialog.css">
     <link rel="stylesheet" href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
+    <style>
+        #page {
+            display: grid;
+            width: 100%;
+            height: 100%;
+            grid-template-areas:
+            "head head"
+            "nav  main"
+            "nav  main";
+            grid-template-rows: auto 1fr;
+            grid-template-columns: 300px 1fr;
+        }
+    </style>
 </head>
 
 <body>
@@ -127,7 +140,7 @@
         </form>
     </dialog>
 
-    <aside id="sidebar">
+    <aside id="sidebar" class="page-hidden">
         <img id="company-logo" src="company-logo.svg" alt="company logo">
         <ul id="nav-buttons">
             <li id="sidebar-projects-btn"><span class="material-icons-round">apartment</span>Projects</li>
@@ -135,7 +148,7 @@
         </ul>
     </aside>
 
-    <main id="content-projects-page" class="projects-page">
+    <main id="content-projects-page" class="projects-page page-hidden not-hidden">
         <div id="projects-page" class="">
             <header id="page-header">
                 <h2>Projects</h2>
@@ -261,42 +274,56 @@
             </div> -->
         </div>
     </main>
-    <main id="bim-viewer" class="page-hidden">
-        <div style="position: absolute; display: flex; top: 0; left: 0; width: 100%; height: fit-content; background-color: transparent; opacity: 5; z-index: 9;" class="">
-            <bim-tabs id="tab-container" style="width: 100vw;">
-                <bim-tab id="architecture-tab" style="width: 100vw;" label="Architecture">
-                  <div style="display: flex;">
-                    <bim-toolbar active>
-                      <bim-toolbar-section id="wall-section" label="Build">
-                        <bim-button id="create-wall" vertical label="wall" icon="mdi:wall"></bim-button>
-                        <bim-button vertical label="wall" icon="mdi:wall"></bim-button>
-                      </bim-toolbar-section>
-                      <bim-toolbar-section label="Stairs">
-                        <bim-button vertical label="Stair" icon="mdi:wall"></bim-button>
-                        <bim-button vertical label="Stair" icon="mdi:wall"></bim-button>
-                        <bim-button vertical label="Stair" icon="mdi:wall"></bim-button>
-                      </bim-toolbar-section>
-                      <bim-toolbar-section label="Build">
-                        <bim-button vertical label="wall" icon="mdi:wall"></bim-button>
-                      </bim-toolbar-section>
-                    </bim-toolbar>
-                  </div>
-                </bim-tab>
-                <bim-tab label="Structural">
-        
-                </bim-tab>
-            </bim-tabs>
-            <bim-panel label="Project Browser" style="grid-area: panel;">
-                <bim-panel-section label="Floor Plans">
-                    <bim-table></bim-table>
-                </bim-panel-section>
-        
-            </bim-panel>
-        </div>
-        <div id="viewer" style="width: 100vw; height: 100vh; min-width: 0; position: relative;">
 
+    <section id="bim-viewer" class="" style="width: 100vw; height: 100vh; margin: 0;">
+        <div id="page">
+            <bim-toolbars-container style="grid-area: head">
+                <bim-toolbar label="Toolbar A" active>
+                  <bim-toolbar-section label="Build">
+                    <bim-button vertical label="My Button" icon="solar:bookmark-square-minimalistic-bold"></bim-button>
+                    <bim-toolbar-group>
+                      <bim-button icon="solar:album-bold"></bim-button>
+                      <bim-button icon="solar:archive-linear"></bim-button>
+                      <bim-button icon="solar:battery-charge-minimalistic-broken"></bim-button>
+                      <bim-button icon="solar:bluetooth-square-outline"></bim-button>
+                    </bim-toolbar-group>
+                  </bim-toolbar-section>
+                </bim-toolbar>
+                <bim-toolbar label="Toolbar B">
+                  <bim-toolbar-section label="Section">
+                    <bim-button vertical label="Button A" icon="bx:command"></bim-button>
+                    <bim-button vertical label="Button B" icon="bx:fast-forward-circle"></bim-button>
+                    <bim-button vertical label="Button C" icon="bx:support"></bim-button>
+                  </bim-toolbar-section>
+                </bim-toolbar>
+              </bim-toolbars-container>
+              <div id="my-panel" style="grid-area: nav; background-color: var(--bim-ui_bg-base)">
+                <bim-panel label="Panel A">
+                  <bim-panel-section label="Build">
+                    <bim-text-input label="Tool Name" value="BCFManager"></bim-text-input>
+                    <bim-input label="Position" vertical>
+                      <bim-number-input pref="X" min="1" value="10" max="50" suffix="m" slider></bim-number-input>
+                      <bim-number-input pref="X" min="1" value="20" max="50" suffix="m" slider></bim-number-input>
+                      <bim-number-input pref="X" min="1" value="30" max="50" suffix="m" slider></bim-number-input>
+                    </bim-input>
+                    <bim-dropdown label="IFC Entity">
+                      <bim-option label="IFCWALL"></bim-option>
+                      <bim-option label="IFCWINDOW"></bim-option>
+                      <bim-option label="IFCSLAB"></bim-option>
+                    </bim-dropdown>
+                  </bim-panel-section>
+                </bim-panel>
+              </div>
+            <div id="viewer" style="grid-area: main;">
+
+            </div>
         </div>
-    </main>
+
+        <!-- <div id="viewer" style="width: 100vw; height: 100vh; min-width: 0; position: relative;">
+
+        </div> -->
+        
+    </section>
     
     <main id="content-project-details" class="project-details page-hidden" style="display: flex; justify-content: center; align-items: center;">
         <div id="shortcut-container" style="width: 500px; height: 500px; background-color: lightgray;">
