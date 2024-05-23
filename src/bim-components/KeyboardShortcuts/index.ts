@@ -2,7 +2,6 @@ import { v4 as uuidv4 } from 'uuid'
 import  *  as OBC from "openbim-components"
 import {KeyBoardShortcutUIComponent} from "./src/KeyboardShortcutUI"
 import {CommandUIComponent, ShortcutUIComponent} from "./src/CommandUI"
-import { Pass } from 'three/examples/jsm/postprocessing/Pass.js'
 
 // NEXT STEPS
 
@@ -37,7 +36,7 @@ class Command {
 
 export class KeyBoardShortCutManager extends OBC.Component<KeyBoardShortcutUIComponent> implements OBC.UI{
     enabled: boolean = true
-    static uuid: string = uuidv4
+    static uuid: string = uuidv4()
     private _components: OBC.Components
     private _keyboardShortcutUI: KeyBoardShortcutUIComponent
     private _form: OBC.Modal

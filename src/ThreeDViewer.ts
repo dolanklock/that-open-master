@@ -76,7 +76,7 @@ const ifcLoader = new OBC.FragmentIfcLoader(viewer)
 // need to do the below because ifc module from open BIM components needs additional files for loading and 
 // working with ifc's
 ifcLoader.settings.wasm = {
-    path: "https://unpkg.com/web-ifc@0.0.43/",
+    path: "https://unpkg.com/web-ifc@0.0.53/",
     absolute: true
 }
 
@@ -176,7 +176,7 @@ toolbar.addChild(ifcPropertiesProcessor.uiElement.get("main"))
 
 
 const culler = new OBC.ScreenCuller(viewer)
-
+culler.setup()
 
 // -------------------------------- ToDoCreator --------------------------------- //
 
@@ -202,20 +202,20 @@ function newProject() {
     showModalForm('new-project-modal', true)
 }
 
-// const keyboardShortcutManager = new KeyBoardShortCutManager(viewer)
-// toolbar.addChild(keyboardShortcutManager.uiElement.get("activationBtn"))
+const keyboardShortcutManager = new KeyBoardShortCutManager(viewer)
+toolbar.addChild(keyboardShortcutManager.uiElement.get("activationBtn"))
 
-// keyboardShortcutManager.addCommand("Print One Console", "one", printSomethingOne)
-// keyboardShortcutManager.addCommand("Print Two Console", "two", printSomethingTwo)
-// keyboardShortcutManager.addCommand("Open ToDo List", "tdl", openToDoList)
-// keyboardShortcutManager.addCommand("Create New Project", "np", newProject)
+keyboardShortcutManager.addCommand("Print One Console", "one", printSomethingOne)
+keyboardShortcutManager.addCommand("Print Two Console", "two", printSomethingTwo)
+keyboardShortcutManager.addCommand("Open ToDo List", "tdl", openToDoList)
+keyboardShortcutManager.addCommand("Create New Project", "np", newProject)
 
-// console.log(keyboardShortcutManager.isDisposeable())
-// const testBtn = new OBC.Button(viewer)
-// toolbar.addChild(testBtn)
-// testBtn.onClick.add(() => {
-//     keyboardShortcutManager.dispose()
-// })
+console.log(keyboardShortcutManager.isDisposeable())
+const testBtn = new OBC.Button(viewer)
+toolbar.addChild(testBtn)
+testBtn.onClick.add(() => {
+    keyboardShortcutManager.dispose()
+})
 
 
 
@@ -267,7 +267,7 @@ fragmentManager.onFragmentsLoaded.add((model) => {
 })
 
 // cameraComponent.controls.addEventListener("sleep", () => {
-//     culler.needsUpdate = true
+//     culler.setup()
 // })  
 
 
@@ -428,11 +428,7 @@ function importFragments() {
     input.click() // when we click the importFragmentBtn it clicks the input
 }
 async function viewerUIOnLoaded(model: FragmentsGroup) {
-    // await highlighter.updateHighlight()
-
-    for ( const fragment of model.items ) {culler.add(fragment.mesh)}
-
-    // culler.needsUpdate = true
+    await highlighter.updateHighlight()
     try {
         // ------ classifier config ------- //
         console.log('MODEL IFC - ', model)
@@ -441,7 +437,6 @@ async function viewerUIOnLoaded(model: FragmentsGroup) {
         classifier.byStorey(model)
         classifier.byEntity(model)
         console.log("CLASSIFIER AFTER", classifier.get())
-        
         // ------ fragmentTree and tree config ------- //
         // Creating fragment tree
         const tree = await createModelTree()
@@ -450,7 +445,6 @@ async function viewerUIOnLoaded(model: FragmentsGroup) {
         // now need to append the html element to the classification window. All UI compoenents have the addChild method
         // which allows you to append html to it
         classificationWindow.addChild(tree)
-    
         // ------ IFC properties processor config ------- //
         ifcPropertiesProcessor.process(model)
         highlighter.events.select.onHighlight.add((fragmentMap) => {
@@ -458,11 +452,8 @@ async function viewerUIOnLoaded(model: FragmentsGroup) {
             const expressID = [...Object.values(fragmentMap)[0]][0]
             ifcPropertiesProcessor.renderProperties(model, Number(expressID))
         })
-        // console.log("*** MODEL ***", model)
-        // console.log("*** MODEL PROPERTIES ***", model.properties)
     } catch (error) {
         throw error
-        alert(error)
     }
 }
 
