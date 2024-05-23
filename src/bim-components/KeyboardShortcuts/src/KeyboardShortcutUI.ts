@@ -1,5 +1,7 @@
 import * as OBC from "openbim-components"
 
+
+
 export class KeyBoardShortcutUIComponent extends OBC.SimpleUIComponent {
     appendCommandChild(e: HTMLElement) {
         this.getInnerElement("commands")!.append(e)

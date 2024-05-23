@@ -202,20 +202,22 @@ function newProject() {
     showModalForm('new-project-modal', true)
 }
 
-const keyboardShortcutManager = new KeyBoardShortCutManager(viewer)
-toolbar.addChild(keyboardShortcutManager.uiElement.get("activationBtn"))
+// const keyboardShortcutManager = new KeyBoardShortCutManager(viewer)
+// toolbar.addChild(keyboardShortcutManager.uiElement.get("activationBtn"))
 
-keyboardShortcutManager.addCommand("Print One Console", "one", printSomethingOne)
-keyboardShortcutManager.addCommand("Print Two Console", "two", printSomethingTwo)
-keyboardShortcutManager.addCommand("Open ToDo List", "tdl", openToDoList)
-keyboardShortcutManager.addCommand("Create New Project", "np", newProject)
+// keyboardShortcutManager.addCommand("Print One Console", "one", printSomethingOne)
+// keyboardShortcutManager.addCommand("Print Two Console", "two", printSomethingTwo)
+// keyboardShortcutManager.addCommand("Open ToDo List", "tdl", openToDoList)
+// keyboardShortcutManager.addCommand("Create New Project", "np", newProject)
 
-console.log(keyboardShortcutManager.isDisposeable())
-const testBtn = new OBC.Button(viewer)
-toolbar.addChild(testBtn)
-testBtn.onClick.add(() => {
-    keyboardShortcutManager.dispose()
-})
+// console.log(keyboardShortcutManager.isDisposeable())
+// const testBtn = new OBC.Button(viewer)
+// toolbar.addChild(testBtn)
+// testBtn.onClick.add(() => {
+//     keyboardShortcutManager.dispose()
+// })
+
+
 
 
 // let keys = {}
@@ -264,9 +266,9 @@ fragmentManager.onFragmentsLoaded.add((model) => {
     importProperties(model)
 })
 
-cameraComponent.controls.addEventListener("sleep", () => {
-    culler.needsUpdate = true
-})  
+// cameraComponent.controls.addEventListener("sleep", () => {
+//     culler.needsUpdate = true
+// })  
 
 
 // ----------------------------   TESTING -------------------------------- //
@@ -336,21 +338,21 @@ async function createModelTree(): Promise<OBC.SimpleUIComponent> {
     // fragment tree will create a UI for the groups based on the classifier
     const fragmentTree = new OBC.FragmentTree(viewer)
     console.log("FRAGMENT TREE", fragmentTree)
-    await fragmentTree.init()
+    fragmentTree.init()
     await fragmentTree.update(['model', 'storeys', 'entities'])
     fragmentTree.onHovered.add((fragmentMap) => {
-        // console.log("FRAGEMENT MAP", fragmentMap)
-        highlighter.highlightByID("hover", fragmentMap)
+        highlighter.highlightByID("hover", fragmentMap.items)
     })
     fragmentTree.onSelected.add((fragmentMap) => {
-        highlighter.highlightByID("select", fragmentMap)
+        highlighter.highlightByID("select", fragmentMap.items)
     })
     const tree = fragmentTree.get().uiElement.get("tree") // gets the html element for the fragment tree
     return tree
 }
-
+ // updated method here model.properties > model.getLocalProperties()
 function exportProperties(model: FragmentsGroup) {
-    let properties = JSON.parse(JSON.stringify(model.properties, null, 2))
+    const localProperties = model.getLocalProperties()
+    let properties = JSON.parse(JSON.stringify(localProperties, null, 2))
     properties.modelName = model.name
     const propertiesJSON = JSON.stringify(properties, null, 2)
     // blob represents a file like object of immutable raw-data
@@ -381,7 +383,8 @@ function importProperties(model: FragmentsGroup) {
             fragmentManager.reset()
             return
         }
-        model.properties = properties
+         // updated method here model.properties > model.getLocalProperties()
+        model.setLocalProperties(properties)
         viewerUIOnLoaded(model)
     })
     input.addEventListener("change", () => {
@@ -425,11 +428,11 @@ function importFragments() {
     input.click() // when we click the importFragmentBtn it clicks the input
 }
 async function viewerUIOnLoaded(model: FragmentsGroup) {
-    highlighter.update()
+    // await highlighter.updateHighlight()
 
     for ( const fragment of model.items ) {culler.add(fragment.mesh)}
 
-    culler.needsUpdate = true
+    // culler.needsUpdate = true
     try {
         // ------ classifier config ------- //
         console.log('MODEL IFC - ', model)
@@ -455,9 +458,10 @@ async function viewerUIOnLoaded(model: FragmentsGroup) {
             const expressID = [...Object.values(fragmentMap)[0]][0]
             ifcPropertiesProcessor.renderProperties(model, Number(expressID))
         })
-        console.log("*** MODEL ***", model)
-        console.log("*** MODEL PROPERTIES ***", model.properties)
+        // console.log("*** MODEL ***", model)
+        // console.log("*** MODEL PROPERTIES ***", model.properties)
     } catch (error) {
+        throw error
         alert(error)
     }
 }
