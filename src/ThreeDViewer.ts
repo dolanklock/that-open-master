@@ -361,7 +361,8 @@ function exportProperties(model: FragmentsGroup) {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `${model.name.replace(".ifc", "")}` // downloaded file name
+    console.log("NAME TEST DOWNLOAD json", model.ifcMetadata.name)
+    a.download = `${model.ifcMetadata.name.replace(".ifc", "")}` // downloaded file name
     a.click()
     URL.revokeObjectURL(url)
 }
@@ -404,7 +405,7 @@ function exportFragments(model: FragmentsGroup) {
     const a = document.createElement('a')
     a.href = url
     // the download method will download the given link url that we set with the file name we passed in
-    a.download = `${model.name.replace(".ifc", "")}.frag` // setting html button element attribute 'download' to the filename string
+    a.download = `${model.ifcMetadata.name.replace(".ifc", "")}.frag` // setting html button element attribute 'download' to the filename string
     a.click()
     URL.revokeObjectURL(url)
 }

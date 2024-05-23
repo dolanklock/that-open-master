@@ -3,22 +3,6 @@ import  *  as OBC from "openbim-components"
 import {KeyBoardShortcutUIComponent} from "./src/KeyboardShortcutUI"
 import {CommandUIComponent, ShortcutUIComponent} from "./src/CommandUI"
 
-// NEXT STEPS
-
-// TODO: configure dispose method for garbage collection
-
-// TODO: need to fix issue when select shortcut to edit and do it for second one it does not add existing text in the textarea
-// of the form...
-
-// TODO: if changing shortcut that is one for example should be able to change it to "on" without getting same leading two characters error
-
-// TODO: verify interface is correct
-
-// TODO: need to figure out how i will deal with removing shortcut from a command
-
-// TODO: what about if addCommand takes a function with arguments?
-
-
 class Command {
     id: string
     fn: Function
