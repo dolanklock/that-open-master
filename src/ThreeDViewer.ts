@@ -266,6 +266,8 @@ fragmentManager.onFragmentsLoaded.add((model) => {
     importProperties(model)
 })
 
+
+
 // cameraComponent.controls.addEventListener("sleep", () => {
 //     culler.setup()
 // })  

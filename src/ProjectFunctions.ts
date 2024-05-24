@@ -105,3 +105,4 @@ export function updateProjectCardContent(project: Project) {
     projectImgLetters.textContent = project.projectName.slice(0, 2).toUpperCase()
 
 }
+

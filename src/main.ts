@@ -182,21 +182,38 @@ function newProjectFormHandler(event: Event, projectForm: HTMLFormElement) {
     }
 }
 
-function projectCardClicked(event: Event) {
+export function projectCardClicked(event: Event) {
     /*
 
     * @param {Project} fill out
     * @returns {none}
     */
-    console.log("HERE", event.target)
-    const projectCard = ( event.target as HTMLElement).closest('.project-card')
+    const projectCard = ( event.target as HTMLElement).closest('.project-card') as HTMLElement
     if ( !projectCard ) return
-    const project = getProject(projectCard.dataset.id)
+    const projectCardId = projectCard.dataset.id as string
+    const project = getProject(projectCardId)
     if ( !project ) return
     updateProjectDetailsContent(project)
     renderToDoList(project)
     projectDetails!.classList.toggle("page-hidden")
     projectsPage!.classList.toggle("page-hidden")
+}
+
+export function bimViewerProjectCardClicked(projectCard: HTMLElement) {
+    /*
+
+    * @param {Project} fill out
+    * @returns {none}
+    */
+    if ( !projectCard ) return
+    const projectCardId = projectCard.dataset.id as string
+    const project = getProject(projectCardId)
+    if ( !project ) return
+    updateProjectDetailsContent(project)
+    renderToDoList(project)
+    projectDetails!.classList.toggle("page-hidden")
+    bimViewerContainer.classList.toggle("page-hidden")
+    sidebar.classList.toggle("page-hidden")
 }
 
 function editProjectCard(event: Event) {
@@ -221,10 +238,10 @@ function projectsClicked(event: Event) {
         bimViewerContainer.classList.toggle("page-hidden")
     }
     if (!(projectDetails!.classList.contains("page-hidden"))) {
-        console.log("truree")
         projectDetails!.classList.toggle("page-hidden")
     }
     if (projectsPage.classList.contains("page-hidden")) {
+        resetActiveProject()
         projectsPage.classList.toggle("page-hidden")
     }
 }
@@ -378,10 +395,23 @@ function todoStatusChangeEventHandler(event: Event) {
     renderToDoStatusColor(getActiveProject() as Project)
 }
 
+function getActiveProjectCard(): HTMLElement {
+    const allProjectCards = document.querySelectorAll(".project-card") as NodeListOf<HTMLElement>
+    const activeProjectCard = Array.from(allProjectCards).find((projectCard) => {
+        return projectCard.classList.contains("active")
+    })
+    console.log('FOUND PROJECT CARD', activeProjectCard)
+    return activeProjectCard!
+}
+
+function resetActiveProject() {
+    getActiveProjectCard().classList.remove("active")
+}
+
+
 
 
 // --------------------------- EVENT HANDLER ---------------------------- //
-
 
 
 // new project button is clicked, will open dialog
@@ -436,11 +466,6 @@ if (importJSONBtn) {
     })
 }
 
-function getProjectCardIdOnClick() {
-    
-}
-
-let activeProjectCardId: string
 if (projectList) {
     // using event delegation here for 3d bim viewer and delete buttons in project card
     projectList.addEventListener('click', (event) => {
@@ -456,12 +481,13 @@ if (projectList) {
                 projectsManager.deleteProject(projectCardId)
             }
         } else if (clickedElement.classList.contains("bim-viewer-btn")) {
-            activeProjectCardId = projectCardId
+            card.classList.toggle("active")
             bimViewerContainer.classList.toggle("page-hidden")
             sidebar.classList.toggle("page-hidden")
             projectsPage!.classList.toggle("page-hidden")
 
         } else {
+            card.classList.toggle("active")
             projectCardClicked(event)
         }
     })
@@ -478,6 +504,22 @@ if ( editProjectDetails ) {
     editProjectDetails.addEventListener('click', (event) => editProjectCard(event))
 }
 
+
+// ------------------------ BIM viewer Event Listeners ------------------------------ #
+
+const bimViewerExitBtn = document.getElementById("bim-viewer-project-details") as HTMLElement
+bimViewerExitBtn.addEventListener("click", () => {
+    const activeProjectCard = getActiveProjectCard() as HTMLElement
+    bimViewerProjectCardClicked(activeProjectCard)
+})
+
+const bimViewerHomeBtn = document.getElementById("bim-viewer-home") as HTMLElement
+bimViewerHomeBtn.addEventListener("click", () => {
+    projectsPage?.classList.toggle("page-hidden")
+    sidebar.classList.toggle("page-hidden")
+    bimViewerContainer.classList.toggle("page-hidden")
+    resetActiveProject()
+})
 
 // ------------------------ todo Event Listeners ------------------------------ #
 
