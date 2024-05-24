@@ -25,8 +25,20 @@ import {ThreeDViewer} from "./ThreeDViewer"
 import * as THREE from "three"
 import * as OBC from "openbim-components"
 import * as BUI from "@thatopen/ui"
+BUI.Manager.init()
 
+const b = document.querySelectorAll("bim-button") as NodeListOf<BUI.Button>
+const bimPanels = document.querySelectorAll("bim-panel") as NodeListOf<BUI.Panel>
 
+for (const btn of b ) {
+    btn.style.color = "black"
+}
+
+for (const panel of bimPanels ) {
+    panel.style.backgroundColor = "#d3d3d3"
+    panel.style.color = "black"
+    panel.style.borderRadius = "0"
+}
 
 // TODO: need to add button while inside bim viewer to go back to home or project info page. toggle sidebar too!
 
@@ -424,21 +436,27 @@ if (importJSONBtn) {
     })
 }
 
-// project card click
+function getProjectCardIdOnClick() {
+    
+}
+
+let activeProjectCardId: string
 if (projectList) {
     // using event delegation here for 3d bim viewer and delete buttons in project card
     projectList.addEventListener('click', (event) => {
         const clickedElement = event.target as HTMLElement
         if ( !clickedElement ) return
+        const card = clickedElement.closest(".project-card") as HTMLElement
+        if (!card) return
+        const projectCardId = card.dataset.id as string
         if ( clickedElement.classList.contains('delete-project')) {
-            const card = clickedElement.closest(".project-card")
             // if ( !card ) return
             if ( card && card instanceof HTMLElement ) {
-                const projectId = card.dataset.id
-                if ( !projectId ) return
-                projectsManager.deleteProject(projectId)
+                if ( !projectCardId ) return
+                projectsManager.deleteProject(projectCardId)
             }
         } else if (clickedElement.classList.contains("bim-viewer-btn")) {
+            activeProjectCardId = projectCardId
             bimViewerContainer.classList.toggle("page-hidden")
             sidebar.classList.toggle("page-hidden")
             projectsPage!.classList.toggle("page-hidden")

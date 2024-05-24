@@ -16,10 +16,15 @@
     padding: 0;
 }
 
-bim-panel {
-    background-color: black;
+bim-button {
+    color:black
 }
 
-bim-toolbars-container {
-    background-color: black;
+bim-panel,
+bim-panel-section,
+bim-toolbars-container,
+bim-toolbar,
+bim-toolbar-section {
+    background-color: #d3d3d3;
 }
+

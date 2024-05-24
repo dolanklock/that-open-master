@@ -27,7 +27,7 @@
             "nav  main"
             "nav  main";
             grid-template-rows: auto 1fr;
-            grid-template-columns: 300px 1fr;
+            grid-template-columns: auto 1fr;
         }
     </style>
 </head>
@@ -140,7 +140,7 @@
         </form>
     </dialog>
 
-    <aside id="sidebar" class="page-hidden">
+    <aside id="sidebar" class="">
         <img id="company-logo" src="company-logo.svg" alt="company logo">
         <ul id="nav-buttons">
             <li id="sidebar-projects-btn"><span class="material-icons-round">apartment</span>Projects</li>
@@ -148,7 +148,7 @@
         </ul>
     </aside>
 
-    <main id="content-projects-page" class="projects-page page-hidden not-hidden">
+    <main id="content-projects-page" class="projects-page">
         <div id="projects-page" class="">
             <header id="page-header">
                 <h2>Projects</h2>
@@ -275,7 +275,7 @@
         </div>
     </main>
 
-    <section id="bim-viewer" class="" style="width: 100vw; height: 100vh; margin: 0;">
+    <section id="bim-viewer" class="page-hidden" style="width: 100vw; height: 100vh; margin: 0;">
         <div id="page">
             <bim-toolbars-container id="bim-toolbar-container" style="grid-area: head">
                 <bim-toolbar label="Toolbar A" active>
@@ -289,7 +289,7 @@
                         </bim-toolbar-group>
                     </bim-toolbar-section>
                 </bim-toolbar>
-                <bim-toolbar label="Toolbar B">
+                <bim-toolbar label="Toolbar B" active>
                     <bim-toolbar-section label="Section">
                     <bim-button vertical label="Button A" icon="bx:command"></bim-button>
                     <bim-button vertical label="Button B" icon="bx:fast-forward-circle"></bim-button>
@@ -315,7 +315,7 @@
                 </bim-panel>
             </div>
             <div id="viewer" style="grid-area: main; height: calc(100vh - 136);">
-                <i class='bx bx-md bx-exit' style="position: absolute; cursor: pointer;"></i>
+                <i class='bx bx-md bx-exit' id="exit" style="position: absolute; cursor: pointer;"></i>
             </div>
         </div>
 
