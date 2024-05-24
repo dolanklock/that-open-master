@@ -21,15 +21,12 @@ import { showWarnModalForm, showModalForm, dateFormat,
         showWarnModalFormImportJson, updateProjectDetailsContent,
         updateProjectCardContent } from "./ProjectFunctions"
 import {ThreeDViewer} from "./ThreeDViewer"
-
-// importing three.js
-import * as THREE from "three"
 // import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
+import * as THREE from "three"
 import * as OBC from "openbim-components"
-
 import * as BUI from "@thatopen/ui"
 
-BUI.UIManager.registerComponents()
+
 
 // TODO: need to add button while inside bim viewer to go back to home or project info page. toggle sidebar too!
 
@@ -47,7 +44,7 @@ const newProjectDialog = document.getElementById('new-project-modal')
 const newProjectSubmitBtn = document.querySelector('.form-submit-btn');
 const newProjectCancelBtn = document.querySelector('.form-cancel-btn');
 const todoBody = document.getElementById('todo-body')
-const todoForm = document.getElementById('new-todo-form')
+const todoForm = document.getElementById('new-todo-form') as HTMLFormElement
 const projectList = document.getElementById('project-list')
 const todoFormInput = document.getElementById('todo-form-input') as HTMLInputElement
 const bimViewerContainer = document.getElementById("bim-viewer") as HTMLElement
@@ -361,10 +358,11 @@ function todoStatusChangeEventHandler(event: Event) {
     * @returns {none}
     */
     event.preventDefault()
-    const selectElement = event.target
-    const todoHTMLElement = (event.target as HTMLElement).closest('.todo')
+    const selectElement = event.target as HTMLSelectElement
+    const todoHTMLElement = (event.target as HTMLElement).closest('.todo') as HTMLElement
     if ( !todoHTMLElement || !selectElement ) return
-    updateProjectToDoStatus(todoHTMLElement.dataset.id, selectElement.value)
+    const id = todoHTMLElement.dataset.id as string
+    updateProjectToDoStatus(id, selectElement.value)
     renderToDoStatusColor(getActiveProject() as Project)
 }
 
@@ -397,7 +395,7 @@ if ( testBtn ) {
     testBtn.addEventListener('click', (event) => {
         event.preventDefault()
         const viewerHTML = document.getElementById("viewer")
-        viewerHTML.requestFullscreen()
+        viewerHTML!.requestFullscreen()
         // projectsManager.importJSONReader = undefined
         // projectsManager.reader.removeEventListener('load', projectsManager.importJSONLoadReader)
         // console.log(projectsManager.importJSONReader)
@@ -493,7 +491,8 @@ if ( todoForm ) {
 // this closes the todo form dialog if cancel is clicked
 if ( todoForm ) {
     todoForm.addEventListener('click', (event) => {
-        if ( event.target.classList.contains('form-cancel-btn') ) {
+        const target = event.target as HTMLElement
+        if ( target.classList.contains('form-cancel-btn') ) {
             todoForm.reset()
             showModalForm('new-todo-modal', false) // closes dialog
         }
@@ -507,8 +506,8 @@ if ( todoBody ) {
         if ( !clickedEditToDo || clickedEditToDo.nodeName !== "SPAN" ) return
         editingTodo = true
         // SETTING FORM INPUT DEFAULT VALUE TO EXISTING TODO TEXT
-        const todo = clickedEditToDo.closest('.todo')
-        const todoExistingText = todo?.querySelector(".todo-text")?.textContent
+        const todo = clickedEditToDo.closest('.todo') as HTMLElement
+        const todoExistingText = todo.querySelector(".todo-text")!.textContent as string
         if ( !todoFormInput ) return
         todoFormInput.value = todoExistingText
         showModalForm('new-todo-modal', true)
