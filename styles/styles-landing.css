@@ -1,0 +1,38 @@
+:root {
+    --primary: #22272e;
+    --primary-btn: #029AE0;
+}
+
+#project-landing {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--primary);
+}
+
+#project-landing-content {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    width: 60%;
+    height: 100%;
+    color: white;
+    background-color: transparent;
+    padding: 20px;
+}
+
+#project-landing-content h1 {
+    font-size: 72px;
+}
+
+#project-landing-content button {
+    background-color: var(--primary-btn);
+    padding: 15px;
+    width: 300px;
+    height: 80px;
+    border-radius: 40px;
+    border: none;
+    font-size: 25px;
+}

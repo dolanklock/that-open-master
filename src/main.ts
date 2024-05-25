@@ -27,18 +27,18 @@ import * as OBC from "openbim-components"
 import * as BUI from "@thatopen/ui"
 BUI.Manager.init()
 
-const b = document.querySelectorAll("bim-button") as NodeListOf<BUI.Button>
-const bimPanels = document.querySelectorAll("bim-panel") as NodeListOf<BUI.Panel>
+// const b = document.querySelectorAll("bim-button") as NodeListOf<BUI.Button>
+// const bimPanels = document.querySelectorAll("bim-panel") as NodeListOf<BUI.Panel>
 
-for (const btn of b ) {
-    btn.style.color = "black"
-}
+// for (const btn of b ) {
+//     btn.style.color = "white"
+// }
 
-for (const panel of bimPanels ) {
-    panel.style.backgroundColor = "#d3d3d3"
-    panel.style.color = "black"
-    panel.style.borderRadius = "0"
-}
+// for (const panel of bimPanels ) {
+//     panel.style.backgroundColor = "#22272e"
+//     panel.style.color = "white"
+//     panel.style.borderRadius = "0"
+// }
 
 // TODO: need to add button while inside bim viewer to go back to home or project info page. toggle sidebar too!
 

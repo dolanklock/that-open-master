@@ -1,3 +1,11 @@
+:root {
+    --action-btn: #27d128;
+    --cancel-btn: #fa4141;
+    --primary-btn: #029AE0;
+    --opencompany-green: #BCF124;
+    --primary: #22272e;
+}
+
 /* #bim-viewer {
     width: 100vw !important;
     height: 100vh !important;
@@ -16,7 +24,7 @@
     padding: 0;
 }
 
-bim-button {
+/* bim-button {
     color:black
 }
 
@@ -25,6 +33,6 @@ bim-panel-section,
 bim-toolbars-container,
 bim-toolbar,
 bim-toolbar-section {
-    background-color: #d3d3d3;
-}
+    background-color: var(--primary);
+} */
 

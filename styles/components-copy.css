@@ -8,9 +8,9 @@
   --secondary-color-120: #1a2128;
 }
 
-* {
-  background-color: transparent;
-}
+/* * {
+  background-color: var(--secondary-color-120);
+} */
 
 /* ! tailwindcss v3.3.3 | MIT License | https://tailwindcss.com */
 

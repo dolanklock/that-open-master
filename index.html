@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="styles/components-copy.css">
     <link rel="stylesheet" href="./styles/components-custom.css">
     <link rel="stylesheet" href="bim-viewer.css">
+    <link rel="stylesheet" href="styles/styles-landing.css">
     <link rel="stylesheet" href="styles/styles.css">
     <link rel="stylesheet" href="styles/styles-sidebar.css">
     <link rel="stylesheet" href="styles/styles-project-details.css">
@@ -140,7 +141,7 @@
         </form>
     </dialog>
 
-    <aside id="sidebar" class="">
+    <aside id="sidebar" class="page-hidden">
         <img id="company-logo" src="company-logo.svg" alt="company logo">
         <ul id="nav-buttons">
             <li id="sidebar-projects-btn"><span class="material-icons-round">apartment</span>Projects</li>
@@ -148,7 +149,14 @@
         </ul>
     </aside>
 
-    <main id="content-projects-page" class="projects-page">
+    <main id="project-landing" class="">
+        <div id="project-landing-content">
+            <h1>Load IFC file and test the 3D BIM viewer!</h1>
+            <button>Load IFC</button>
+        </div>
+    </main>
+
+    <main id="content-projects-page" class="projects-page page-hidden not-hidden">
         <div id="projects-page" class="">
             <header id="page-header">
                 <h2>Projects</h2>
@@ -316,8 +324,8 @@
             </div>
             <div id="viewer" style="grid-area: main; height: calc(100vh - 136);">
                 <div style="position: absolute; cursor: pointer; display: flex; flex-direction: row; column-gap: 5px;">
-                    <i class='bx bx-md bx-home' id="bim-viewer-home" style="cursor: pointer;"></i>
-                    <i class='bx bx-md bx-exit' id="bim-viewer-project-details" style="cursor: pointer;"></i>
+                    <i class='bx bx-sm bx-home' id="bim-viewer-home" style="cursor: pointer;"></i>
+                    <i class='bx bx-sm bx-exit' id="bim-viewer-project-details" style="cursor: pointer;"></i>
                 </div>
             </div>
         </div>

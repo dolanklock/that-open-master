@@ -1,9 +1,13 @@
+:root {
+    --primary-btn: #029AE0;
+}
+
 #nav-buttons li span {
-    color: black;
+    color: white;
 }
 
 #nav-buttons li {
-    color: black;
+    color: white;
 }
 
 #sidebar {
@@ -52,5 +56,5 @@
 }
 
 #nav-buttons li:hover {
-    background-color: var(--primary-100);
+    background-color: var(--primary-btn);
 }

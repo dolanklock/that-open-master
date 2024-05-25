@@ -57,7 +57,7 @@ form .form-field-title {
 /* selecting multiple different tags */
 
 input, textarea, select {
-    color: black;
+    color: white;
     background-color: white;
     padding: 15px;
     border-radius: 8px;

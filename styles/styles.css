@@ -2,13 +2,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300&display=swap');
 
 :root {
-    /* --primary: #26282b; */
-    --primary: #d4d6d9;
-    --primary-100: #029AE0;
+    --primary: #22272e;
     --primary-200: #4a4946;
-    /* --primary-300: #202124; */
-    --primary-300: #f2f2f0;
-    --background-100: #029AE0;
     --action-btn: #27d128;
     --font-xs: 10px;
     --font-sm: 12px;
@@ -50,7 +45,7 @@ body {
     width: 100vw !important;
     /* background-color: #202124; */
     background-color: transparent;
-    color: black;
+    color: white;
     margin: 0;
     padding: 0;
 }
