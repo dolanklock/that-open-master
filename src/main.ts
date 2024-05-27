@@ -1,27 +1,12 @@
 'use strict';
 
-// IMPORTS //
-
-// this is how to import a module from another file
-// now we have access to all classes and functions inside of it
-// in the curly brackets we type the classes or functions
-// we want to import from the file
-// NOTE: we need to add the attribute to the script tag in our HTML file
-// to have type="module" - this will let the browser know we are using import/export
-// from different modules
-
-// ---------------------------- IMPORTS ----------------------------- //
-
-
 // import { ThreeDViewer } from "./ArchiveThreeDViewer"
+// import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import {KeyBoardShortCutManager} from "./bim-components/KeyboardShortcuts"
 import { Project, IProject, projectRole, projectStatus, ToDo } from "./Projects"
 import { ProjectsManager } from "./ProjectsManager"
-import { showWarnModalForm, showModalForm, dateFormat,
-        showWarnModalFormImportJson, updateProjectDetailsContent,
-        updateProjectCardContent } from "./ProjectFunctions"
+import { showWarnModalForm, showModalForm, updateProjectDetailsContent, updateProjectCardContent } from "./ProjectFunctions"
 import {ThreeDViewer} from "./ThreeDViewer"
-// import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import * as THREE from "three"
 import * as OBC from "openbim-components"
 import * as BUI from "@thatopen/ui"
@@ -60,10 +45,12 @@ const todoForm = document.getElementById('new-todo-form') as HTMLFormElement
 const projectList = document.getElementById('project-list')
 const todoFormInput = document.getElementById('todo-form-input') as HTMLInputElement
 const bimViewerContainer = document.getElementById("bim-viewer") as HTMLElement
-const sidebar = document.getElementById("sidebar") as HTMLElement
+const sidebar = document.getElementById("side-bar") as HTMLElement
 
 const projectsManager = new ProjectsManager()
 const testBtn = document.getElementById('test')
+
+const projectLandingProductsBtn = document.getElementById("project-landing-product") as HTMLButtonElement
 
 
 // -------------------------- FUNCTIONS ------------------------ // 
@@ -213,7 +200,7 @@ export function bimViewerProjectCardClicked(projectCard: HTMLElement) {
     renderToDoList(project)
     projectDetails!.classList.toggle("page-hidden")
     bimViewerContainer.classList.toggle("page-hidden")
-    sidebar.classList.toggle("page-hidden")
+    // sidebar.classList.toggle("page-hidden")
 }
 
 function editProjectCard(event: Event) {
@@ -483,7 +470,7 @@ if (projectList) {
         } else if (clickedElement.classList.contains("bim-viewer-btn")) {
             card.classList.toggle("active")
             bimViewerContainer.classList.toggle("page-hidden")
-            sidebar.classList.toggle("page-hidden")
+            // sidebar.classList.toggle("page-hidden")
             projectsPage!.classList.toggle("page-hidden")
 
         } else {
@@ -516,10 +503,44 @@ bimViewerExitBtn.addEventListener("click", () => {
 const bimViewerHomeBtn = document.getElementById("bim-viewer-home") as HTMLElement
 bimViewerHomeBtn.addEventListener("click", () => {
     projectsPage?.classList.toggle("page-hidden")
-    sidebar.classList.toggle("page-hidden")
+    // sidebar.classList.toggle("page-hidden")
     bimViewerContainer.classList.toggle("page-hidden")
     resetActiveProject()
 })
+
+
+// ------------------------ Project Landing Page Event Listeners ------------------------------ #
+
+const projectLanding = document.getElementById("project-landing") as HTMLDivElement
+projectLandingProductsBtn.addEventListener("click", () => {
+    projectLanding.classList.toggle("page-hidden")
+    projectsPage!.classList.toggle("page-hidden")
+    sidebar.classList.toggle("page-hidden")
+
+})
+
+// ------------------------ SIDEBAR Event Listeners ------------------------------ #
+
+const expandBtn = document.querySelector(".bx-menu") as HTMLElement
+const allSideBarTitlesHTMLElement = document.querySelectorAll(".side-bar-titles") as NodeListOf<HTMLElement>
+const scriptsListHTMLElement = document.querySelector(".scripts-list") as HTMLElement
+expandBtn.onclick = function() {
+    sidebar.classList.toggle("active")
+    if (sidebar.classList.contains("active")) {
+        sidebar.style.width = "350px"
+        allSideBarTitlesHTMLElement.forEach((titleElement) => {
+            titleElement.classList.remove("hide")
+        })
+        scriptsListHTMLElement.classList.remove("hide")
+        return
+    }
+    allSideBarTitlesHTMLElement.forEach((titleElement) => {
+        titleElement.classList.add("hide")
+    })
+    scriptsListHTMLElement.classList.add("hide")
+    sidebar.style.width = "50px"
+}
+
 
 // ------------------------ todo Event Listeners ------------------------------ #
 

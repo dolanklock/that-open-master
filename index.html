@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🍕</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <title>🚀 That Open Company</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -141,18 +142,61 @@
         </form>
     </dialog>
 
-    <aside id="sidebar" class="page-hidden">
-        <img id="company-logo" src="company-logo.svg" alt="company logo">
+    <!-- <aside id="sidebar" class="page-hidden"> -->
+    <aside id="side-bar" class="active page-hidden">
+        <header id="side-bar-header">
+            <div class="icon">
+                <i class='bx bx-sm bx-menu bx-flashing-hover'></i>
+                <h4 class="side-bar-titles ">Menu</h4>
+            </div>
+            <div class="icon">
+                <i class='bx bx-sm bx-home-alt-2 bx-flashing-hover about-btn'></i>
+                <h4 class="side-bar-titles ">Home</h4>
+            </div>
+            <div class="icon">
+                <i class='bx bx-sm bxl-python bx-flashing-hover blog-btn' ></i>
+                <h4 class="side-bar-titles ">Blog</h4>
+            </div>
+            <div class="scripts">
+                <div class="icon">
+                    <i class='bx bx-sm bxs-component bx-flashing-hover'></i>
+                    <h4 class="side-bar-titles ">Automation</h4>
+                </div>
+                <div class="scripts-list">
+                    <!-- <ol>
+                        <a href=""><li>script one</li></a>
+                        <li>script two</li>
+                    </ol> -->
+                </div>
+            </div>
+        </header>
+        
+    </aside>
+
+
+        <!-- <img id="company-logo" src="company-logo.svg" alt="company logo">
         <ul id="nav-buttons">
             <li id="sidebar-projects-btn"><span class="material-icons-round">apartment</span>Projects</li>
             <li><span class="material-icons-round">people</span>Users</li>
-        </ul>
-    </aside>
+        </ul> -->
+    <!-- </aside> -->
 
     <main id="project-landing" class="">
+        <nav id="navbar">
+            <div style="display: flex; align-items: center; column-gap: 10px;">
+                <span class="material-symbols-outlined">rocket_launch</span>
+                <h1>BIM Viewer</h1>
+            </div>
+            <div id="navbar-btn">
+                <button id="project-landing-product">Product</button>
+                <button>Demo</button>
+                <button>Login / Signup</button>
+            </div>
+        </nav>
         <div id="project-landing-content">
-            <h1>Load IFC file and test the 3D BIM viewer!</h1>
+            <h1>Load IFC files and start viewing!</h1>
             <button>Load IFC</button>
+            <video class="video-shadow" style="border-radius: 20px; width: 1100px; height: auto;" muted autoplay loop src="./Video/test.mp4"></video>
         </div>
     </main>
 
@@ -172,7 +216,7 @@
                     </div>
                     <div class="import-export-btn">
                         <i class='bx bx-sm bxs-file-plus' ></i>
-                        <button class="new-project-btn">New Project</button>
+                        <button style="padding: 0;" class="new-project-btn">New Project</button>
                     </div>
                 </div>
             </header>
