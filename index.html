@@ -143,35 +143,7 @@
     </dialog>
 
     <!-- <aside id="sidebar" class="page-hidden"> -->
-    <aside id="side-bar" class="active page-hidden">
-        <header id="side-bar-header">
-            <div class="icon">
-                <i class='bx bx-sm bx-menu bx-flashing-hover'></i>
-                <h4 class="side-bar-titles ">Menu</h4>
-            </div>
-            <div class="icon">
-                <i class='bx bx-sm bx-home-alt-2 bx-flashing-hover about-btn'></i>
-                <h4 class="side-bar-titles ">Home</h4>
-            </div>
-            <div class="icon">
-                <i class='bx bx-sm bxl-python bx-flashing-hover blog-btn' ></i>
-                <h4 class="side-bar-titles ">Blog</h4>
-            </div>
-            <div class="scripts">
-                <div class="icon">
-                    <i class='bx bx-sm bxs-component bx-flashing-hover'></i>
-                    <h4 class="side-bar-titles ">Automation</h4>
-                </div>
-                <div class="scripts-list">
-                    <!-- <ol>
-                        <a href=""><li>script one</li></a>
-                        <li>script two</li>
-                    </ol> -->
-                </div>
-            </div>
-        </header>
-        
-    </aside>
+   
 
 
         <!-- <img id="company-logo" src="company-logo.svg" alt="company logo">
@@ -200,26 +172,63 @@
         </div>
     </main>
 
-    <main id="content-projects-page" class="projects-page page-hidden not-hidden">
-        <div id="projects-page" class="">
-            <header id="page-header">
-                <h2>Projects</h2>
-                <div id="page-header-buttons">
-                    <div class="import-export-btn import-json">
-                        <i class='bx bx-sm bxs-file-import'></i>
-                        <p>Import Projects</p>
+    <main id="content-projects-page" class="projects-page page-hidden">
+        <div style="grid-area: nav; width: 100%; height: 100%;">
+            <aside id="side-bar" class="page-hidden">
+                <header id="side-bar-header">
+                    <div class="icon">
+                        <i class='bx bx-sm bx-menu bx-flashing-hover'></i>
+                        <h4 class="side-bar-titles hide">Menu</h4>
                     </div>
-                    <div class="import-export-btn export-json">
-                        <i class='bx bx-sm bxs-file-export'></i>
-                        <p>Export Projects</p>                
-                        <a href="" id="export-json"></a>
+                    <div class="icon">
+                        <i class='bx bx-sm bx-home-alt-2 bx-flashing-hover about-btn'></i>
+                        <h4 class="side-bar-titles hide">Home</h4>
                     </div>
-                    <div class="import-export-btn">
-                        <i class='bx bx-sm bxs-file-plus' ></i>
-                        <button style="padding: 0;" class="new-project-btn">New Project</button>
+                    <div class="icon">
+                        <i class='bx bx-sm bxl-python bx-flashing-hover blog-btn' ></i>
+                        <h4 class="side-bar-titles hide">Blog</h4>
                     </div>
+                    <div class="scripts">
+                        <div class="icon">
+                            <i class='bx bx-sm bxs-component bx-flashing-hover'></i>
+                            <h4 class="side-bar-titles hide">Automation</h4>
+                        </div>
+                        <div class="scripts-list">
+                            <!-- <ol>
+                                <a href=""><li>script one</li></a>
+                                <li>script two</li>
+                            </ol> -->
+                        </div>
+                    </div>
+                </header>
+                
+            </aside>
+
+        </div>
+        <!-- <div id="projects-page" class=""> -->
+        <header id="page-header" style="grid-area: head;">
+            <div style="display: flex; align-items: center; column-gap: 10px;">
+                <span class="material-symbols-outlined">rocket_launch</span>
+                <h1>BIM Viewer</h1>
+            </div>
+            <div id="page-header-buttons">
+                <div class="import-export-btn import-json">
+                    <i class='bx bx-sm bxs-file-import'></i>
+                    <p>Import Projects</p>
                 </div>
-            </header>
+                <div class="import-export-btn export-json">
+                    <i class='bx bx-sm bxs-file-export'></i>
+                    <p>Export Projects</p>                
+                    <a href="" id="export-json"></a>
+                </div>
+                <div class="import-export-btn">
+                    <i class='bx bx-sm bxs-file-plus' ></i>
+                    <button style="padding: 0;" class="new-project-btn">New Project</button>
+                </div>
+            </div>
+        </header>
+        <div id="project-list-section" style="grid-area: main;">
+            <h1>Projects</h1>
             <div id="project-list">
                 <!-- <div class="project-card">
                     <div class="project-card-header">
@@ -252,7 +261,8 @@
                 </div>
                 </div> -->
             </div>
-        </div>       
+        </div>
+        <!-- </div>        -->
     </main>
 
     <main id="content-project-details" class="project-details page-hidden">

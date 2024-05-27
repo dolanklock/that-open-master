@@ -48,17 +48,17 @@
 /* NEW CSS FOR NEW SIDEBAR */
 
 #side-bar {
-    position: absolute;
-    top: 5;
-    left: 5;
+    /* position: absolute; */
+    /* top: 5; */
+    /* left: 5; */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: left;
     border-radius: 15px;
-    width: 350px;
+    width: 50px;
     height: 84vh;
-    margin: 120px 30px 50px 40px;
+    margin: 20px 30px 20px 30px;
     padding: 5px 55px 5px 30px;
     background-color: var(--primary);
     transition: all 0.5s ease;
