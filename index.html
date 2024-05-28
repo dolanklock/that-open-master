@@ -142,7 +142,7 @@
         </form>
     </dialog>
 
-    <main id="project-landing" class="page-hidden">
+    <main id="project-landing" class="">
         <nav id="navbar">
             <div style="display: flex; align-items: center; column-gap: 10px;">
                 <span class="material-symbols-outlined">rocket_launch</span>
@@ -326,33 +326,15 @@
         </div>
     </main>
 
-    <section id="bim-viewer" class="" style="width: 100vw; height: 100vh; margin: 0;">
+    <section id="bim-viewer" class="page-hidden" style="width: 100vw; height: 100vh; margin: 0;">
         <div id="page">
             <bim-tabs id="tab-container" style="grid-area: head;">
-                <bim-tab id="architecture-tab" label="Tools">
-                  <div style="display: flex;">
-                    <bim-toolbar active>
-                      <bim-toolbar-section id="wall-section" label="Build">
-                        <bim-button id="create-wall" vertical label="wall" icon="mdi:wall"></bim-button>
-                        <bim-button vertical label="wall" icon="mdi:wall"></bim-button>
-                      </bim-toolbar-section>
-                      <bim-toolbar-section label="Stairs">
-                        <bim-button vertical label="Stair" icon="mdi:wall"></bim-button>
-                        <bim-button vertical label="Stair" icon="mdi:wall"></bim-button>
-                        <bim-button vertical label="Stair" icon="mdi:wall"></bim-button>
-                      </bim-toolbar-section>
-                      <bim-toolbar-section label="Build">
-                        <bim-button vertical label="wall" icon="mdi:wall"></bim-button>
-                      </bim-toolbar-section>
-                    </bim-toolbar>
-                  </div>
-                </bim-tab>
                 <bim-tab label="Load">
                     <div style="display: flex;">
                         <bim-toolbar active>
                             <bim-toolbar-section label="Load IFC">
-                                <bim-button id="load-ifc" vertical label="Load Existing Fragment" icon="lets-icons:load-list"></bim-button>
-                                <bim-button vertical label="Load New IFC" icon="lets-icons:load-list-light"></bim-button>
+                                <bim-button id="load-ifc" vertical label="Load New IFC" icon="lets-icons:load-list"></bim-button>
+                                <bim-button id="import-ifc" vertical label="Load Fragment Group" icon="lets-icons:load-list-light"></bim-button>
                             </bim-toolbar-section>
                         </bim-toolbar>
                     </div>

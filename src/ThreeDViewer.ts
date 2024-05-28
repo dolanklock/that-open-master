@@ -245,8 +245,13 @@ testBtn.onClick.add(() => {
 // -------------------------------- Event Handlers ---------------------------------- //
 
 const loadIFCBtn = document.getElementById("load-ifc")
-loadIFCBtn?.addEventListener("click", () => {
+loadIFCBtn!.addEventListener("click", () => {
     ifcLoader.uiElement.get("main").get().click()
+})
+
+const importIFC = document.getElementById("import-ifc")
+importIFC!.addEventListener("click", () => {
+    importFragmentBtn.domElement.click()
 })
 
 
@@ -369,7 +374,9 @@ function exportProperties(model: FragmentsGroup) {
     const a = document.createElement('a')
     a.href = url
     console.log("NAME TEST DOWNLOAD json", model.ifcMetadata.name)
-    a.download = `${model.ifcMetadata.name.replace(".ifc", "")}` // downloaded file name
+    console.log("model data", model.getLocalProperties())
+    // a.download = `${model.ifcMetadata.name.replace(".ifc", "")}` // downloaded file name
+    a.download = `${model.ifcMetadata.name}.json` // downloaded file name
     a.click()
     URL.revokeObjectURL(url)
 }
