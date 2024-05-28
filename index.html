@@ -142,18 +142,7 @@
         </form>
     </dialog>
 
-    <!-- <aside id="sidebar" class="page-hidden"> -->
-   
-
-
-        <!-- <img id="company-logo" src="company-logo.svg" alt="company logo">
-        <ul id="nav-buttons">
-            <li id="sidebar-projects-btn"><span class="material-icons-round">apartment</span>Projects</li>
-            <li><span class="material-icons-round">people</span>Users</li>
-        </ul> -->
-    <!-- </aside> -->
-
-    <main id="project-landing" class="">
+    <main id="project-landing" class="page-hidden">
         <nav id="navbar">
             <div style="display: flex; align-items: center; column-gap: 10px;">
                 <span class="material-symbols-outlined">rocket_launch</span>
@@ -337,28 +326,38 @@
         </div>
     </main>
 
-    <section id="bim-viewer" class="page-hidden" style="width: 100vw; height: 100vh; margin: 0;">
+    <section id="bim-viewer" class="" style="width: 100vw; height: 100vh; margin: 0;">
         <div id="page">
-            <bim-toolbars-container id="bim-toolbar-container" style="grid-area: head">
-                <bim-toolbar label="Toolbar A" active>
-                    <bim-toolbar-section label="Build">
-                        <bim-button vertical label="My Button" icon="solar:bookmark-square-minimalistic-bold"></bim-button>
-                        <bim-toolbar-group>
-                            <bim-button icon="solar:album-bold"></bim-button>
-                            <bim-button icon="solar:archive-linear"></bim-button>
-                            <bim-button icon="solar:battery-charge-minimalistic-broken"></bim-button>
-                            <bim-button icon="solar:bluetooth-square-outline"></bim-button>
-                        </bim-toolbar-group>
-                    </bim-toolbar-section>
-                </bim-toolbar>
-                <bim-toolbar label="Toolbar B" active>
-                    <bim-toolbar-section label="Section">
-                    <bim-button vertical label="Button A" icon="bx:command"></bim-button>
-                    <bim-button vertical label="Button B" icon="bx:fast-forward-circle"></bim-button>
-                    <bim-button vertical label="Button C" icon="bx:support"></bim-button>
-                    </bim-toolbar-section>
-                </bim-toolbar>
-            </bim-toolbars-container>
+            <bim-tabs id="tab-container" style="grid-area: head;">
+                <bim-tab id="architecture-tab" label="Tools">
+                  <div style="display: flex;">
+                    <bim-toolbar active>
+                      <bim-toolbar-section id="wall-section" label="Build">
+                        <bim-button id="create-wall" vertical label="wall" icon="mdi:wall"></bim-button>
+                        <bim-button vertical label="wall" icon="mdi:wall"></bim-button>
+                      </bim-toolbar-section>
+                      <bim-toolbar-section label="Stairs">
+                        <bim-button vertical label="Stair" icon="mdi:wall"></bim-button>
+                        <bim-button vertical label="Stair" icon="mdi:wall"></bim-button>
+                        <bim-button vertical label="Stair" icon="mdi:wall"></bim-button>
+                      </bim-toolbar-section>
+                      <bim-toolbar-section label="Build">
+                        <bim-button vertical label="wall" icon="mdi:wall"></bim-button>
+                      </bim-toolbar-section>
+                    </bim-toolbar>
+                  </div>
+                </bim-tab>
+                <bim-tab label="Load">
+                    <div style="display: flex;">
+                        <bim-toolbar active>
+                            <bim-toolbar-section label="Load IFC">
+                                <bim-button id="load-ifc" vertical label="Load Existing Fragment" icon="lets-icons:load-list"></bim-button>
+                                <bim-button vertical label="Load New IFC" icon="lets-icons:load-list-light"></bim-button>
+                            </bim-toolbar-section>
+                        </bim-toolbar>
+                    </div>
+                </bim-tab>
+              </bim-tabs>
             <div id="my-panel" style="grid-area: nav; background-color: var(--bim-ui_bg-base)">
                 <bim-panel label="Panel A">
                     <bim-panel-section label="Build">

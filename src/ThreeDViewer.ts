@@ -244,6 +244,11 @@ testBtn.onClick.add(() => {
 
 // -------------------------------- Event Handlers ---------------------------------- //
 
+const loadIFCBtn = document.getElementById("load-ifc")
+loadIFCBtn?.addEventListener("click", () => {
+    ifcLoader.uiElement.get("main").get().click()
+})
+
 
 // IFCLOADED EVENT
 // OBC has built in event handlers. this one will get triggered when ifc is loaded
