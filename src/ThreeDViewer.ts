@@ -8,6 +8,7 @@ import { Fragment, IfcProperties } from "bim-fragment"
 import { FragmentsGroup } from "bim-fragment"
 import { ToDoCreator } from "./bim-components/ToDoCreator"
 import { KeyBoardShortCutManager } from "./bim-components/KeyboardShortcuts"
+import { AIRenderer } from "./bim-components/AIRenderer"
 import { showModalForm } from "./ProjectFunctions"
 
 // ------------------------ 3D Viewer setup --------------------------- //
@@ -216,6 +217,14 @@ toolbar.addChild(testBtn)
 testBtn.onClick.add(() => {
     keyboardShortcutManager.dispose()
 })
+
+
+// -------------------------------- AI render tool --------------------------------- //
+const APIKey = "5Dc5hLuEiPd9ie3PKG6Tv51hXDLlhU52iTOwPhqL6FJZdj6OC5cCYrngMpEq"
+
+const aiRenderer = new AIRenderer(viewer,  APIKey)
+toolbar.addChild(aiRenderer.uiElement.get("activationBtn"))
+
 
 
 
