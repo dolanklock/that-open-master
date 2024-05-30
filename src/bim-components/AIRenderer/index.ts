@@ -10,9 +10,15 @@ import {LibraryUIComponent} from "./src/libraryUIComponent"
 
 // TODO: check if fetch in _uploadRender method is failing or if its the test() fetch that is...
 
+// build tool as a bim-panel for toolbar with tools for updating width, height, etc, of render settings available?
+
+// TODO: need to update so API key is not in code base - refer to open companny master class for how to avoid it
+// "This shouldn't be in your code on production, but on an environment variable"
+
+// TODO: figure out better way to implement loader. if someone doesnt have loader in html then this will throw error
+// have way to integrate loader without user needing to do anything
 
 export class StableDiffusionRender {
-    APIKey = "5Dc5hLuEiPd9ie3PKG6Tv51hXDLlhU52iTOwPhqL6FJZdj6OC5cCYrngMpEq"
     proxyURL: string
     uploadURL: string
     processURL: string
@@ -25,6 +31,10 @@ export class StableDiffusionRender {
         this.uploadURL = uploadURL
     }
 
+    /**
+     * takes a screen shot of the viewer scene and returns the image as png
+     * @returns 
+     */
     private _takeScreenshot() {
         const postproductionRenderer = this._components.renderer as OBC.PostproductionRenderer
         console.log("HERE", postproductionRenderer)
@@ -34,56 +44,40 @@ export class StableDiffusionRender {
         return image
     }
 
+    /**
+     * uploads image to SD and gets the image url from it
+     * @param APIKey 
+     * @param image 
+     * @returns 
+     */
     private async _uploadRender(APIKey: string, image: string) {
-        // This shouldn't be in your code on production, but on an environment variable
-        const key = "5Dc5hLuEiPd9ie3PKG6Tv51hXDLlhU52iTOwPhqL6FJZdj6OC5cCYrngMpEq";
-
-        const proxyUrl = "https://cors-anywhere.herokuapp.com/"; // Avoids CORS locally
-        const uploadUrl = "https://modelslab.com/api/v3/base64_crop";
-        const processURL = "https://modelslab.com/api/v6/realtime/img2img";
-
-        // Let's upload the render to stable diffusion
         const url = this.proxyURL + this.uploadURL;
         const crop = "false";
         
         const req = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ key, image, crop }),
+            body: JSON.stringify({ APIKey, image, crop }),
         })
         const res = await req.json()
         const imageURL = res.link
         return imageURL
     }
-    async render(APIKey: string) {
-        // const image = this._takeScreenshot()
-        // const imageURL = await this._uploadRender(this.APIKey, image)
-        // const params = {
-        //     key: this.APIKey,
-        //     init_image: imageURL,
-        //     ...this.settings,
-        //   };
-          
-        //   const rawResponse = await fetch(this.processURL, {
-        //     method: "POST",
-        //     headers: { "Content-Type": "application/json" },
-        //     body: JSON.stringify(params),
-        //   })
-      
-        //   const response = await rawResponse.json();
-        //   console.log("RESPONSE HERE", response)
-        //   if (response.status === "success") {
-        //     return response.output as string[];
-        //   } else {
-        //     throw new Error("Something went wrong rendering");
-        //   }
+
+    /**
+     * sends post request to SD to render the image that we uploaded with the given prompt
+     * @param APIKey 
+     * @param prompt 
+     * @returns 
+     */
+    async render(APIKey: string, prompt: string) {
         const image = this._takeScreenshot()
-        const uploadedImageURL = await this._uploadRender(this.APIKey, image)
+        const uploadedImageURL = await this._uploadRender(APIKey, image)
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         const raw = JSON.stringify({
             key: APIKey,
-            prompt: "building with glass exterior",
+            prompt: prompt,
             negative_prompt: "bad quality",
             init_image: uploadedImageURL,
             width: "800",
@@ -107,6 +101,7 @@ export class StableDiffusionRender {
         console.log(rawResponse)
         const response = await rawResponse.json()
         console.log(response.output as string[])
+        return response.output as string[]
         
     }
   }
@@ -150,17 +145,29 @@ export class AIRenderer extends OBC.Component<LibraryUIComponent> implements OBC
             form.visible = !form.visible
         })
         form.onAccept.add(async () => {
-            form.visible = false
-            this.renderer.render(this._APIKey).then(() => {
-                console.log("finished render")
-            }).catch((err) => {
-                console.log("ERRRRR", err)
-            })
+            const prompt = formPrompt.value
+            if (!prompt) {
+                alert("Enter a prompt!")
+            } else {
+                form.visible = false
+                const loader = document.querySelector(".loader") as HTMLDivElement
+                try {
+                    loader.classList.toggle("hide")
+                    const renderedImages = await this.renderer.render(this._APIKey, prompt)
+                    loader.classList.toggle("hide")
+                    if (!renderedImages) {
+                        throw new Error("Something went wrong")
+                    }
+                } catch (error) {
+                    loader.classList.toggle("hide")
+                    alert(error)
+                }
+            }
         })
         // form input
-        const todoDescriptionInput = new OBC.TextArea(this._components)
-        todoDescriptionInput.label = "Prompt AI"
-        form.slots.content.addChild(todoDescriptionInput)
+        const formPrompt = new OBC.TextArea(this._components)
+        formPrompt.label = "Prompt AI"
+        form.slots.content.addChild(formPrompt)
         form.slots.content.get().style.padding = "20px"
         form.slots.content.get().style.display = "flex"
         form.slots.content.get().style.flexDirection = "column"
@@ -179,14 +186,11 @@ export class AIRenderer extends OBC.Component<LibraryUIComponent> implements OBC
         })
         activationBtn.addChild(libraryUIBtn)
         this.uiElement.set({activationBtn, LibraryUIComponent: libraryUI})
-    }
-    /**
-     * sends image to stable diffusion and fetches api and returns image generated
-     */
-    private async _renderImage() {
+
+        // testing // 
         
     }
-
+    
     private _saveImage() {
 
     }

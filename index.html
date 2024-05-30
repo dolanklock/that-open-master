@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="styles/styles-project-details.css">
     <link rel="stylesheet" href="styles/styles-project-home.css">
     <link rel="stylesheet" href="styles/styles-form-dialog.css">
+    <link rel="stylesheet" href="styles/styles-loaders.css">
     <link rel="stylesheet" href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
     <style>
         #page {
@@ -35,6 +36,9 @@
 </head>
 
 <body>
+    <div class="loader hide">
+
+    </div>
     <!-- projects page main -->
     <dialog id="new-project-modal">
         <form id="new-project-form" action="">
@@ -335,6 +339,16 @@
                             <bim-toolbar-section label="Load IFC">
                                 <bim-button id="load-ifc" vertical label="Load New IFC" icon="lets-icons:load-list"></bim-button>
                                 <bim-button id="import-ifc" vertical label="Load Fragment Group" icon="lets-icons:load-list-light"></bim-button>
+                            </bim-toolbar-section>
+                        </bim-toolbar>
+                    </div>
+                </bim-tab>
+                <bim-tab label="AI">
+                    <div style="display: flex;">
+                        <bim-toolbar active>
+                            <bim-toolbar-section label="AI Renderer">
+                                <bim-button id="load-ifc" vertical label="Render" icon="lets-icons:load-list"></bim-button>
+                                <bim-button id="import-ifc" vertical label="Render Settings" icon="lets-icons:load-list-light"></bim-button>
                             </bim-toolbar-section>
                         </bim-toolbar>
                     </div>
