@@ -18,22 +18,6 @@ export class StableDiffusionRender {
     processURL: string
     private _components: OBC.Components
 
-    settings = {
-      prompt: "", // Indications to the AI engine
-      negative_prompt: null, // Indications to be avoided by the AI engine
-      width: "128", // Maximum 1024
-      height: "128", // Maximum 1024
-      samples: "1", // Maximum 4
-      num_inference_steps: "30",
-      safety_checker: "no",
-      enhance_prompt: "yes",
-      guidance_scale: "10", // cifras en string, min 1, max 20
-      strength: 0.7, // Intensity of change, min 0, max 1
-      seed: null, // If null, it will be randomly generated
-      webhook: null,
-      track_id: null,
-    };
-
     constructor(components: OBC.Components, proxyURL: string, uploadURL: string, processURL: string) {
         this._components = components
         this.processURL = processURL
@@ -51,91 +35,79 @@ export class StableDiffusionRender {
     }
 
     private async _uploadRender(APIKey: string, image: string) {
-        // api key shouldn't be in your code on production, but on an environment variable  
+        // This shouldn't be in your code on production, but on an environment variable
+        const key = "5Dc5hLuEiPd9ie3PKG6Tv51hXDLlhU52iTOwPhqL6FJZdj6OC5cCYrngMpEq";
+
+        const proxyUrl = "https://cors-anywhere.herokuapp.com/"; // Avoids CORS locally
+        const uploadUrl = "https://modelslab.com/api/v3/base64_crop";
+        const processURL = "https://modelslab.com/api/v6/realtime/img2img";
+
         // Let's upload the render to stable diffusion
         const url = this.proxyURL + this.uploadURL;
         const crop = "false";
-    
-        const rawUploadResponse = await fetch(url, {
+        
+        const req = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ APIKey, image, crop }),
-        });
-    
-        const uploadResponse = await rawUploadResponse.json();
-        
-        if (!uploadResponse.link) {
-            throw new Error("There was a problem with the upload!");
-        }
-        return uploadResponse.link
+            body: JSON.stringify({ key, image, crop }),
+        })
+        const res = await req.json()
+        const imageURL = res.link
+        return imageURL
     }
     async render(APIKey: string) {
+        // const image = this._takeScreenshot()
+        // const imageURL = await this._uploadRender(this.APIKey, image)
+        // const params = {
+        //     key: this.APIKey,
+        //     init_image: imageURL,
+        //     ...this.settings,
+        //   };
+          
+        //   const rawResponse = await fetch(this.processURL, {
+        //     method: "POST",
+        //     headers: { "Content-Type": "application/json" },
+        //     body: JSON.stringify(params),
+        //   })
+      
+        //   const response = await rawResponse.json();
+        //   console.log("RESPONSE HERE", response)
+        //   if (response.status === "success") {
+        //     return response.output as string[];
+        //   } else {
+        //     throw new Error("Something went wrong rendering");
+        //   }
         const image = this._takeScreenshot()
-        console.log("IMAGE", image)
-        const uploadedImageURL = this._uploadRender(this.APIKey, image)
-        const params = {
-            APIKey,
-            init_image: uploadedImageURL,
-            ...this.settings,
-        };
-        // Image uploaded! Now, let's process it:
-        const rawResponse = await fetch(this.processURL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(params),
-        });
-    
-        const response = await rawResponse.json();
-    
-        if (response.status === "success") {
-            return response.output as string[];
-        } else {
-            throw new Error("Something went wrong rendering");
-        }
-        
-    }
-    async test(APIKey: string) {
-        const image = this._takeScreenshot()
-        console.log("IMAGE", image)
-        const uploadedImageURL = this._uploadRender(this.APIKey, image)
-        console.log(image)
-        // 1. take capture of scene for sending to SD api
+        const uploadedImageURL = await this._uploadRender(this.APIKey, image)
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-
         const raw = JSON.stringify({
-            "key": APIKey,
-            "prompt": "a cat sitting on a bench",
-            "negative_prompt": "bad quality",
-            "init_image": uploadedImageURL,
-            "width": "512",
-            "height": "512",
-            "samples": "1",
-            "temp": false,
-            "safety_checker": false,
-            "strength":0.7,
-            "seed": null,
-            "webhook": null,
-            "track_id": null,
+            key: APIKey,
+            prompt: "building with glass exterior",
+            negative_prompt: "bad quality",
+            init_image: uploadedImageURL,
+            width: "800",
+            height: "800",
+            samples: "1",
+            temp: false,
+            safety_checker: false,
+            strength:0.7,
+            seed: null,
+            webhook: null,
+            track_id: null,
         });
-
         const requestOptions = {
         method: 'POST',
         headers: myHeaders,
         body: raw,
         redirect: 'follow',
         };
-        // const url = this.proxyURL + "https://modelslab.com/api/v6/realtime/img2img"
-        const url = "https://modelslab.com/api/v6/realtime/img2img"
-        fetch(url, requestOptions)
-        .then(response => response.text())
-        .then(result => console.log(result))
-        .catch(error => console.log('error', error));
-        // 2. send captured image to SD for rendering
-
-        // 3. get response from SD with finished image
-
-        // 4. save image to libarary and display in UI
+        const url = this.proxyURL + this.processURL
+        const rawResponse = await fetch(url, requestOptions)
+        console.log(rawResponse)
+        const response = await rawResponse.json()
+        console.log(response.output as string[])
+        
     }
   }
 

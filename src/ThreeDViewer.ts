@@ -225,9 +225,9 @@ const APIKey = "5Dc5hLuEiPd9ie3PKG6Tv51hXDLlhU52iTOwPhqL6FJZdj6OC5cCYrngMpEq"
 // const processURL = "https://stablediffusionapi.com/api/v3/img2img";
 const processURL = "https://modelslab.com/api/v6/realtime/img2img";
 const proxyURL = "https://cors-anywhere.herokuapp.com/"; // Avoids CORS locally
-const uploadURL = "https://stablediffusionapi.com/api/v3/base64_crop";
+const uploadURL = "https://modelslab.com/api/v3/base64_crop";
 
-const aiRenderer = new AIRenderer(viewer,  APIKey, proxyURL, uploadURL, processURL)
+const aiRenderer = new AIRenderer(viewer, APIKey, proxyURL, uploadURL, processURL)
 toolbar.addChild(aiRenderer.uiElement.get("activationBtn"))
 
 
