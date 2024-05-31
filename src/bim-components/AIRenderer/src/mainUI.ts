@@ -9,6 +9,6 @@ export class AIRendererUI extends OBC.SimpleUIComponent {
             <bim-button id="import-ifc" vertical label="Render Settings" icon="lets-icons:load-list-light"></bim-button>
         </bim-toolbar-section>
         `
-        super(components, template)ß
+        super(components, template)
     }
 }
