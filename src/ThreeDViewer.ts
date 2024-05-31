@@ -228,9 +228,11 @@ const proxyURL = "https://cors-anywhere.herokuapp.com/"; // Avoids CORS locally
 const uploadURL = "https://modelslab.com/api/v3/base64_crop";
 
 const aiRenderer = new AIRenderer(viewer, APIKey, proxyURL, uploadURL, processURL)
-toolbar.addChild(aiRenderer.uiElement.get("activationBtn"))
+// toolbar.addChild(aiRenderer.uiElement.get("activationBtn"))
 
-
+const ribbon = document.getElementById("bim-toolbar-ai")
+console.log(aiRenderer.uiElement.get("RibbonUIComponent").get())
+ribbon?.insertAdjacentElement("beforeend", aiRenderer.uiElement.get("RibbonUIComponent").get())
 
 
 // let keys = {}

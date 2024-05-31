@@ -1,7 +1,9 @@
 
 import { v4 as uuidv4 } from 'uuid'
 import  *  as OBC from "openbim-components"
-import {LibraryUIComponent} from "./src/libraryUIComponent"
+import {LibraryUIComponent} from "./src/LibraryUIComponent"
+import {RibbonUIComponent} from "./src/RibbonUIComponent"
+import {SettingsUIComponent} from "./src/SettingsUIComponent"
 
 // const processURL = "https://stablediffusionapi.com/api/v3/img2img";
 // const proxyUrl = "https://cors-anywhere.herokuapp.com/"; // Avoids CORS locally
@@ -106,7 +108,7 @@ export class StableDiffusionRender {
     }
   }
 
-export class AIRenderer extends OBC.Component<LibraryUIComponent> implements OBC.UI{
+export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.UI{
     enabled: boolean = true
     static uuid: string = uuidv4()
     private _components: OBC.Components
@@ -115,7 +117,7 @@ export class AIRenderer extends OBC.Component<LibraryUIComponent> implements OBC
     uploadURL: string
     processURL: string
     renderer: StableDiffusionRender
-    uiElement = new OBC.UIElement<{activationBtn: OBC.Button, LibraryUIComponent: LibraryUIComponent}>()
+    uiElement = new OBC.UIElement<{RibbonUIComponent: RibbonUIComponent}>()
 
     constructor(components: OBC.Components, APIKey: string, proxyURL: string, uploadURL: string, processURL: string) {
         super(components)
@@ -130,14 +132,6 @@ export class AIRenderer extends OBC.Component<LibraryUIComponent> implements OBC
     }
 
     private _setUI() {
-        const activationBtn = new OBC.Button(this._components)
-        activationBtn.materialIcon = "construction"
-        const promptUIBtn = new OBC.Button(this._components)
-        promptUIBtn.materialIcon = "construction"
-        promptUIBtn.onClick.add(() => {
-            form.visible = true
-        })
-        activationBtn.addChild(promptUIBtn)
         const form = new OBC.Modal(this._components)
         form.title = "AI Renderer"
         this._components.ui.add(form)
@@ -173,28 +167,38 @@ export class AIRenderer extends OBC.Component<LibraryUIComponent> implements OBC
         form.slots.content.get().style.flexDirection = "column"
         form.slots.content.get().style.rowGap = "20px"
 
+        // library UI
         const libraryFloatingWindow = new OBC.FloatingWindow(this._components)
         this._components.ui.add(libraryFloatingWindow)
         libraryFloatingWindow.visible = false
-        libraryFloatingWindow.title = "Keyboard Shortcuts"
+        libraryFloatingWindow.title = "AI Rendering Library"
         const libraryUI = new LibraryUIComponent(this._components)
         libraryFloatingWindow.addChild(libraryUI)
-        const libraryUIBtn = new OBC.Button(this._components)
-        libraryUIBtn.materialIcon = "construction"
-        libraryUIBtn.onClick.add(() => {
+    
+        // render settings UI
+        const settingsFloatingWindow = new OBC.FloatingWindow(this._components)
+        settingsFloatingWindow.title = "Render Settings"
+        this._components.ui.add(settingsFloatingWindow)
+        settingsFloatingWindow.visible = false
+
+        // main ribbon UI
+        const ribbonUI = new RibbonUIComponent(this._components)
+        ribbonUI.onRenderclick.add(() => {
+            form.visible = true
+        })
+        ribbonUI.onSettingsclick.add(() => {
+            settingsFloatingWindow.visible = true
+        })
+        ribbonUI.onLibraryclick.add(() => {
             libraryFloatingWindow.visible = true
         })
-        activationBtn.addChild(libraryUIBtn)
-        this.uiElement.set({activationBtn, LibraryUIComponent: libraryUI})
 
-        // testing // 
-        
+        this.uiElement.set({RibbonUIComponent: ribbonUI})
     }
     
     private _saveImage() {
 
     }
-
 
     dispose() {
     }
