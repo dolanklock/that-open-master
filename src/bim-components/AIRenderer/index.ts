@@ -4,109 +4,7 @@ import  *  as OBC from "openbim-components"
 import {LibraryUIComponent} from "./src/LibraryUIComponent"
 import {RibbonUIComponent} from "./src/RibbonUIComponent"
 import {SettingsUIComponent} from "./src/SettingsUIComponent"
-
-// const processURL = "https://stablediffusionapi.com/api/v3/img2img";
-// const proxyUrl = "https://cors-anywhere.herokuapp.com/"; // Avoids CORS locally
-// const uploadUrl = "https://stablediffusionapi.com/api/v3/base64_crop";
-
-
-// TODO: check if fetch in _uploadRender method is failing or if its the test() fetch that is...
-
-// build tool as a bim-panel for toolbar with tools for updating width, height, etc, of render settings available?
-
-// TODO: need to update so API key is not in code base - refer to open companny master class for how to avoid it
-// "This shouldn't be in your code on production, but on an environment variable"
-
-// TODO: figure out better way to implement loader. if someone doesnt have loader in html then this will throw error
-// have way to integrate loader without user needing to do anything
-
-export class StableDiffusionRender {
-    proxyURL: string
-    uploadURL: string
-    processURL: string
-    private _components: OBC.Components
-
-    constructor(components: OBC.Components, proxyURL: string, uploadURL: string, processURL: string) {
-        this._components = components
-        this.processURL = processURL
-        this.proxyURL = proxyURL
-        this.uploadURL = uploadURL
-    }
-
-    /**
-     * takes a screen shot of the viewer scene and returns the image as png
-     * @returns 
-     */
-    private _takeScreenshot() {
-        const postproductionRenderer = this._components.renderer as OBC.PostproductionRenderer
-        console.log("HERE", postproductionRenderer)
-        postproductionRenderer.postproduction.composer.render()
-        const renderer = postproductionRenderer.get();
-        const image = renderer.domElement.toDataURL("image/png");
-        return image
-    }
-
-    /**
-     * uploads image to SD and gets the image url from it
-     * @param APIKey 
-     * @param image 
-     * @returns 
-     */
-    private async _uploadRender(APIKey: string, image: string) {
-        const url = this.proxyURL + this.uploadURL;
-        const crop = "false";
-        
-        const req = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ APIKey, image, crop }),
-        })
-        const res = await req.json()
-        const imageURL = res.link
-        return imageURL
-    }
-
-    /**
-     * sends post request to SD to render the image that we uploaded with the given prompt
-     * @param APIKey 
-     * @param prompt 
-     * @returns 
-     */
-    async render(APIKey: string, prompt: string) {
-        const image = this._takeScreenshot()
-        const uploadedImageURL = await this._uploadRender(APIKey, image)
-        const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        const raw = JSON.stringify({
-            key: APIKey,
-            prompt: prompt,
-            negative_prompt: "bad quality",
-            init_image: uploadedImageURL,
-            width: "800",
-            height: "800",
-            samples: "1",
-            temp: false,
-            safety_checker: false,
-            strength:0.7,
-            seed: null,
-            webhook: null,
-            track_id: null,
-        });
-        const requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow',
-        };
-        const url = this.proxyURL + this.processURL
-        const rawResponse = await fetch(url, requestOptions)
-        console.log(rawResponse)
-        const response = await rawResponse.json()
-        console.log(response.output as string[])
-        return response.output as string[]
-        
-    }
-  }
+import {StableDiffusionRender} from "./src/StableDiffusionRender"
 
 export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.UI{
     enabled: boolean = true
@@ -166,7 +64,6 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
         form.slots.content.get().style.display = "flex"
         form.slots.content.get().style.flexDirection = "column"
         form.slots.content.get().style.rowGap = "20px"
-
         // library UI
         const libraryFloatingWindow = new OBC.FloatingWindow(this._components)
         this._components.ui.add(libraryFloatingWindow)
@@ -174,13 +71,11 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
         libraryFloatingWindow.title = "AI Rendering Library"
         const libraryUI = new LibraryUIComponent(this._components)
         libraryFloatingWindow.addChild(libraryUI)
-    
         // render settings UI
         const settingsFloatingWindow = new OBC.FloatingWindow(this._components)
         settingsFloatingWindow.title = "Render Settings"
         this._components.ui.add(settingsFloatingWindow)
         settingsFloatingWindow.visible = false
-
         // main ribbon UI
         const ribbonUI = new RibbonUIComponent(this._components)
         ribbonUI.onRenderclick.add(() => {
@@ -208,6 +103,15 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
     }
 }
 
+// TODO: check if fetch in _uploadRender method is failing or if its the test() fetch that is...
+
+// build tool as a bim-panel for toolbar with tools for updating width, height, etc, of render settings available?
+
+// TODO: need to update so API key is not in code base - refer to open companny master class for how to avoid it
+// "This shouldn't be in your code on production, but on an environment variable"
+
+// TODO: figure out better way to implement loader. if someone doesnt have loader in html then this will throw error
+// have way to integrate loader without user needing to do anything
 
 // should have a button for generate which will open dialog for user to input text.
 // what is showing in the scene is what will be sent to SD API
