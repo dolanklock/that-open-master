@@ -86,6 +86,7 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
         })
         ribbonUI.onLibraryclick.add(() => {
             libraryFloatingWindow.visible = true
+            libraryUI.addRenderCard("imageurl", "building render", "glass facade")
         })
 
         this.uiElement.set({RibbonUIComponent: ribbonUI})
