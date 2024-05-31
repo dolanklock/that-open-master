@@ -230,9 +230,6 @@ const uploadURL = "https://modelslab.com/api/v3/base64_crop";
 const aiRenderer = new AIRenderer(viewer, APIKey, proxyURL, uploadURL, processURL)
 toolbar.addChild(aiRenderer.uiElement.get("activationBtn"))
 
-console.log("testing 123")
-console.log("testing 123")
-
 
 
 
