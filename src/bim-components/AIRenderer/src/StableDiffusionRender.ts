@@ -39,7 +39,9 @@ export class StableDiffusionRender {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ APIKey, image, crop }),
         })
+        console.log("test", req)
         const res = await req.json()
+        console.log("test2", res)
         const imageURL = res.link
         return imageURL
     }
@@ -52,6 +54,7 @@ export class StableDiffusionRender {
     async render(APIKey: string, prompt: string) {
         const image = this._takeScreenshot()
         const uploadedImageURL = await this._uploadRender(APIKey, image)
+        console.log("image here: ", uploadedImageURL)
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         const raw = JSON.stringify({
@@ -76,10 +79,13 @@ export class StableDiffusionRender {
         redirect: 'follow',
         };
         const url = this.proxyURL + this.processURL
-        const rawResponse = await fetch(url, requestOptions)
-        console.log(rawResponse)
-        const response = await rawResponse.json()
-        console.log(response.output as string[])
-        return response.output as string[]
+        const rawResponse = await fetch(url, requestOptions).then(async (res) => {
+            const repJSON = await res.json()
+            console.log(repJSON)
+    })
+        // console.log(rawResponse)
+        // const response = await rawResponse.json()
+        // console.log(response.output as string[])
+        // return response.output as string[]
     }
 }

@@ -47,9 +47,15 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
                     loader.classList.toggle("hide")
                     const renderedImages = await this.renderer.render(this._APIKey, prompt)
                     loader.classList.toggle("hide")
-                    if (!renderedImages) {
-                        throw new Error("Something went wrong")
-                    }
+                    console.log(renderedImages)
+                    // if (!renderedImages) {
+                    //     loader.classList.toggle("hide")
+                    //     throw new Error("Something went wrong")
+                    // } else {
+                    //     for ( const imageURL of renderedImages ) {
+                    //         libraryUI.addRenderCard(imageURL, "testing", "promppt here")
+                    //     }
+                    // }
                 } catch (error) {
                     loader.classList.toggle("hide")
                     alert(error)

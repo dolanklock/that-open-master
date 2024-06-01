@@ -234,6 +234,31 @@ const ribbon = document.getElementById("bim-toolbar-ai")
 console.log(aiRenderer.uiElement.get("RibbonUIComponent").get())
 ribbon?.insertAdjacentElement("beforeend", aiRenderer.uiElement.get("RibbonUIComponent").get())
 
+// ----------- TESTING PROMISES ----------- //
+
+
+async function test() {
+    const newPromise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log("done")
+            return resolve("worked")
+        }, 3000);
+    })
+    return newPromise
+}
+
+async function test2() {
+    console.log("ran first")
+    const res = await test()
+    // console.log(res)
+    console.log("ran second")
+}
+test2()
+
+
+// ----------- TESTING PROMISES ----------- //
+
+
 
 // let keys = {}
 // document.addEventListener("keyup", (e: KeyboardEvent) => {
