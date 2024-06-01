@@ -5,11 +5,15 @@ export class LibraryCard extends OBC.SimpleUIComponent {
     title: string
     prompt: string
     components: OBC.Components
+    onclick = new OBC.Event()
+    // TODO: add click event on cards which will open image and enlarge it
+    // TODO: add ability to edit caard title?
+    // add export options to export all renders? and be able to import to library again??
     constructor(components: OBC.Components, imageURL: string, title: string, prompt: string) {
         const template = `
                 <div>
                     <p>Title: </p>
-                    <p>Date: ${new Date().toDateString()}</p>
+                    <p>Date: ${new Date().toDateString()}</p> 
                     <p>Prompt: </p>
                     <img src="${imageURL}"></img>
                 </div>
@@ -49,13 +53,11 @@ export class LibraryUIComponent extends OBC.SimpleUIComponent {
         this._cardLibrary.push(card)
         this.get().insertAdjacentElement("beforeend", card.get())
     }
-    getLibraryCard(uuid: string) {
+    getLibraryCard(id: string) {
         return this._cardLibrary.find((card) => {
-            if ( card.uuid === uuid ) return card
+            if ( card.id === id ) return card
         })
     }
 
 
 }
-
-// TODO: how should i add library cards to this main div above? should the library cards be there own class ??
