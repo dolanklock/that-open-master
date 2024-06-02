@@ -6,6 +6,7 @@
   "dependencies": {
     "@thatopen/ui": "^2.0.0",
     "bim-fragment": "^1.0.22",
+    "dexie": "^4.0.7",
     "esbuild": "^0.19.9",
     "exact": "^0.8.0",
     "fsevents": "^2.3.3",

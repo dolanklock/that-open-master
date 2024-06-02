@@ -227,6 +227,10 @@ const processURL = "https://modelslab.com/api/v6/realtime/img2img";
 const proxyURL = "https://cors-anywhere.herokuapp.com/"; // Avoids CORS locally
 const uploadURL = "https://modelslab.com/api/v3/base64_crop";
 
+// const proxyURL = "https://cors-anywhere.herokuapp.com/"; // Avoids CORS locally
+// const uploadURL = "https://stablediffusionapi.com/api/v3/base64_crop";
+// const processURL = "https://stablediffusionapi.com/api/v3/img2img";
+
 const aiRenderer = new AIRenderer(viewer, APIKey, proxyURL, uploadURL, processURL)
 // toolbar.addChild(aiRenderer.uiElement.get("activationBtn"))
 
@@ -253,6 +257,7 @@ async function test2() {
     // console.log(res)
     console.log("ran second")
 }
+
 test2()
 
 

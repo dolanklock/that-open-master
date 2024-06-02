@@ -30,20 +30,20 @@ export class StableDiffusionRender {
      * @param image 
      * @returns 
      */
-    private async _uploadRender(APIKey: string, image: string) {
+    private async _uploadRender(key: string, image: string) {
         const url = this.proxyURL + this.uploadURL;
         const crop = "false";
-        
-        const req = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ APIKey, image, crop }),
-        })
-        console.log("test", req)
-        const res = await req.json()
-        console.log("test2", res)
-        const imageURL = res.link
-        return imageURL
+        try {
+            const rawUploadResponse = await fetch(url, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ key, image, crop }),
+            });
+            const uploadResponse = await rawUploadResponse.json();
+            return uploadResponse.link
+        } catch (error) {
+            throw new Error(error)
+        }
     }
     /**
      * sends post request to SD to render the image that we uploaded with the given prompt
@@ -53,8 +53,8 @@ export class StableDiffusionRender {
      */
     async render(APIKey: string, prompt: string) {
         const image = this._takeScreenshot()
+        // console.log("image", image)
         const uploadedImageURL = await this._uploadRender(APIKey, image)
-        console.log("image here: ", uploadedImageURL)
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         const raw = JSON.stringify({
@@ -79,13 +79,10 @@ export class StableDiffusionRender {
         redirect: 'follow',
         };
         const url = this.proxyURL + this.processURL
-        const rawResponse = await fetch(url, requestOptions).then(async (res) => {
-            const repJSON = await res.json()
-            console.log(repJSON)
-    })
-        // console.log(rawResponse)
-        // const response = await rawResponse.json()
-        // console.log(response.output as string[])
-        // return response.output as string[]
+        const rawResponse = await fetch(url, requestOptions)
+        const response = await rawResponse.json()
+        console.log(response)
+        console.log("image here", response.output as string[])
+        return response.output as string[]
     }
 }
