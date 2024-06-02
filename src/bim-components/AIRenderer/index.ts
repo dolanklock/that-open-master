@@ -51,7 +51,7 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
                         throw new Error("Something went wrong")
                     } else {
                         for ( const imageURL of renderedImages ) {
-                            libraryUI.addRenderCard(imageURL, "testing", "promppt here")
+                            libraryUI.addRenderCard(imageURL, "testing")
                         }
                     }
                     loader.classList.toggle("hide")
@@ -91,7 +91,7 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
         })
         ribbonUI.onLibraryclick.add(() => {
             libraryFloatingWindow.visible = true
-            libraryUI.addRenderCard("imageurl", "building render", "glass facade")
+            libraryUI.addRenderCard("https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/38474b53-cf68-4e78-8ac5-e4e34a46ea4b-0.png", "Building Render")
         })
 
         this.uiElement.set({RibbonUIComponent: ribbonUI})
