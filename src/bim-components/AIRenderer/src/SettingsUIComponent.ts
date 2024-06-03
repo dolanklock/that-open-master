@@ -29,35 +29,30 @@ export class SettingsUIComponent extends OBC.SimpleUIComponent {
         this.getInnerElement("negative-prompt")!.textContent = "Bad quality, blurry, bad texture"
         this.getInnerElement("width")!.textContent = "800"
         this.getInnerElement("height")!.textContent = "800"
-        this._currentSettings = {
-            negativePrompt: this.getInnerElement("negative-prompt")!.textContent as string,
-            width: this.getInnerElement("width")!.textContent as string,
-            height: this.getInnerElement("height")!.textContent as string,
-        }
+        this._updateCurrentSettings()
         this._settingsDB = new RenderSettingsDB(this._currentSettings)
+        // TODO: need to make so that everytime page is refreshed then the values from db are used for input values in settings dialog
     }
 
-    update() {
-        this._settingsDB.update(this._currentSettings)
+    private _updateCurrentSettings() {
+        this._currentSettings = {
+            negativePrompt: (this.getInnerElement("negative-prompt") as HTMLTextAreaElement).value,
+            width: (this.getInnerElement("width") as HTMLTextAreaElement).value,
+            height: (this.getInnerElement("height") as HTMLTextAreaElement).value,
+        }
+    }
+
+    async update() {
+        this._updateCurrentSettings()
+        await this._settingsDB.update(this._currentSettings)
+        console.log("UPDATED SETTINGS", this._settingsDB.db.settings.toArray())
     }
 
     getRenderSettings(): ISettings {
         return this._settingsDB.db.settings.toArray()[0]
     }
+
+    clearSettings() {
+        this._settingsDB.db.settings.clear()
+    }
 }
-
-// TODO: need to setup a DB for settings so they are remembered when user refreshes
-
-// key: APIKey,
-// prompt: prompt,
-// negative_prompt: "bad quality",
-// init_image: uploadedImageURL,
-// width: "800",
-// height: "800",
-// samples: "1",
-// temp: false,
-// safety_checker: false,
-// strength:0.7,
-// seed: null,
-// webhook: null,
-// track_id: null,

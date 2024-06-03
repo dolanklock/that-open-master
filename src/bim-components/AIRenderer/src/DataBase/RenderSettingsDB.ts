@@ -28,7 +28,7 @@ export class RenderSettingsDB {
     const negativePrompt = renderSettings.negativePrompt
     const width = renderSettings.width
     const height = renderSettings.height
-    this.db.settings.add({ negativePrompt, width, height});
+    this.update(renderSettings)
   }
 
   async init() {
@@ -37,7 +37,9 @@ export class RenderSettingsDB {
 
   async update(renderSettings: ISettings) {
     try {
-        await this.db.settings.update(1, {...renderSettings})
+        // need to clear data and re-add everytime. if use add everytime page refresh will add a new one if this mehtod is called in a constructor somewhere
+        this.db.settings.clear()
+        this.db.settings.add({ ...renderSettings });
     } catch (error) {
         alert(`Error updating render settings ${error}`)
     }

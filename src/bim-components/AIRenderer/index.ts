@@ -11,6 +11,9 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
     static uuid: string = uuidv4()
     private _components: OBC.Components
     private _APIKey: string
+    private _ribbonUI: RibbonUIComponent
+    private _libraryUI: LibraryUIComponent
+    private _settingsUI: SettingsUIComponent
     proxyURL: string
     uploadURL: string
     processURL: string
@@ -22,6 +25,10 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
         this._components = components
         this._components.tools.add(AIRenderer.uuid, this)
         this._APIKey = APIKey
+        this._ribbonUI = new RibbonUIComponent(this._components)
+        this._libraryUI = new LibraryUIComponent(this._components)
+        this._settingsUI = new SettingsUIComponent(this._components)
+        this._libraryUI.update()
         this._setUI()
         this.processURL = processURL
         this.proxyURL = proxyURL
@@ -51,7 +58,7 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
                         throw new Error("Something went wrong")
                     } else {
                         for ( const imageURL of renderedImages ) {
-                            libraryUI.addRenderCard(imageURL, "testing")
+                            this._libraryUI.addRenderCard(imageURL, "testing")
                         }
                     }
                     loader.classList.toggle("hide")
@@ -69,41 +76,43 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
         form.slots.content.get().style.display = "flex"
         form.slots.content.get().style.flexDirection = "column"
         form.slots.content.get().style.rowGap = "20px"
-        // library UI
+        this._ribbonUI.onRenderclick.add(() => {
+            form.visible = true
+        })
+        this._libraryUISetup()
+        this._settingsUISetup()
+        this.uiElement.set({RibbonUIComponent: this._ribbonUI})
+    }
+
+    private _libraryUISetup() {
         const libraryFloatingWindow = new OBC.FloatingWindow(this._components)
         this._components.ui.add(libraryFloatingWindow)
         libraryFloatingWindow.visible = false
         libraryFloatingWindow.title = "AI Rendering Library"
-        const libraryUI = new LibraryUIComponent(this._components)
-        libraryFloatingWindow.addChild(libraryUI)
-        // render settings UI
-        const settingsUI = new SettingsUIComponent(this._components)
-        const settingsForm = new OBC.Modal(this._components)
-        settingsForm.onAccept.add(() => {
-            settingsUI.update()
-        })
-        settingsForm.addChild(settingsUI)
-        settingsForm.title = "Render Settings"
-        this._components.ui.add(settingsForm)
-        settingsForm.visible = false
-
-        // main ribbon UI
-        const ribbonUI = new RibbonUIComponent(this._components)
-        ribbonUI.onRenderclick.add(() => {
-            form.visible = true
-        })
-        ribbonUI.onSettingsclick.add(() => {
-            settingsForm.visible = true
-            // libraryUI.clearGallery()
-        })
-        ribbonUI.onLibraryclick.add(() => {
+        libraryFloatingWindow.addChild(this._libraryUI)
+        this._ribbonUI.onLibraryclick.add(() => {
             libraryFloatingWindow.visible = true
             // libraryUI.addRenderCard("https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/38474b53-cf68-4e78-8ac5-e4e34a46ea4b-0.png", "Building Render")
         })
-
-        this.uiElement.set({RibbonUIComponent: ribbonUI})
     }
-    
+
+    private _settingsUISetup() {
+        const settingsForm = new OBC.Modal(this._components)
+        settingsForm.onAccept.add(() => {
+            this._settingsUI.update()
+            settingsForm.visible = false
+            // settingsUI.clearSettings()
+        })
+        settingsForm.addChild(this._settingsUI)
+        settingsForm.title = "Render Settings"
+        this._components.ui.add(settingsForm)
+        settingsForm.visible = false
+        this._ribbonUI.onSettingsclick.add(() => {
+            settingsForm.visible = true
+            // libraryUI.clearGallery()
+        })
+    }
+
     dispose() {
     }
 
