@@ -1,5 +1,5 @@
 import * as OBC from "openbim-components"
-import {Gallery} from "./RenderLibraryDB"
+import {Gallery} from "./DataBase/RenderLibraryDB"
 
 export class LibraryCard extends OBC.SimpleUIComponent {
     imageURL: string

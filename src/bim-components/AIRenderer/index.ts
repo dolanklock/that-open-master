@@ -77,10 +77,15 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
         const libraryUI = new LibraryUIComponent(this._components)
         libraryFloatingWindow.addChild(libraryUI)
         // render settings UI
-        const settingsFloatingWindow = new OBC.FloatingWindow(this._components)
-        settingsFloatingWindow.title = "Render Settings"
-        this._components.ui.add(settingsFloatingWindow)
-        settingsFloatingWindow.visible = false
+        const settingsUI = new SettingsUIComponent(this._components)
+        const settingsForm = new OBC.Modal(this._components)
+        settingsForm.onAccept.add(() => {
+            settingsUI.update()
+        })
+        settingsForm.addChild(settingsUI)
+        settingsForm.title = "Render Settings"
+        this._components.ui.add(settingsForm)
+        settingsForm.visible = false
 
         // main ribbon UI
         const ribbonUI = new RibbonUIComponent(this._components)
@@ -88,8 +93,8 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
             form.visible = true
         })
         ribbonUI.onSettingsclick.add(() => {
-            settingsFloatingWindow.visible = true
-            libraryUI.clearGallery()
+            settingsForm.visible = true
+            // libraryUI.clearGallery()
         })
         ribbonUI.onLibraryclick.add(() => {
             libraryFloatingWindow.visible = true

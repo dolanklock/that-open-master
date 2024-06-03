@@ -222,7 +222,15 @@ testBtn.onClick.add(() => {
 // -------------------------------- AI render tool --------------------------------- //
 
 // TODO: setup API key - refer to youtube video https://www.youtube.com/watch?v=17UVejOw3zA&list=LL&index=10
+
 // TODO: why is render quality so bad???? - try with IFC export of revit sample model
+
+// TODO: change spinner to be an OBC.Spinner object, then us spinner.visible = true, etc to use
+
+// TODO: make so that when render is complete it shows a sample of the render and then asks the user if they want to discard or save the image
+// if discard it will not save the image and close the window, if save, of course will save the render
+
+// TODO: give hint to good prompts in the prompt dialog, (research what a good prompt looks like)
 
 const APIKey = "5Dc5hLuEiPd9ie3PKG6Tv51hXDLlhU52iTOwPhqL6FJZdj6OC5cCYrngMpEq"
 const processURL = "https://modelslab.com/api/v6/realtime/img2img";

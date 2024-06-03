@@ -64,7 +64,7 @@ export class StableDiffusionRender {
             init_image: uploadedImageURL,
             width: "800",
             height: "800",
-            samples: "1",
+            samples: "3",
             temp: false,
             safety_checker: false,
             strength:0.7,
