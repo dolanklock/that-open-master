@@ -81,6 +81,7 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
         settingsFloatingWindow.title = "Render Settings"
         this._components.ui.add(settingsFloatingWindow)
         settingsFloatingWindow.visible = false
+
         // main ribbon UI
         const ribbonUI = new RibbonUIComponent(this._components)
         ribbonUI.onRenderclick.add(() => {
@@ -88,19 +89,16 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
         })
         ribbonUI.onSettingsclick.add(() => {
             settingsFloatingWindow.visible = true
+            libraryUI.clearGallery()
         })
         ribbonUI.onLibraryclick.add(() => {
             libraryFloatingWindow.visible = true
-            libraryUI.addRenderCard("https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/38474b53-cf68-4e78-8ac5-e4e34a46ea4b-0.png", "Building Render")
+            // libraryUI.addRenderCard("https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/38474b53-cf68-4e78-8ac5-e4e34a46ea4b-0.png", "Building Render")
         })
 
         this.uiElement.set({RibbonUIComponent: ribbonUI})
     }
     
-    private _saveImage() {
-
-    }
-
     dispose() {
     }
 

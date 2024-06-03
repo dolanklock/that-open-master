@@ -1,5 +1,8 @@
 import * as OBC from "openbim-components"
 
+/**
+ * class to control stable diffusion settings for request
+ */
 export class SettingsUIComponent extends OBC.SimpleUIComponent {
     onclick = new OBC.Event()
     constructor(components: OBC.Components) {
@@ -11,3 +14,19 @@ export class SettingsUIComponent extends OBC.SimpleUIComponent {
         super(components, template)
     }
 }
+
+
+
+// key: APIKey,
+// prompt: prompt,
+// negative_prompt: "bad quality",
+// init_image: uploadedImageURL,
+// width: "800",
+// height: "800",
+// samples: "1",
+// temp: false,
+// safety_checker: false,
+// strength:0.7,
+// seed: null,
+// webhook: null,
+// track_id: null,

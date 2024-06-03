@@ -238,6 +238,7 @@ const ribbon = document.getElementById("bim-toolbar-ai")
 console.log(aiRenderer.uiElement.get("RibbonUIComponent").get())
 ribbon?.insertAdjacentElement("beforeend", aiRenderer.uiElement.get("RibbonUIComponent").get())
 
+
 // ----------- TESTING PROMISES ----------- //
 
 
