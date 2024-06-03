@@ -39,12 +39,6 @@ export class LibraryCard extends OBC.SimpleUIComponent {
         this.get().style.backgroundColor = "#22272e"
         this.get().style.borderRadius = "8px"
         this.get().style.padding = "15px"
-        this.getInnerElement("image")!.onmouseover = function() {
-            this.getInnerElement("image")!.style.border = "1px solid #BCF124"
-        }.bind(this)
-        this.getInnerElement("image")!.onmouseleave = function() {
-            this.getInnerElement("image")!.style.border = "none"
-        }.bind(this)
         this.getInnerElement("image")!.style.cursor = "pointer"
         this.getInnerElement("image")!.style.width = "150px"
         this.getInnerElement("image")!.style.height = "auto"
@@ -52,6 +46,12 @@ export class LibraryCard extends OBC.SimpleUIComponent {
         this.getInnerElement("image")!.style.border = "1px solid darkgray"
         this.getInnerElement("date")!.style.fontSize = "10px"
         this.getInnerElement("date")!.style.color = "darkgray"
+        this.getInnerElement("image")!.onmouseover = function() {
+            this.getInnerElement("image")!.style.border = "1px solid #BCF124"
+        }.bind(this)
+        this.getInnerElement("image")!.onmouseleave = function() {
+            this.getInnerElement("image")!.style.border = "none"
+        }.bind(this)
         const form = new OBC.Modal(this._components)
         form.title = "Render Enlarged"
         this._components.ui.add(form)

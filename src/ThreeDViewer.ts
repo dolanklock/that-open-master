@@ -220,23 +220,19 @@ testBtn.onClick.add(() => {
 
 
 // -------------------------------- AI render tool --------------------------------- //
-const APIKey = "5Dc5hLuEiPd9ie3PKG6Tv51hXDLlhU52iTOwPhqL6FJZdj6OC5cCYrngMpEq"
 
-// const processURL = "https://stablediffusionapi.com/api/v3/img2img";
+// TODO: setup API key - refer to youtube video https://www.youtube.com/watch?v=17UVejOw3zA&list=LL&index=10
+// TODO: why is render quality so bad???? - try with IFC export of revit sample model
+
+const APIKey = "5Dc5hLuEiPd9ie3PKG6Tv51hXDLlhU52iTOwPhqL6FJZdj6OC5cCYrngMpEq"
 const processURL = "https://modelslab.com/api/v6/realtime/img2img";
 const proxyURL = "https://cors-anywhere.herokuapp.com/"; // Avoids CORS locally
 const uploadURL = "https://modelslab.com/api/v3/base64_crop";
 
-// const proxyURL = "https://cors-anywhere.herokuapp.com/"; // Avoids CORS locally
-// const uploadURL = "https://stablediffusionapi.com/api/v3/base64_crop";
-// const processURL = "https://stablediffusionapi.com/api/v3/img2img";
-
 const aiRenderer = new AIRenderer(viewer, APIKey, proxyURL, uploadURL, processURL)
-// toolbar.addChild(aiRenderer.uiElement.get("activationBtn"))
-
 const ribbon = document.getElementById("bim-toolbar-ai")
 console.log(aiRenderer.uiElement.get("RibbonUIComponent").get())
-ribbon?.insertAdjacentElement("beforeend", aiRenderer.uiElement.get("RibbonUIComponent").get())
+ribbon!.insertAdjacentElement("beforeend", aiRenderer.uiElement.get("RibbonUIComponent").get())
 
 
 // ----------- TESTING PROMISES ----------- //
