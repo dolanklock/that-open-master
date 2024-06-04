@@ -20,24 +20,28 @@ class DB extends Dexie {
 
 export class RenderSettingsDB {
   db: DB;
-  constructor(renderSettings: ISettings) {
+  constructor() {
     this.db = new DB();
     this.db.version(1).stores({
         settings: "++id, negativePrompt, width, height",
     });
-    const negativePrompt = renderSettings.negativePrompt
-    const width = renderSettings.width
-    const height = renderSettings.height
-    this.update(renderSettings)
+    this.init()
+  }
+
+  getCurrentSettings() {
+    const existingSettings = this.db.settings.toArray()[0]
+    return existingSettings
   }
 
   async init() {
-    await this.db.open();
+    await this.db.open()
+    // below we are setting the values of the settings form with ones from db when page refreshes
+    const settingsCurrent = await this.getCurrentSettings()
+    this.update(settingsCurrent)
   }
 
   async update(renderSettings: ISettings) {
     try {
-        // need to clear data and re-add everytime. if use add everytime page refresh will add a new one if this mehtod is called in a constructor somewhere
         this.db.settings.clear()
         this.db.settings.add({ ...renderSettings });
     } catch (error) {

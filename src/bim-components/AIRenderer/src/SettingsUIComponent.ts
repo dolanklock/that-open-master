@@ -1,12 +1,15 @@
 import * as OBC from "openbim-components"
 import { RenderSettingsDB, ISettings } from "./DataBase/RenderSettingsDB"
+import { IsExternal } from "rollup"
 /**
  * class to control stable diffusion settings for request
  */
 export class SettingsUIComponent extends OBC.SimpleUIComponent {
     onclick = new OBC.Event()
     private _settingsDB: RenderSettingsDB
-    private _currentSettings: ISettings 
+    private _negativePrompt: HTMLTextAreaElement = this.getInnerElement("negative-prompt") as HTMLTextAreaElement
+    private _width: HTMLTextAreaElement = this.getInnerElement("width") as HTMLTextAreaElement
+    private _height: HTMLTextAreaElement = this.getInnerElement("height") as HTMLTextAreaElement
     constructor(components: OBC.Components) {
         const template = `
         <div id="settings-container">
@@ -26,33 +29,43 @@ export class SettingsUIComponent extends OBC.SimpleUIComponent {
         this.get().style.flexDirection = "column"
         this.get().style.rowGap = "10px"
         this.get().style.padding = "25px"
-        this.getInnerElement("negative-prompt")!.textContent = "Bad quality, blurry, bad texture"
-        this.getInnerElement("width")!.textContent = "800"
-        this.getInnerElement("height")!.textContent = "800"
-        this._updateCurrentSettings()
-        this._settingsDB = new RenderSettingsDB(this._currentSettings)
-        // TODO: need to make so that everytime page is refreshed then the values from db are used for input values in settings dialog
+        this._negativePrompt.textContent = "Bad quality, blurry, bad texture"
+        this._width.value = "800"
+        this._height.value = "800"
+        this._settingsDB = new RenderSettingsDB()
     }
-
-    private _updateCurrentSettings() {
-        this._currentSettings = {
-            negativePrompt: (this.getInnerElement("negative-prompt") as HTMLTextAreaElement).value,
-            width: (this.getInnerElement("width") as HTMLTextAreaElement).value,
-            height: (this.getInnerElement("height") as HTMLTextAreaElement).value,
-        }
+    /**
+     * this updates the forms html input values to whatever the DB values are
+     * @returns 
+     */
+    async updateFormInputsFromDB() {
+        const dbVal = await this._settingsDB.db.settings.toArray()
+        const settings = dbVal[0]
+        if ( !dbVal ) return
+        this._negativePrompt.textContent = settings.negativePrompt
+        this._width.value = settings.width
+        this._height.value = settings.height
     }
-
+    /**
+     * this will updates the current settings and database with new inputs from user in theonAccept event
+     */
     async update() {
-        this._updateCurrentSettings()
-        await this._settingsDB.update(this._currentSettings)
+        const settings = {
+            negativePrompt: this._negativePrompt.value,
+            width: this._width.value,
+            height: this._height.value,
+        }
+        await this._settingsDB.update(settings)
         console.log("UPDATED SETTINGS", this._settingsDB.db.settings.toArray())
-    }
-
-    getRenderSettings(): ISettings {
-        return this._settingsDB.db.settings.toArray()[0]
     }
 
     clearSettings() {
         this._settingsDB.db.settings.clear()
     }
 }
+
+// TODO: need to actually get this to update render settings. should take from the DB values
+// can have attirbute properties on the stablediffusion cclass instance and when onacppet is triggererd for settings form
+// it will set the stable diffusion class instance objects properties and update them
+
+// TODO: need to make so the default values are set on very first page initialize

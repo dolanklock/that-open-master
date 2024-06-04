@@ -105,6 +105,7 @@ export class LibraryUIComponent extends OBC.SimpleUIComponent {
     async update() {
         this.get().innerHTML = ""
         const allRenders = await this._gallery.db.renders.toArray()
+        console.log(allRenders)
         for (const render of allRenders ) {
             const file = new File([new Blob([render.buffer])], render.id!.toString())
             const src = URL.createObjectURL(file);;

@@ -24,16 +24,16 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
         super(components)
         this._components = components
         this._components.tools.add(AIRenderer.uuid, this)
+        this.processURL = processURL
+        this.proxyURL = proxyURL
+        this.uploadURL = uploadURL
         this._APIKey = APIKey
+        this.renderer = new StableDiffusionRender(this._components, this.proxyURL, this.uploadURL, this.processURL)
         this._ribbonUI = new RibbonUIComponent(this._components)
         this._libraryUI = new LibraryUIComponent(this._components)
         this._settingsUI = new SettingsUIComponent(this._components)
         this._libraryUI.update()
         this._setUI()
-        this.processURL = processURL
-        this.proxyURL = proxyURL
-        this.uploadURL = uploadURL
-        this.renderer = new StableDiffusionRender(this._components, this.proxyURL, this.uploadURL, this.processURL)
     }
 
     private _setUI() {
@@ -97,9 +97,10 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
     }
 
     private _settingsUISetup() {
+        this._settingsUI.updateFormInputsFromDB()
         const settingsForm = new OBC.Modal(this._components)
-        settingsForm.onAccept.add(() => {
-            this._settingsUI.update()
+        settingsForm.onAccept.add(async () => {
+            await this._settingsUI.update()
             settingsForm.visible = false
             // settingsUI.clearSettings()
         })
