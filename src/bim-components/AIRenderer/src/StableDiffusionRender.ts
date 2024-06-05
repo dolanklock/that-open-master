@@ -4,6 +4,9 @@ export class StableDiffusionRender {
     proxyURL: string
     uploadURL: string
     processURL: string
+    negPrompt: string
+    width: number
+    height: number
     private _components: OBC.Components
 
     constructor(components: OBC.Components, proxyURL: string, uploadURL: string, processURL: string) {
@@ -11,6 +14,9 @@ export class StableDiffusionRender {
         this.processURL = processURL
         this.proxyURL = proxyURL
         this.uploadURL = uploadURL
+        this.negPrompt = "bad quality, blurry"
+        this.width = "800"
+        this.height = "800"
     }
     /**
      * takes a screen shot of the viewer scene and returns the image as png
@@ -42,7 +48,7 @@ export class StableDiffusionRender {
             const uploadResponse = await rawUploadResponse.json();
             return uploadResponse.link
         } catch (error) {
-            throw new Error(error)
+            throw new Error(`Failed to upload render to SD: ${error}`)
         }
     }
     /**
@@ -60,11 +66,11 @@ export class StableDiffusionRender {
         const raw = JSON.stringify({
             key: APIKey,
             prompt: prompt,
-            negative_prompt: "bad quality",
+            negative_prompt: this.negPrompt,
             init_image: uploadedImageURL,
-            width: "800",
-            height: "800",
-            samples: "3",
+            width: this.width,
+            height: this.height,
+            samples: "1",
             temp: false,
             safety_checker: false,
             strength:0.7,
@@ -80,6 +86,7 @@ export class StableDiffusionRender {
         };
         const url = this.proxyURL + this.processURL
         const rawResponse = await fetch(url, requestOptions)
+        console.log("raw", rawResponse)
         const response = await rawResponse.json()
         console.log(response)
         console.log("image here", response.output as string[])

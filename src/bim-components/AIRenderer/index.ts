@@ -53,18 +53,20 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
                 try {
                     loader.classList.toggle("hide")
                     const renderedImages = await this.renderer.render(this._APIKey, prompt)
+                    console.log("RENDERED IMAGES", renderedImages)
                     if (!renderedImages) {
                         loader.classList.toggle("hide")
-                        throw new Error("Something went wrong")
+                        throw new Error("Something went wrong, render images is undefined")
                     } else {
                         for ( const imageURL of renderedImages ) {
+                            console.log("url here", imageURL)
                             this._libraryUI.addRenderCard(imageURL, "testing")
                         }
                     }
                     loader.classList.toggle("hide")
                 } catch (error) {
                     loader.classList.toggle("hide")
-                    alert(error)
+                    alert(`render failed, ${error}`)
                 }
             }
         })
@@ -101,6 +103,10 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
         const settingsForm = new OBC.Modal(this._components)
         settingsForm.onAccept.add(async () => {
             await this._settingsUI.update()
+            // console.log("testing here", this._settingsUI.width)
+            this.renderer.negPrompt = this._settingsUI.negativePrompt
+            this.renderer.width = parseInt(this._settingsUI.width)
+            this.renderer.height = parseInt(this._settingsUI.height)
             settingsForm.visible = false
             // settingsUI.clearSettings()
         })

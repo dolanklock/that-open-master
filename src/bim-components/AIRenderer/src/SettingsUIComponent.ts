@@ -34,6 +34,16 @@ export class SettingsUIComponent extends OBC.SimpleUIComponent {
         this._height.value = "800"
         this._settingsDB = new RenderSettingsDB()
     }
+    // TODO: need to control the way these are set, width can only be number, need to parseInt. if user inputs string then raise alert and say number only
+    get negativePrompt() {
+        return this._negativePrompt.value
+    }
+    get width() {
+        return this._width.value
+    }
+    get height() {
+        return this._height.value
+    }
     /**
      * this updates the forms html input values to whatever the DB values are
      * @returns 
@@ -65,7 +75,7 @@ export class SettingsUIComponent extends OBC.SimpleUIComponent {
 }
 
 // TODO: need to actually get this to update render settings. should take from the DB values
-// can have attirbute properties on the stablediffusion cclass instance and when onacppet is triggererd for settings form
+// can have attirbute properties on the stablediffusion cclass instance and when onAccept is triggererd for settings form
 // it will set the stable diffusion class instance objects properties and update them
 
 // TODO: need to make so the default values are set on very first page initialize

@@ -93,6 +93,7 @@ export class LibraryUIComponent extends OBC.SimpleUIComponent {
     }
     async addRenderCard(imageURL: string, title: string) {
         const date = new Date().toDateString()
+        console.log("imageURL from addrendercard method", imageURL)
         await this._gallery.save(imageURL, title, date)
         this.update()
     }

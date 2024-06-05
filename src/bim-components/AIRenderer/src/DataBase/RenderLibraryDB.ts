@@ -36,6 +36,7 @@ export class Gallery {
   }
 
   async save(url: string, title: string, date: string) {
+    console.log("failing URL HERE", url)
     const fetched = await fetch(url);
     const buffer = await fetched.arrayBuffer();
     return await this.db.renders.add({ buffer, title, date });
