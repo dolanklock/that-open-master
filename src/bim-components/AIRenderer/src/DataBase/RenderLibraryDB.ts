@@ -22,8 +22,6 @@ class GalleryDB extends Dexie {
 
 export class Gallery {
   db: GalleryDB;
-  drawer: OBC.Drawer;
-
   constructor() {
     this.db = new GalleryDB();
     this.db.version(1).stores({
@@ -37,9 +35,22 @@ export class Gallery {
 
   async save(url: string, title: string, date: string) {
     console.log("failing URL HERE", url)
-    const fetched = await fetch(url);
-    const buffer = await fetched.arrayBuffer();
+    const response = await fetch(url);
+    if (!response.ok) {
+      switch(response.status) {
+          case 400:
+              throw new Error(`Bad response saving image to render library DB: ${response.status}`)
+          case 401:
+              throw new Error(`Bad response saving image to render library DB: ${response.status}`)
+          case 404:
+              throw new Error(`Bad response saving image to render library DB: ${response.status}`)
+          case 500:
+              throw new Error(`Bad response saving image to render library DB: ${response.status}`)  
+      }
+  } else {
+    const buffer = await response.arrayBuffer();
     return await this.db.renders.add({ buffer, title, date });
+    }
   }
 
   async clear() {

@@ -53,7 +53,7 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
                 try {
                     loader.classList.toggle("hide")
                     const renderedImages = await this.renderer.render(this._APIKey, prompt)
-                    console.log("RENDERED IMAGES", renderedImages)
+                    console.log("rendered images", renderedImages)
                     if (!renderedImages) {
                         loader.classList.toggle("hide")
                         throw new Error("Something went wrong, render images is undefined")
