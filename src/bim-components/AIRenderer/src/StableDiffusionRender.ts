@@ -117,9 +117,9 @@ export class StableDiffusionRender {
             console.log("raw", response)
             const responseURLs = await response.json()
             console.log("responseURLs", responseURLs)
-            const resy = await fetch(responseURLs.fetch_result)
-            console.log("resy", resy)
-            console.log("resy", await resy.json())
+            // const resy = await fetch(responseURLs.fetch_result)
+            // console.log("resy", resy)
+            // console.log("resy", await resy.json())
             // let eta = responseURLs.eta * 1000
             // setTimeout(async () => {
             //     const responseFetched = await fetch(responseURLs.fetch_result)

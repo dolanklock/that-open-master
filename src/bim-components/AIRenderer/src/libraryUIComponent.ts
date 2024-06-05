@@ -95,7 +95,7 @@ export class LibraryUIComponent extends OBC.SimpleUIComponent {
         const date = new Date().toDateString()
         console.log("imageURL from addrendercard method", imageURL)
         await this._gallery.save(imageURL, title, date)
-        await this.update()
+        this.update()
     }
 
     private _deleteLibraryCard(key: string) {
