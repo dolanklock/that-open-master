@@ -28,16 +28,16 @@ export class RenderSettingsDB {
     this.init()
   }
 
-  getCurrentSettings() {
-    const existingSettings = this.db.settings.toArray()[0]
-    return existingSettings
+  async getCurrentSettings() {
+    const existingSettings = await this.db.settings.toArray()
+    return existingSettings[0]
   }
 
   async init() {
     await this.db.open()
     // below we are setting the values of the settings form with ones from db when page refreshes
     const settingsCurrent = await this.getCurrentSettings()
-    this.update(settingsCurrent)
+    await this.update(settingsCurrent)
   }
 
   async update(renderSettings: ISettings) {
