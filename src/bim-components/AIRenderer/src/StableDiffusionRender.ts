@@ -119,6 +119,7 @@ export class StableDiffusionRender {
             } else {
                 const responseURLs = await response.json()
                 if ( responseURLs.status !== "success" ) throw new Error(`Error getting JSON from response: ${responseURLs.message}`)
+                    console.log("test")
                 // .then((res) => {
                 //     console.log("res", res)
                 //     return res
