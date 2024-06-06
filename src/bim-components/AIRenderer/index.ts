@@ -50,23 +50,21 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
             } else {
                 form.visible = false
                 const loader = document.querySelector(".loader") as HTMLDivElement
+                loader.classList.toggle("hide")
                 try {
-                    loader.classList.toggle("hide")
                     const renderedImages = await this.renderer.render(this._APIKey, prompt)
-                    console.log("rendered images", renderedImages)
                     if (!renderedImages) {
                         loader.classList.toggle("hide")
                         throw new Error("Something went wrong, render images is undefined")
                     } else {
                         for ( const imageURL of renderedImages ) {
-                            console.log("url here", imageURL)
                             this._libraryUI.addRenderCard(imageURL, "testing")
                         }
                     }
                     loader.classList.toggle("hide")
                 } catch (error) {
                     loader.classList.toggle("hide")
-                    alert(`render failed, ${error}`)
+                    throw new Error(`Unable to complete render: ${error}`)
                 }
             }
         })

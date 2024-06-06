@@ -42,6 +42,8 @@ export class Gallery {
               throw new Error(`Bad response saving image to render library DB: ${response.status}`)
           case 401:
               throw new Error(`Bad response saving image to render library DB: ${response.status}`)
+          case 403:
+            throw new Error(`Bad response saving image to render library DB: ${response.status}`)
           case 404:
               throw new Error(`Bad response saving image to render library DB: ${response.status}`)
           case 500:

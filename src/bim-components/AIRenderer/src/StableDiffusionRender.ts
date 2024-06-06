@@ -45,7 +45,6 @@ export class StableDiffusionRender {
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ key, image, crop }),
             });
-            console.log("testing", rawUploadResponse)
             if (!rawUploadResponse.ok) {
                 switch(rawUploadResponse.status) {
                     case 400:
@@ -62,7 +61,7 @@ export class StableDiffusionRender {
                 return uploadResponse.link
             }
         } catch (error) {
-            throw error
+            throw new Error(`Error making post request to upload image to SD: ${error}`)
         }
     }
     /**
@@ -81,10 +80,10 @@ export class StableDiffusionRender {
         const raw = JSON.stringify({
             key: APIKey,
             prompt: prompt,
-            negative_prompt: this.negPrompt,
+            negative_prompt: "blurry, bad quality",
             init_image: uploadedImageURL,
-            width: this.width,
-            height: this.height,
+            width: "800",
+            height: "800",
             samples: "1",
             temp: false,
             safety_checker: false,
@@ -100,56 +99,42 @@ export class StableDiffusionRender {
         redirect: 'follow',
         };
         const url = this.proxyURL + this.processURL
-        const response = await fetch(url, requestOptions)
-        console.log("TEST", response)
-        if (!response.ok) {
-            switch(response.status) {
-                case 400:
-                    throw new Error(`Bad response fetching final image url: ${response.status}`)
-                case 401:
-                    throw new Error(`Bad response fetching final image url: ${response.status}`)
-                case 404:
-                    throw new Error(`Bad response fetching final image url: ${response.status}`)
-                case 500:
-                    throw new Error(`Bad response fetching final image url: ${response.status}`)  
+        try {
+            const response = await fetch(url, requestOptions)
+            if (!response.ok) {
+                switch(response.status) {
+                    case 400:
+                        throw new Error(`Bad response fetching final image url: ${response.status}`)
+                    case 401:
+                        throw new Error(`Bad response fetching final image url: ${response.status}`)
+                    case 403:
+                        throw new Error(`Bad response fetching final image url: ${response.status}`)
+                    case 404:
+                        throw new Error(`Bad response fetching final image url: ${response.status}`)
+                    case 405:
+                        throw new Error(`Bad response fetching final image url: ${response.status}`)
+                    case 500:
+                        throw new Error(`Bad response fetching final image url: ${response.status}`)  
+                }
+            } else {
+                const responseURLs = await response.json()
+                if ( responseURLs.status !== "success" ) throw new Error(`Error getting JSON from response: ${responseURLs.message}`)
+                // .then((res) => {
+                //     console.log("res", res)
+                //     return res
+                // })
+                // .then((img) => {
+                //     console.log(img)
+                //     return img.output as string[]
+                // })
+                // .catch((err) => {
+                //     throw err
+                // })
+                // console.log("final output", responseURLs)
+                return responseURLs.output as string[]
             }
-        } else {
-            console.log("raw", response)
-            const responseURLs = await response.json()
-            .then((res) => {
-                console.log("res", res)
-                return res
-            })
-            .then((img) => {
-                console.log(img)
-                return img.output as string[]
-            })
-            .catch((err) => {
-                throw err
-            })
-            // console.log("responseURLs", responseURLs)
-
-            // const resy = await fetch(responseURLs.fetch_result)
-            // console.log("resy", resy)
-            // console.log("resy", await resy.json())
-            // let eta = responseURLs.eta * 1000
-            // setTimeout(async () => {
-            //     const responseFetched = await fetch(responseURLs.fetch_result)
-            //     console.log("responseFetched", responseFetched)
-            //     if (!responseFetched.ok) {
-            //         throw new Error('Network response was not ok ' + responseFetched.statusText);
-            //       } else {
-            //         const result = responseFetched.json()
-            //         console.log("result", result)
-            //         return result
-            //       }
-                
-            //   }, eta);
-            console.log("final output", responseURLs)
-            return responseURLs
+        } catch (error) {
+            throw new Error(`Error making request to get rendered image from SD: ${error}`)
         }
-        // console.log(response)
-        // console.log("image here", response.output as string[])
-        // return response.output as string[]
     }
 }
