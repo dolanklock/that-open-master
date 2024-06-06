@@ -15,8 +15,8 @@ export class StableDiffusionRender {
         this.proxyURL = proxyURL
         this.uploadURL = uploadURL
         this.negPrompt = "bad quality, blurry"
-        this.width = "800"
-        this.height = "800"
+        this.width = 800
+        this.height = 800
     }
     /**
      * takes a screen shot of the viewer scene and returns the image as png
@@ -116,7 +116,19 @@ export class StableDiffusionRender {
         } else {
             console.log("raw", response)
             const responseURLs = await response.json()
-            console.log("responseURLs", responseURLs)
+            .then((res) => {
+                console.log("res", res)
+                return res
+            })
+            .then((img) => {
+                console.log(img)
+                return img.output as string[]
+            })
+            .catch((err) => {
+                throw err
+            })
+            // console.log("responseURLs", responseURLs)
+
             // const resy = await fetch(responseURLs.fetch_result)
             // console.log("resy", resy)
             // console.log("resy", await resy.json())
@@ -133,8 +145,8 @@ export class StableDiffusionRender {
             //       }
                 
             //   }, eta);
-            
-            return responseURLs.output as string[]
+            console.log("final output", responseURLs)
+            return responseURLs
         }
         // console.log(response)
         // console.log("image here", response.output as string[])
