@@ -93,7 +93,6 @@ export class LibraryUIComponent extends OBC.SimpleUIComponent {
     }
     async addRenderCard(imageURL: string, title: string) {
         const date = new Date().toDateString()
-        console.log("imageURL from addrendercard method", imageURL)
         await this._gallery.save(imageURL, title, date)
         this.update()
     }
@@ -106,7 +105,6 @@ export class LibraryUIComponent extends OBC.SimpleUIComponent {
     async update() {
         this.get().innerHTML = ""
         const allRenders = await this._gallery.db.renders.toArray()
-        console.log(allRenders)
         for (const render of allRenders ) {
             const file = new File([new Blob([render.buffer])], render.id!.toString())
             const src = URL.createObjectURL(file);;

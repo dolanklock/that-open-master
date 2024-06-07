@@ -66,11 +66,13 @@ export class SettingsUIComponent extends OBC.SimpleUIComponent {
             height: this._height.value,
         }
         await this._settingsDB.update(settings)
-        console.log("UPDATED SETTINGS", this._settingsDB.db.settings.toArray())
     }
 
     clearSettings() {
         this._settingsDB.db.settings.clear()
+    }
+    getDB() {
+        return this._settingsDB.db.settings.toArray()
     }
 }
 

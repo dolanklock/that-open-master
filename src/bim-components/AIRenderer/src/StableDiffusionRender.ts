@@ -51,6 +51,8 @@ export class StableDiffusionRender {
                         throw new Error(`Bad response uploading render image to SD: ${rawUploadResponse.status}`)
                     case 401:
                         throw new Error(`Bad response uploading render image to SD: ${rawUploadResponse.status}`)
+                    case 403:
+                        throw new Error(`Bad response fetching final image url: ${rawUploadResponse.status}`)
                     case 404:
                         throw new Error(`Bad response uploading render image to SD: ${rawUploadResponse.status}`)
                     case 500:
@@ -101,6 +103,7 @@ export class StableDiffusionRender {
         const url = this.proxyURL + this.processURL
         try {
             const response = await fetch(url, requestOptions)
+            console.log("response", response)
             if (!response.ok) {
                 switch(response.status) {
                     case 400:
@@ -118,20 +121,8 @@ export class StableDiffusionRender {
                 }
             } else {
                 const responseURLs = await response.json()
+                console.log("responseURLs", responseURLs)
                 if ( responseURLs.status !== "success" ) throw new Error(`Error getting JSON from response: ${responseURLs.message}`)
-                    console.log("test")
-                // .then((res) => {
-                //     console.log("res", res)
-                //     return res
-                // })
-                // .then((img) => {
-                //     console.log(img)
-                //     return img.output as string[]
-                // })
-                // .catch((err) => {
-                //     throw err
-                // })
-                // console.log("final output", responseURLs)
                 return responseURLs.output as string[]
             }
         } catch (error) {

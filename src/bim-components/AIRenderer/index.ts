@@ -44,6 +44,7 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
             form.visible = !form.visible
         })
         form.onAccept.add(async () => {
+            console.log("DB", this._settingsUI.getDB())
             const prompt = formPrompt.value
             if (!prompt) {
                 alert("Enter a prompt!")
@@ -92,7 +93,6 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
         libraryFloatingWindow.addChild(this._libraryUI)
         this._ribbonUI.onLibraryclick.add(() => {
             libraryFloatingWindow.visible = true
-            // libraryUI.addRenderCard("https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/38474b53-cf68-4e78-8ac5-e4e34a46ea4b-0.png", "Building Render")
         })
     }
 
@@ -101,12 +101,10 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
         const settingsForm = new OBC.Modal(this._components)
         settingsForm.onAccept.add(async () => {
             await this._settingsUI.update()
-            // console.log("testing here", this._settingsUI.width)
             this.renderer.negPrompt = this._settingsUI.negativePrompt
             this.renderer.width = parseInt(this._settingsUI.width)
             this.renderer.height = parseInt(this._settingsUI.height)
             settingsForm.visible = false
-            // settingsUI.clearSettings()
         })
         settingsForm.addChild(this._settingsUI)
         settingsForm.title = "Render Settings"
@@ -114,7 +112,6 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
         settingsForm.visible = false
         this._ribbonUI.onSettingsclick.add(() => {
             settingsForm.visible = true
-            // libraryUI.clearGallery()
         })
     }
 
@@ -126,9 +123,6 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
     }
 }
 
-// TODO: check if fetch in _uploadRender method is failing or if its the test() fetch that is...
-
-// build tool as a bim-panel for toolbar with tools for updating width, height, etc, of render settings available?
 
 // TODO: need to update so API key is not in code base - refer to open companny master class for how to avoid it
 // "This shouldn't be in your code on production, but on an environment variable"

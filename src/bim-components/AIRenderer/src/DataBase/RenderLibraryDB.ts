@@ -1,6 +1,4 @@
 import Dexie from "dexie";
-import * as OBC from "openbim-components";
-
 
 interface IRender {
     id?: number,
@@ -34,24 +32,29 @@ export class Gallery {
   }
 
   async save(url: string, title: string, date: string) {
-    console.log("failing URL HERE", url)
-    const response = await fetch(url);
-    if (!response.ok) {
-      switch(response.status) {
-          case 400:
+    try {
+      const response = await fetch(url);
+      console.log("response here", response)
+      if (!response.ok) {
+        switch(response.status) {
+            case 400:
+                throw new Error(`Bad response saving image to render library DB: ${response.status}`)
+            case 401:
+                throw new Error(`Bad response saving image to render library DB: ${response.status}`)
+            case 403:
               throw new Error(`Bad response saving image to render library DB: ${response.status}`)
-          case 401:
-              throw new Error(`Bad response saving image to render library DB: ${response.status}`)
-          case 403:
-            throw new Error(`Bad response saving image to render library DB: ${response.status}`)
-          case 404:
-              throw new Error(`Bad response saving image to render library DB: ${response.status}`)
-          case 500:
-              throw new Error(`Bad response saving image to render library DB: ${response.status}`)  
+            case 404:
+                throw new Error(`Bad response saving image to render library DB: ${response.status}`)
+            case 500:
+                throw new Error(`Bad response saving image to render library DB: ${response.status}`)  
+        }
+    } else {
+      const buffer = await response.arrayBuffer();
+      return await this.db.renders.add({ buffer, title, date });
       }
-  } else {
-    const buffer = await response.arrayBuffer();
-    return await this.db.renders.add({ buffer, title, date });
+    } catch (error) {
+      console.log("url", url)
+      throw new Error(`Error saving image to DB: ${error}`)
     }
   }
 
