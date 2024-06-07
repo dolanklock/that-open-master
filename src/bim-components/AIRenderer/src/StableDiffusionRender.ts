@@ -5,8 +5,8 @@ export class StableDiffusionRender {
     uploadURL: string
     processURL: string
     negPrompt: string
-    width: number
-    height: number
+    width: string
+    height: string
     private _components: OBC.Components
 
     constructor(components: OBC.Components, proxyURL: string, uploadURL: string, processURL: string) {
@@ -15,8 +15,8 @@ export class StableDiffusionRender {
         this.proxyURL = proxyURL
         this.uploadURL = uploadURL
         this.negPrompt = "bad quality, blurry"
-        this.width = 800
-        this.height = 800
+        this.width = "800"
+        this.height = "800"
     }
     /**
      * takes a screen shot of the viewer scene and returns the image as png
@@ -82,7 +82,7 @@ export class StableDiffusionRender {
         const raw = JSON.stringify({
             key: APIKey,
             prompt: prompt,
-            negative_prompt: "blurry, bad quality",
+            negative_prompt: "Bad quality, Worst quality, Normal quality, Low quality, Low resolution, Blurry, Jpeg artifacts, Grainy.",
             init_image: uploadedImageURL,
             width: "800",
             height: "800",

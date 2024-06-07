@@ -14,6 +14,7 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
     private _ribbonUI: RibbonUIComponent
     private _libraryUI: LibraryUIComponent
     private _settingsUI: SettingsUIComponent
+    private _spinner: OBC.Spinner
     proxyURL: string
     uploadURL: string
     processURL: string
@@ -32,6 +33,9 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
         this._ribbonUI = new RibbonUIComponent(this._components)
         this._libraryUI = new LibraryUIComponent(this._components)
         this._settingsUI = new SettingsUIComponent(this._components)
+        this._spinner = new OBC.Spinner(this._components)
+        this._spinner.visible = false
+        this._components.ui.add(this._spinner)
         this._libraryUI.update()
         this._setUI()
     }
@@ -50,21 +54,20 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
                 alert("Enter a prompt!")
             } else {
                 form.visible = false
-                const loader = document.querySelector(".loader") as HTMLDivElement
-                loader.classList.toggle("hide")
+                this._spinner.visible = true
                 try {
                     const renderedImages = await this.renderer.render(this._APIKey, prompt)
                     if (!renderedImages) {
-                        loader.classList.toggle("hide")
+                        this._spinner.visible = false
                         throw new Error("Something went wrong, render images is undefined")
                     } else {
                         for ( const imageURL of renderedImages ) {
-                            this._libraryUI.addRenderCard(imageURL, "testing")
+                            await this._libraryUI.addRenderCard(imageURL, "testing")
                         }
                     }
-                    loader.classList.toggle("hide")
+                    this._spinner.visible = false
                 } catch (error) {
-                    loader.classList.toggle("hide")
+                    this._spinner.visible = false
                     throw new Error(`Unable to complete render: ${error}`)
                 }
             }
@@ -102,8 +105,9 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
         settingsForm.onAccept.add(async () => {
             await this._settingsUI.update()
             this.renderer.negPrompt = this._settingsUI.negativePrompt
-            this.renderer.width = parseInt(this._settingsUI.width)
-            this.renderer.height = parseInt(this._settingsUI.height)
+            this.renderer.width = this._settingsUI.width
+            this.renderer.height = this._settingsUI.height
+            console.log("updated renderer", this.renderer.width, this.renderer.height, this.renderer.negPrompt)
             settingsForm.visible = false
         })
         settingsForm.addChild(this._settingsUI)
