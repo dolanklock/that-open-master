@@ -23,18 +23,12 @@ export class SettingsUIComponent extends OBC.SimpleUIComponent {
         </div>
         `
         super(components, template)
-        this.get().style.width = "100%"
-        this.get().style.height = "100%"
-        this.get().style.display = "flex"
-        this.get().style.flexDirection = "column"
-        this.get().style.rowGap = "10px"
-        this.get().style.padding = "25px"
+        this._setStyles()
         this._negativePrompt.textContent = "Bad quality, blurry, bad texture"
         this._width.value = "800"
         this._height.value = "800"
         this._settingsDB = new RenderSettingsDB()
     }
-    // TODO: need to control the way these are set, width can only be number, need to parseInt. if user inputs string then raise alert and say number only
     get negativePrompt() {
         return this._negativePrompt.value
     }
@@ -43,6 +37,14 @@ export class SettingsUIComponent extends OBC.SimpleUIComponent {
     }
     get height() {
         return this._height.value
+    }
+    private _setStyles() {
+        this.get().style.width = "100%"
+        this.get().style.height = "100%"
+        this.get().style.display = "flex"
+        this.get().style.flexDirection = "column"
+        this.get().style.rowGap = "10px"
+        this.get().style.padding = "25px"
     }
     /**
      * this updates the forms html input values to whatever the DB values are
@@ -67,10 +69,16 @@ export class SettingsUIComponent extends OBC.SimpleUIComponent {
         }
         await this._settingsDB.update(settings)
     }
-
+    /**
+     * clears all items from database
+     */
     clearSettings() {
         this._settingsDB.db.settings.clear()
     }
+    /**
+     * returns all items in database in an array data type
+     * @returns 
+     */
     getDB() {
         return this._settingsDB.db.settings.toArray()
     }

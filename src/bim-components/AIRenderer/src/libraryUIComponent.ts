@@ -27,6 +27,28 @@ export class LibraryCard extends OBC.SimpleUIComponent {
         this.dbKey = dbKey
         this.title = title
         this.date = date
+        this._setStyles()
+        const form = new OBC.Modal(this._components)
+        form.title = "Render Enlarged"
+        this._components.ui.add(form)
+        this.getInnerElement("image")!.addEventListener("click", (e: Event) => {
+            form.visible = true
+            const image = this.getInnerElement("image")!.cloneNode(true) as HTMLImageElement
+            image!.style.width = "800px"
+            image!.style.height = "auto"
+            image!.style.border = "none"
+            form.slots.content.domElement.insertAdjacentElement("beforeend", image!)
+        })
+        // TODO: remove cancel button from form and change Accept button to "Close"
+        form.onAccept.add(() => {
+            form.visible = false
+            form.slots.content.domElement.innerHTML = ""
+        })
+        this.getInnerElement("delete")!.addEventListener("click", () => {
+            this.onDeleteEvent.trigger(this.dbKey)
+        })
+    }
+    private _setStyles() {
         this.get().style.display = "flex"
         this.get().style.flexDirection = "column"
         this.get().style.rowGap = "10px"
@@ -52,26 +74,6 @@ export class LibraryCard extends OBC.SimpleUIComponent {
         this.getInnerElement("image")!.onmouseleave = function() {
             this.getInnerElement("image")!.style.border = "none"
         }.bind(this)
-        const form = new OBC.Modal(this._components)
-        form.title = "Render Enlarged"
-        this._components.ui.add(form)
-        this.getInnerElement("image")!.addEventListener("click", (e: Event) => {
-            console.log("clocked")
-            form.visible = true
-            const image = this.getInnerElement("image")!.cloneNode(true) as HTMLImageElement
-            image!.style.width = "800px"
-            image!.style.height = "auto"
-            image!.style.border = "none"
-            form.slots.content.domElement.insertAdjacentElement("beforeend", image!)
-        })
-        form.onAccept.add(() => {
-            form.visible = false
-            form.slots.content.domElement.innerHTML = ""
-            
-        })
-        this.getInnerElement("delete")!.addEventListener("click", () => {
-            this.onDeleteEvent.trigger(this.dbKey)
-        })
     }
 }
 
@@ -84,24 +86,38 @@ export class LibraryUIComponent extends OBC.SimpleUIComponent {
         </div>
         `
         super(components, template)
+        this._setStyles()
         this._gallery = new Gallery()
         this._gallery.init()
+        
+    }
+    private _setStyles() {
         this.get().style.display = "grid"
         this.get().style.gridTemplateColumns = "repeat(auto-fill, minmax(150px, 150px))"
         this.get().style.gap = "30px 30px"
         this.get().style.padding = "20px 20px 20px 0"
     }
+    /**
+     * adds rendered image to the gallary DB and updates the library
+     * @param imageURL 
+     * @param title 
+     */
     async addRenderCard(imageURL: string, title: string) {
         const date = new Date().toDateString()
         await this._gallery.save(imageURL, title, date)
         this.update()
     }
-
+    /**
+     * deletes an image from the library
+     * @param key 
+     */
     private _deleteLibraryCard(key: string) {
         const cardHTMLElement = document.querySelectorAll(`[data-key="${key}"]`)
         this.get().removeChild(cardHTMLElement[0])
     }   
-
+    /**
+     * iterates through the DB and adds the images from the DB to the UI
+     */
     async update() {
         this.get().innerHTML = ""
         const allRenders = await this._gallery.db.renders.toArray()

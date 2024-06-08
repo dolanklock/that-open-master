@@ -10,9 +10,13 @@ import { ToDoCreator } from "./bim-components/ToDoCreator"
 import { KeyBoardShortCutManager } from "./bim-components/KeyboardShortcuts"
 import { AIRenderer } from "./bim-components/AIRenderer"
 import { showModalForm } from "./ProjectFunctions"
-
+// import 'dotenv/config'
+// import dotenv from 'dotenv';
+// dotenv.config()
+// import dotenv from "dotenv";
+// dotenv.config();
+// require('dotenv').config()
 // ------------------------ 3D Viewer setup --------------------------- //
-
 
 
 export function ThreeDViewer() {
@@ -39,7 +43,6 @@ viewer.renderer = rendererComponent
 const cameraComponent = new OBC.OrthoPerspectiveCamera(viewer)
 viewer.camera = cameraComponent
 
-
 // setting up the raycaster component
 const raycasterComponent = new OBC.SimpleRaycaster(viewer)
 viewer.raycaster = raycasterComponent
@@ -48,56 +51,32 @@ viewer.raycaster = raycasterComponent
 viewer.init()
 cameraComponent.updateAspect()
 rendererComponent.postproduction.enabled = true // need to call this after viewer.init()
-// scene.add(mesh) // add geometry to scene
-// viewer.meshes.add(mesh)
-
 
 // -------------------------------- Toolbar Setup --------------------------------- //
 
-
-// TOOLBAR
 const toolbar = new OBC.Toolbar(viewer)
-
-// add toolbar to the viewer UI
 viewer.ui.addToolbar(toolbar)
 
-
 // ------------------------ Fragments manager --------------------------- //
-
 
 const fragmentManager = new OBC.FragmentManager(viewer)
 toolbar.addChild(fragmentManager.uiElement.get("main"))
 
 // ------------------------ IFC Loader Setup/Config --------------------------- //
 
-
-// IFC LOADER
-// creating ifcloader component from fragments library
 const ifcLoader = new OBC.FragmentIfcLoader(viewer)
-// need to do the below because ifc module from open BIM components needs additional files for loading and 
-// working with ifc's
+// need to do the below because ifc module from open BIM components needs additional files for loading and working with ifc's
 ifcLoader.settings.wasm = {
     path: "https://unpkg.com/web-ifc@0.0.53/",
     absolute: true
 }
-
-// all tools come with uiElement object that has all the premade user interface that the ifcloader object has
-// it is html code behind the scenes that gets added. 
-// its a uiElement with a get method that we pass in the name of the uiElement we want to get
-// now as you can see, the "main" is oof type OBC.SimpleUIComponent. This OBC.SimpleUIComponent object contains the html for the button
-// can use the OBC.Toolbar object and use the addChild method to add the SimpleUIComponent object
 toolbar.addChild(ifcLoader.uiElement.get("main"))
-
-
 
 // -------------------------------- Buttons --------------------------------- //
 
-
-// FULL SCREEN BUTTON
 const fullScreenBtn = new OBC.Button(viewer);
 fullScreenBtn.materialIcon = "info";
 fullScreenBtn.tooltip = "Full screen";
-// FULL SCREEN BUTTON EVENT LISTENER
 fullScreenBtn.onClick.add(() => {
     const viewerHTML = document.getElementById("viewer")
     if ( !viewerHTML ) return
@@ -105,24 +84,14 @@ fullScreenBtn.onClick.add(() => {
 });
 toolbar.addChild(fullScreenBtn);
 
-// EXIT FULL SCREEN BUTTON
 const exitFullScreenBtn = new OBC.Button(viewer);
 exitFullScreenBtn.materialIcon = "handshake";
 exitFullScreenBtn.tooltip = "Exit full screen";
 exitFullScreenBtn.onClick.add(() => {
-    // const viewerHTML = document.getElementById("viewer")
-    // if ( !viewerHTML ) return
     document.exitFullscreen()
 });
 toolbar.addChild(exitFullScreenBtn);
 
-// DIMENSIONS
-// const dimensions = new OBC.AreaMeasurement(viewer);
-// dimensions.enabled = true;
-// dimensions.snapDistance = 1;
-// toolbar.addChild(dimensions.uiElement.get("main"));
-
-// OPEN CLASSIFICATION WINDOW
 const classificationWindowOpenBtn = new OBC.Button(viewer)
 classificationWindowOpenBtn.materialIcon = "open_in_new"
 classificationWindowOpenBtn.tooltip = "Classification Window"
@@ -132,55 +101,40 @@ classificationWindowOpenBtn.onClick.add(() => {
 })
 toolbar.addChild(classificationWindowOpenBtn)
 
-
-// IMPORT FRAGMENT BUTTON
 const importFragmentBtn = new OBC.Button(viewer)
 importFragmentBtn.materialIcon = "upload"
 importFragmentBtn.tooltip = "Import Fragment Group"
 toolbar.addChild(importFragmentBtn)
 
-
 // -------------------------------- Fragments Highlighter --------------------------------- //
 
-
-// SELECTOR
 const highlighter = new OBC.FragmentHighlighter(viewer)
 highlighter.setup()
 
-
 // -------------------------------- Fragments Classifier --------------------------------- //
-
 
 // LETS US GROUP ELEMENTS, FROM THE FRAGEMENT GROUPS OBJECT
 const classifier = new OBC.FragmentClassifier(viewer)
 
-
 // -------------------------------- Classification Window UI --------------------------------- //
 
-
-// CREATING WINDOW FOR MODEL VIEWER
 const classificationWindow = new OBC.FloatingWindow(viewer)
 viewer.ui.add(classificationWindow)
 classificationWindow.description = "Building Components"
 classificationWindow.title = "Main Window"
 classificationWindow.visible = false
 
-
 // -------------------------------- IFC properties processor --------------------------------- //
-
 
 const ifcPropertiesProcessor = new OBC.IfcPropertiesProcessor(viewer)
 toolbar.addChild(ifcPropertiesProcessor.uiElement.get("main"))
 
-
-// -------------------------------- Culler --------------------------------- //
-
+// ------------------------------- Culler --------------------------------- //
 
 const culler = new OBC.ScreenCuller(viewer)
 culler.setup()
 
 // -------------------------------- ToDoCreator --------------------------------- //
-
 
 const todoCreator = new ToDoCreator(viewer)
 toolbar.addChild(todoCreator.uiElement.get("activationButton"))
@@ -233,6 +187,14 @@ testBtn.onClick.add(() => {
 // TODO: give hint to good prompts in the prompt dialog, (research what a good prompt looks like)
 
 const APIKey = "5Dc5hLuEiPd9ie3PKG6Tv51hXDLlhU52iTOwPhqL6FJZdj6OC5cCYrngMpEq"
+
+// require('dotenv').config()
+// console.log("API KEY HERE FROM ENV", process.env)
+
+
+// dotenv.config();
+// console.log("API KEY HERE FROM ENV", process.env.API_KEY); // or any specific key
+
 const processURL = "https://modelslab.com/api/v6/realtime/img2img";
 const proxyURL = "https://cors-anywhere.herokuapp.com/"; // Avoids CORS locally
 const uploadURL = "https://modelslab.com/api/v3/base64_crop";
@@ -242,6 +204,7 @@ const aiRenderer = new AIRenderer(viewer, APIKey, proxyURL, uploadURL, processUR
 const ribbon = document.getElementById("bim-toolbar-ai")
 console.log(aiRenderer.uiElement.get("RibbonUIComponent").get())
 ribbon!.insertAdjacentElement("beforeend", aiRenderer.uiElement.get("RibbonUIComponent").get())
+
 
 
 // ----------- TESTING PROMISES ----------- //
@@ -305,8 +268,6 @@ importIFC!.addEventListener("click", () => {
     importFragmentBtn.domElement.click()
 })
 
-
-// IFCLOADED EVENT
 // OBC has built in event handlers. this one will get triggered when ifc is loaded
 ifcLoader.onIfcLoaded.add((model) => {
     exportFragments(model)
@@ -327,15 +288,7 @@ fragmentManager.onFragmentsLoaded.add((model) => {
     importProperties(model)
 })
 
-
-
-// cameraComponent.controls.addEventListener("sleep", () => {
-//     culler.setup()
-// })  
-
-
 // ----------------------------   TESTING -------------------------------- //
-
 
 // let coords: number = 0
 // const geometryCube = new THREE.BoxGeometry(50, 50, 50, 50, 50, 50)

@@ -131,9 +131,6 @@ export class AIRenderer extends OBC.Component<RibbonUIComponent> implements OBC.
 // TODO: need to update so API key is not in code base - refer to open companny master class for how to avoid it
 // "This shouldn't be in your code on production, but on an environment variable"
 
-// TODO: figure out better way to implement loader. if someone doesnt have loader in html then this will throw error
-// have way to integrate loader without user needing to do anything
-
 // should have a button for generate which will open dialog for user to input text.
 // what is showing in the scene is what will be sent to SD API
 
